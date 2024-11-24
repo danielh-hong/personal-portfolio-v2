@@ -25,7 +25,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
 
   // Updated galaxy parameters for more subtle effect
   const params = useRef({
-    count: 80000,
+    count: 40000, // You can adjust this number for less particles
     size: 0.015,
     radius: 12,
     branches: 5,
@@ -38,6 +38,13 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     rotationSpeed: 0.15, // Reduced rotation speed
   });
 
+  // Function to adjust the number of particles
+  const adjustParticleCount = (newCount) => {
+    params.current.count = newCount;
+  };
+
+  // Example usage: adjustParticleCount(40000); // Reduce to 40,000 particles
+
   useEffect(() => {
     const scene = new THREE.Scene();
 
@@ -48,7 +55,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       0.1,
       2000
     );
-    camera.position.z = 5; // Moved back
+    camera.position.z = 10; // Moved back
     camera.position.x = 0; // Adjusted to view galaxy on the right
     camera.position.y = 0; // Offset down
     cameraRef.current = camera;
@@ -92,18 +99,49 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       return texture;
     })();
 
+    // Create a texture atlas with '1' and '0' for galaxy particles
+    const digitTexture = (() => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 128; // Increased size for better resolution
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+
+      // Make background transparent
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 60px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Draw '1' on the left half
+      ctx.fillText('1', 32, 32);
+
+      // Draw '0' on the right half
+      ctx.fillText('0', 96, 32);
+
+      const texture = new THREE.Texture(canvas);
+      texture.needsUpdate = true;
+      return texture;
+    })();
+
     class ShootingStarWithTrail {
       constructor() {
         this.maxPoints = Math.floor(Math.random() * 15) + 30;
-        this.points = new Array(this.maxPoints).fill(0).map(() => new THREE.Vector3());
+        this.points = new Array(this.maxPoints)
+          .fill(0)
+          .map(() => new THREE.Vector3());
 
         this.trailGeometry = new THREE.BufferGeometry();
         const positions = new Float32Array(this.maxPoints * 3);
-        this.trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        this.trailGeometry.setAttribute(
+          'position',
+          new THREE.BufferAttribute(positions, 3)
+        );
 
         this.trailMaterial = new THREE.ShaderMaterial({
           uniforms: {
-            uOpacity: { value: 1.0 }, // Add this line
+            uOpacity: { value: 1.0 },
           },
           vertexShader: `
             attribute float vertexAlpha;
@@ -115,13 +153,13 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
             }
           `,
           fragmentShader: `
-            uniform float uOpacity; // Add this line
+            uniform float uOpacity;
             varying float vAlpha;
             void main() {
               vec3 baseColor = vec3(0.98, 0.9, 1.0);
               float fadeOut = pow(vAlpha, 1.6);
               fadeOut *= smoothstep(0.0, 0.3, vAlpha);
-              gl_FragColor = vec4(baseColor, fadeOut * 0.8 * uOpacity); // Increased opacity multiplier to 0.8
+              gl_FragColor = vec4(baseColor, fadeOut * 0.8 * uOpacity);
             }
           `,
           transparent: true,
@@ -195,7 +233,9 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           positions[i3 + 2] = this.points[i].z;
 
           alphas[i] =
-            Math.pow(1 - i / (this.maxPoints - 1), 1.5) * this.size * this.life;
+            Math.pow(1 - i / (this.maxPoints - 1), 1.5) *
+            this.size *
+            this.life;
         }
 
         this.trailGeometry.setAttribute(
@@ -224,6 +264,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       const positions = new Float32Array(params.current.count * 3);
       const colors = new Float32Array(params.current.count * 3);
       const scales = new Float32Array(params.current.count);
+      const digitType = new Float32Array(params.current.count); // New attribute for '1's and '0's
 
       const colorInside = new THREE.Color(params.current.insideColor);
       const colorMiddle = new THREE.Color(params.current.middleColor);
@@ -234,7 +275,9 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         const radius = Math.random() * params.current.radius;
         const spinAngle = radius * params.current.spin;
         const branchAngle =
-          ((i % params.current.branches) / params.current.branches) * Math.PI * 2;
+          ((i % params.current.branches) / params.current.branches) *
+          Math.PI *
+          2;
 
         // Reduced randomness for more structured look
         const randomX =
@@ -271,7 +314,8 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           color.lerpColors(
             colorMiddle,
             colorOutside,
-            (radius - params.current.radius * 0.4) / (params.current.radius * 0.6)
+            (radius - params.current.radius * 0.4) /
+              (params.current.radius * 0.6)
           );
         }
 
@@ -279,12 +323,22 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         colors[i3 + 1] = color.g;
         colors[i3 + 2] = color.b;
 
-        scales[i] = Math.random() * 2;
+        scales[i] = 1.0 + Math.random() * 2.0; // Increased scale for visibility
+
+        // Determine if the particle is a '1' or '0'
+        digitType[i] = Math.random() < 0.5 ? 0.0 : 1.0;
       }
 
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute(
+        'position',
+        new THREE.BufferAttribute(positions, 3)
+      );
       geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
       geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
+      geometry.setAttribute(
+        'digitType',
+        new THREE.BufferAttribute(digitType, 1)
+      ); // Set the new attribute
 
       return geometry;
     };
@@ -301,7 +355,8 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         const phi = Math.acos(Math.random() * 2 - 1);
 
         starsPositions[i3] = radius * Math.sin(phi) * Math.cos(theta);
-        starsPositions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        starsPositions[i3 + 1] =
+          radius * Math.sin(phi) * Math.sin(theta);
         starsPositions[i3 + 2] = radius * Math.cos(phi);
       }
 
@@ -312,15 +367,17 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       return starsGeometry;
     };
 
-    // Updated shader material with custom point sprite
+    // Updated shader material with custom point sprite for galaxy particles
     const galaxyMaterial = new THREE.ShaderMaterial({
       uniforms: {
-        starTexture: { value: starTexture },
-        uOpacity: { value: 1.0 }, // Add this line
+        digitTexture: { value: digitTexture }, // Use the digit texture
+        uOpacity: { value: 1.0 },
       },
       vertexShader: `
         attribute float aScale;
+        attribute float digitType; // New attribute
         varying vec3 vColor;
+        varying float vDigitType; // Pass to fragment shader
 
         void main() {
           vec4 modelPosition = modelMatrix * vec4(position, 1.0);
@@ -328,22 +385,33 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           vec4 projectedPosition = projectionMatrix * viewPosition;
 
           gl_Position = projectedPosition;
-          gl_PointSize = aScale * 10.0 * (1.0 / -viewPosition.z);
+          gl_PointSize = aScale * 30.0 * (1.0 / -viewPosition.z); // Increased size for visibility
 
           vColor = color;
+          vDigitType = digitType; // Pass to fragment shader
         }
       `,
       fragmentShader: `
-        uniform sampler2D starTexture;
-        uniform float uOpacity; // Add this line
+        uniform sampler2D digitTexture;
+        uniform float uOpacity;
         varying vec3 vColor;
+        varying float vDigitType;
 
         void main() {
-          vec4 texColor = texture2D(starTexture, gl_PointCoord);
+          vec2 uv = gl_PointCoord;
+
+          // Shift uv.x based on vDigitType
+          if (vDigitType < 0.5) {
+            uv.x = uv.x * 0.5; // Left half for '1'
+          } else {
+            uv.x = 0.5 + uv.x * 0.5; // Right half for '0'
+          }
+
+          vec4 texColor = texture2D(digitTexture, uv);
           float strength = texColor.a;
 
           vec3 finalColor = mix(vec3(0.0), vColor, strength);
-          float alpha = strength * 1.4 * uOpacity; // Multiply by uOpacity
+          float alpha = strength * uOpacity;
 
           gl_FragColor = vec4(finalColor, alpha);
         }
@@ -358,7 +426,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     const starsMaterial = new THREE.PointsMaterial({
       size: 0.1,
       sizeAttenuation: true,
-      map: starTexture,
+      map: starTexture, // Use the original star texture
       transparent: true,
       opacity: 0.8,
       blending: THREE.AdditiveBlending,
@@ -383,7 +451,10 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     stars.position.z = -5;
 
     const shootingStarCount = 30; // Increased count from 15 to 30
-    const shootingStars = Array.from({ length: shootingStarCount }, () => new ShootingStarWithTrail());
+    const shootingStars = Array.from(
+      { length: shootingStarCount },
+      () => new ShootingStarWithTrail()
+    );
     shootingStarsRef.current = shootingStars; // Assign to ref
 
     let targetX = 0;
@@ -404,8 +475,10 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
 
       shootingStars.forEach((star) => star.update());
 
-      mousePosition.current.x += (targetX - mousePosition.current.x) * 2 * deltaTime;
-      mousePosition.current.y += (targetY - mousePosition.current.y) * 2 * deltaTime;
+      mousePosition.current.x +=
+        (targetX - mousePosition.current.x) * 2 * deltaTime;
+      mousePosition.current.y +=
+        (targetY - mousePosition.current.y) * 2 * deltaTime;
 
       const galaxyBasePosX = 20; // Updated base position to match galaxy position
       const galaxyBasePosY = -5;
@@ -414,9 +487,12 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       const galaxySensitivity = 1.5;
       const starSensitivity = 3;
 
-      if (!triggerZoomRef.current) { // Use ref to check the latest triggerZoom
-        const targetGalaxyX = galaxyBasePosX + mousePosition.current.x * galaxySensitivity;
-        const targetGalaxyY = galaxyBasePosY + mousePosition.current.y * galaxySensitivity;
+      if (!triggerZoomRef.current) {
+        // Use ref to check the latest triggerZoom
+        const targetGalaxyX =
+          galaxyBasePosX + mousePosition.current.x * galaxySensitivity;
+        const targetGalaxyY =
+          galaxyBasePosY + mousePosition.current.y * galaxySensitivity;
 
         const clampedGalaxyX = Math.max(
           galaxyBasePosX - maxOffset,
@@ -431,17 +507,24 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         const targetStarY = mousePosition.current.y * starSensitivity;
 
         camera.position.x +=
-          (clampedGalaxyX * 0.8 + targetStarX * 0.2 - camera.position.x) * deltaTime * 1.5;
+          (clampedGalaxyX * 0.8 + targetStarX * 0.2 - camera.position.x) *
+          deltaTime *
+          1.5;
         camera.position.y +=
-          (clampedGalaxyY * 0.8 + targetStarY * 0.2 - camera.position.y) * deltaTime * 1.5;
+          (clampedGalaxyY * 0.8 + targetStarY * 0.2 - camera.position.y) *
+          deltaTime *
+          1.5;
       }
 
       camera.lookAt(galaxy.position);
 
       // Smoother rotation
-      galaxy.rotation.y += deltaTime * params.current.rotationSpeed * 0.3; // Reduced from 0.8
-      galaxy.rotation.z += deltaTime * params.current.rotationSpeed * 0.1; // Reduced from 0.3
-      stars.rotation.y += deltaTime * params.current.rotationSpeed * 0.1; // Reduced from 0.2
+      galaxy.rotation.y +=
+        deltaTime * params.current.rotationSpeed * 0.3; // Reduced from 0.8
+      galaxy.rotation.z +=
+        deltaTime * params.current.rotationSpeed * 0.1; // Reduced from 0.3
+      stars.rotation.y +=
+        deltaTime * params.current.rotationSpeed * 0.1; // Reduced from 0.2
 
       // Gentler light pulsing
       centerLight.intensity = 2.0 + Math.sin(elapsedTime * 0.5) * 0.5;
@@ -468,7 +551,8 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       galaxyGeometry.dispose();
       starsGeometry.dispose();
       galaxyMaterial.dispose();
-      starTexture.dispose();
+      digitTexture.dispose(); // Dispose the digit texture
+      starTexture.dispose(); // Dispose the star texture
       shootingStars.forEach((star) => star.dispose());
       starsMaterial.dispose();
     };
@@ -480,13 +564,6 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         z: 0.1,
         duration: 4,
         ease: 'power2.in',
-        // Removed the jitter effect by eliminating the onUpdate callback
-        // onUpdate: () => {
-        //   if (cameraRef.current) {
-        //     cameraRef.current.position.x += (Math.random() - 0.5) * 0.02;
-        //     cameraRef.current.position.y += (Math.random() - 0.5) * 0.02;
-        //   }
-        // },
         onComplete: () => {
           navigate('/about');
         },
@@ -532,7 +609,8 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       ref={containerRef}
       className="fixed inset-0"
       style={{
-        background: 'radial-gradient(circle at center, #1a1025 0%, #0a0510 100%)',
+        background:
+          'radial-gradient(circle at center, #1a1025 0%, #0a0510 100%)',
         zIndex: -1,
       }}
     />

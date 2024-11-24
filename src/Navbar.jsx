@@ -1,30 +1,32 @@
-import { useContext } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { ThemeContext } from './ThemeContext'
-import { FaSun, FaMoon } from 'react-icons/fa'
-import styles from './Navbar.module.css'
+// Navbar.jsx
+import { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ThemeContext } from './ThemeContext';
+import { FaSun, FaMoon } from 'react-icons/fa';
+import styles from './Navbar.module.css';
 
 const Navbar = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext)
-  const location = useLocation()
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const location = useLocation();
 
   const navItems = [
     { path: '/', label: 'About' },
     { path: '/projects', label: 'Projects' },
     { path: '/resume', label: 'Resume' }
-  ]
+  ];
 
   return (
-    <nav className={`${styles.navbar} ${styles.active}`}>
-      <div className={styles.navbarLogo}>
-        <Link to="/">YourName</Link>
+    <nav className={styles.navbar}>
+      <div className={styles.lineContainer}>
+        <div className={styles.line} />
       </div>
-
-      <ul className={styles.navbarNav}>
-        {navItems.map(({ path, label }) => (
-          <li key={path} className={styles.navItem}>
+      
+      <ul className={styles.navItems}>
+        {navItems.map(({ path, label }, index) => (
+          <li key={path} className={styles.navItemWrapper}>
+            {index > 0 && <span className={styles.dot} />}
             <Link 
-              to={path} 
+              to={path}
               className={`${styles.navLink} ${location.pathname === path ? styles.active : ''}`}
             >
               {label}
@@ -33,24 +35,23 @@ const Navbar = () => {
         ))}
       </ul>
 
-      <div className={styles.navbarRight}>
-        <div className={styles.themeToggle}>
-          <input
-            type="checkbox"
-            id="theme-toggle"
-            className={styles.themeToggleInput}
-            checked={theme === 'dark'}
-            onChange={toggleTheme}
-          />
-          <label htmlFor="theme-toggle" className={styles.themeToggleLabel}>
-            <FaSun className={styles.sunIcon} />
-            <FaMoon className={styles.moonIcon} />
-            <span className={styles.themeToggleSlider}></span>
-          </label>
-        </div>
+      <div className={styles.lineContainer}>
+        <div className={styles.line} />
       </div>
+      
+      <button
+        onClick={toggleTheme}
+        className={styles.themeToggle}
+        aria-label="Toggle theme"
+      >
+        {theme === 'dark' ? (
+          <FaSun className={styles.sunIcon} />
+        ) : (
+          <FaMoon className={styles.moonIcon} />
+        )}
+      </button>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

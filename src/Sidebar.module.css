@@ -1,16 +1,15 @@
 /* Sidebar.module.css */
 .sidebar {
-  position: fixed;
-  left: 2rem;
-  top: 5rem;  /* Accounts for navbar height + some spacing */
-  bottom: 2rem;
+  position: relative;
   width: 300px;
+  height: 100%;
   background-color: var(--sidebar-bg);
   border-radius: 20px;
   padding: 1.5rem;
   overflow-y: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all var(--transition-duration) var(--transition-timing);
+  box-sizing: border-box;
 }
 
 .sidebarContent {

@@ -6,9 +6,15 @@
   --text: #1a1a1a;
   --nav-bg: #ffffff;
   --sidebar-bg: #ffffff;
+  --container-bg: #ffffff;
   --hover: #e5e5e5;
   --primary: #007bff;
   --secondary: #6c757d; /* For gradients and secondary elements */
+
+  /* Scrollbar Colors */
+  --scrollbar-track-color: #e5e5e5; /* Light grey for track */
+  --scrollbar-thumb-color: #cccccc; /* Slightly darker grey for thumb */
+  --scrollbar-thumb-hover-color: #b3b3b3; /* Darker grey on hover */
 
   /* Transition for smooth theme changes */
   --transition-duration: 0.3s;
@@ -16,23 +22,33 @@
 
   /* Add some layout constants */
   --max-content-width: 1400px;
-  --navbar-height: 64px;
+  --navbar-height: 25px;
   --horizontal-padding: 2rem;
-  
+
+  --divider-color: #cccccc; /* Light grey for dividers */
+  --nav-line-color: #b1b1b1; /* Light grey for navbar lines */
 }
 
 /* Dark Theme Overrides */
 [data-theme='dark'] {
   --bg: #1a1a1a;
+  --container-bg: #2a2a2a;
   --text: #ffffff;
   --nav-bg: #2a2a2a;
   --sidebar-bg: #2a2a2a;
   --hover: #333333;
   --primary: #4dabff;
   --secondary: #6c757d; /* Maintained for consistency */
+
+  /* Scrollbar Colors */
+  --scrollbar-track-color: #2a2a2a; /* Dark grey for track */
+  --scrollbar-thumb-color: #555555; /* Medium grey for thumb */
+  --scrollbar-thumb-hover-color: #777777; /* Lighter grey on hover */
+
+  --divider-color: #7e7e7e; /* Dark grey for dividers */
+  --nav-line-color: #bdbdbd; /* Dark grey for navbar lines */
 }
-/* App.css */
-/* Keep your existing root variables and theme setup */
+
 
 * {
   margin: 0;
@@ -51,7 +67,11 @@ body {
 .app {
   min-height: 100vh;
   position: relative;
-  width: 100%;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Background container for custom effects */
@@ -68,23 +88,38 @@ body {
 
 /* Centered content wrapper */
 .content-wrapper {
+  position: relative;
   display: flex;
+  flex-direction: row;
+  gap: 2rem;
   padding-top: var(--navbar-height);
-  min-height: calc(100vh - var(--navbar-height));
-  max-width: var(--max-content-width);
-  margin: 0 auto;
-  padding-left: var(--horizontal-padding);
-  padding-right: var(--horizontal-padding);
-  gap: 2rem; /* Optional: Adds space between sidebar and main content */
+  height: 85vh;
+  width: var(--max-content-width);
 }
 
 /* Main content area */
 .main-content {
   flex: 1;
-  padding: 2rem;
-  max-width: calc(var(--max-content-width) - 350px); /* Adjust if needed */
   transition: all var(--transition-duration) var(--transition-timing);
+  overflow-y: auto;
+  height: 100%;
+  background: var(--container-bg);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
+
+@media (max-width: 2000px) {
+  :root {
+    --max-content-width: 1500px;
+  }
+}
+
+@media (max-width: 1800px) {
+  :root {
+    --max-content-width: 1400px;
+  }
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 1500px) {
@@ -106,12 +141,42 @@ body {
 
 @media (max-width: 992px) {
   .content-wrapper {
+    width: 100%;
     flex-direction: column;
+    height: fit-content;
     padding: var(--navbar-height) 1rem 1rem 1rem;
   }
 
   .main-content {
     padding: 1rem;
     max-width: 100%;
+    flex: 1;
   }
+}
+
+
+/* custom scrollbar styles */
+
+::-webkit-scrollbar {
+  width: 4px; /* Increased width for better visibility */
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track-color); /* Responsive to theme */
+  border-radius: 10px; /* Rounded edges for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color); /* Responsive to theme */
+  border-radius: 10px; /* Rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color); /* Responsive to theme */
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }

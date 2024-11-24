@@ -1,4 +1,3 @@
-// App.jsx
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './ThemeContext'
 import Landing from './Landing'
@@ -6,6 +5,7 @@ import MouseTrail from './MouseTrail'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import About from './About'
+import Projects from './Projects'
 import './App.css'
 
 // Wrapper component that handles the layout logic
@@ -32,8 +32,16 @@ const AppContent = () => {
       <Routes>
         {/* Landing page route */}
         <Route path="/" element={<Landing />} />
-        
-        {/* All other routes with the PageLayout */}
+        {/* Projects page with PageLayout */}
+        <Route
+          path="/projects"
+          element={
+            <PageLayout>
+              <Projects />
+            </PageLayout>
+          }
+        />
+        {/* About page with PageLayout */}
         <Route
           path="/about"
           element={

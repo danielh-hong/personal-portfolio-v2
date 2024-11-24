@@ -1,0 +1,673 @@
+/* ProjectsModal.module.css */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+
+.modalContent {
+  cursor: default;
+  background-color: var(--container-bg);
+  border-radius: 16px;
+  width: 95%;
+  max-width: 1300px;
+  max-height: 95vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 3rem;
+  padding-top: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: var(--container-bg);
+  color: var(--text);
+  border: 1px solid var(--divider-color);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  z-index: 2;
+}
+
+.closeButton:hover {
+  background-color: var(--hover);
+  transform: rotate(90deg);
+  border-color: var(--text);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-right: 3rem;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.modalSkills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.modalSkills .skill {
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  background-color: var(--secondary);
+  color: white;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.modalLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.projectLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  background-color: var(--primary);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.projectLink:hover {
+  transform: translateY(-2px);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--divider-color);
+  opacity: 0.6;
+  transition: background-color 0.3s ease;
+}
+
+.modalImageContainer {
+  position: relative;
+  width: 100%;
+  height: 500px; /* Adjust as needed for responsiveness */
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modalImage {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease; /* Smooth transitions on zoom */
+}
+
+/* Navigation Controls */
+.navigationButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--container-bg);
+  color: var(--text);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navigationButton:hover {
+  background-color: var(--hover);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.navigationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.prev {
+  left: 1.5rem;
+}
+
+.next {
+  right: 1.5rem;
+}
+
+/* Image Controls */
+.imageControls {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+  background-color: var(--container-bg);
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imageControls button {
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.4rem;
+  transition: color 0.2s ease;
+}
+
+.imageControls button:hover {
+  color: var(--primary);
+}
+
+/* Video Wrapper */
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+/* PDF Viewer */
+.pdfWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pdfControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background-color: var(--container-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pdfControls button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.pdfControls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pdfDocument {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pdfPage {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pdfPage canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* Pagination Dots */
+.paginationDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.paginationDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--text);
+  opacity: 0.3;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paginationDot:hover {
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+.paginationDot.activeDot {
+  opacity: 1;
+  background-color: var(--primary);
+  transform: scale(1.2);
+}
+
+.mediaTypeIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8px;
+  color: white;
+  line-height: 1;
+}
+
+.paginationDot:has(.mediaTypeIcon) {
+  width: 16px;
+  height: 16px;
+}
+
+.imageCaption {
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+  color: var(--text);
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.modalDescription {
+  margin: 2rem 0;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.modalDescription p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.modalTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--divider-color);
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  background-color: var(--primary);
+  color: white;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Loading States */
+.loadingPlaceholder {
+  background: linear-gradient(
+    90deg,
+    var(--container-bg) 0%,
+    var(--hover) 50%,
+    var(--container-bg) 100%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .modalContent {
+    max-width: 1100px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .modalContent {
+    max-width: 95%;
+    padding: 2rem;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.75rem;
+  }
+
+  .modalImageContainer {
+    height: 400px;
+  }
+}
+
+@media (max-width: 992px) {
+  .modalContent {
+    padding: 1.5rem;
+  }
+
+  .modalImageContainer {
+    height: 300px;
+  }
+
+  .navigationButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .imageControls {
+    top: 0.75rem;
+  }
+
+  .imageControls button {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .modalHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.5rem;
+  }
+
+  .closeButton {
+    top: 1rem;
+    right: 1rem;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .modalImageContainer {
+    height: 300px;
+    margin: 1.5rem 0;
+  }
+
+  .pdfControls {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .pdfControls button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .paginationDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .paginationDot:has(.mediaTypeIcon) {
+    width: 14px;
+    height: 14px;
+  }
+
+  .mediaTypeIcon {
+    font-size: 7px;
+  }
+
+  .modalLinks {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .projectLink {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .imageControls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 1.25rem;
+  }
+
+  .modalImageContainer {
+    height: 250px;
+  }
+
+  .navigationButton {
+    width: 36px;
+    height: 36px;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .imageCaption {
+    font-size: 0.85rem;
+  }
+
+  .paginationDot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .paginationDot:has(.mediaTypeIcon) {
+    width: 12px;
+    height: 12px;
+  }
+
+  .mediaTypeIcon {
+    font-size: 6px;
+  }
+
+  .pdfControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .imageControls {
+    width: calc(100% - 2rem);
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .imageControls button {
+    flex: 1;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.4rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .modalContent,
+  .closeButton,
+  .projectLink,
+  .navigationButton,
+  .paginationDot,
+  .imageControls button,
+  .pdfControls button {
+    transition: none;
+  }
+
+  .loadingPlaceholder {
+    animation: none;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .modalImageContainer {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .pdfDocument {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .imageControls,
+  .pdfControls,
+  .navigationButton {
+    background-color: var(--container-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Focus styles for accessibility */
+.closeButton:focus,
+.navigationButton:focus,
+.projectLink:focus,
+.paginationDot:focus,
+.imageControls button:focus,
+.pdfControls button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar for modal */
+.modalContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalContent::-webkit-scrollbar-track {
+  background: var(--container-bg);
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 4px;
+}
+
+/* Loading spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--container-bg);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

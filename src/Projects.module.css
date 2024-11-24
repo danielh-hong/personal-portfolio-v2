@@ -1,0 +1,219 @@
+/* Projects.module.css */
+
+.projectsContainer {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.filterContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.filterTag {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--container-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.filterTag:hover {
+  background-color: var(--hover);
+}
+
+.filterTag.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.projectCard {
+  background-color: var(--container-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.projectCard:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.projectImage {
+  width: 100%;
+  aspect-ratio: 3 / 2; /* Maintains a 3:2 aspect ratio */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Overlay Styles */
+/* Overlay Styles */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Remove fixed height to allow content-driven height */
+  /* height: 60px; */ 
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+  display: flex;
+  align-items: flex-start; /* Corrected alignment */
+  padding: 0.75rem; /* Adjusted padding */
+  box-sizing: border-box; /* Ensure padding is included in width/height */
+}
+
+/* Project Skills Container */
+.projectSkills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem; /* Reduced gap between skill tags */
+  max-height: 100%; /* Prevent overflow */
+  overflow: hidden; /* Hide any overflow if necessary */
+}
+
+/* Individual Skill Tag */
+.skill {
+  padding: 0.1rem 0.4rem; /* Reduced padding */
+  border-radius: 50px;
+  background-color: var(--secondary);
+  color: white;
+  font-size: 0.65rem; /* Reduced font size */
+  opacity: 0.85;
+  white-space: nowrap; /* Prevents text from wrapping within a tag */
+}
+
+/* Project Info */
+.projectInfo {
+  padding: 1.5rem;
+}
+
+.projectInfo h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.projectInfo p {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.projectTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  background-color: var(--primary);
+  color: white;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  .projectsContainer {
+    padding: 1.5rem;
+  }
+
+  .projectImage {
+    aspect-ratio: 3 / 2; /* Maintains aspect ratio */
+  }
+}
+
+@media (max-width: 992px) {
+  .projectsContainer {
+    padding: 1rem;
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .projectInfo h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .projectsContainer {
+    padding: 1rem;
+  }
+
+  .filterContainer {
+    gap: 0.75rem;
+  }
+
+  .filterTag {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projectsContainer {
+    padding: 0.75rem;
+  }
+
+  .filterContainer {
+    gap: 0.5rem;
+  }
+
+  .filterTag {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .projectImage {
+    aspect-ratio: 3 / 2; /* Maintains aspect ratio */
+  }
+}
+
+/* Accessibility */
+.filterTag:focus,
+.projectCard:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

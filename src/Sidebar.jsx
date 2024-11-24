@@ -18,7 +18,7 @@ const Sidebar = () => {
           </div>
           <div className={styles.username}>Daniel Hong</div>
           <div className={styles.location}>
-            <FaMapMarkerAlt /> New York, NY
+            <FaMapMarkerAlt /> Toronto, Ontario
           </div>
         </div>
 
@@ -91,25 +91,7 @@ const Sidebar = () => {
             </ul>
           </section>
 
-          {/* Optional: Additional Sections (e.g., Projects, Skills) */}
-          {/* 
-          <section className={styles.section}>
-            <h3 className={styles.sectionHeader}>Projects</h3>
-            <ul className={styles.navList}>
-              <li className={styles.navItem}>
-                <a href="/project1" className={styles.navLink}>
-                  <FaProjectDiagram /> <span>Project One</span>
-                </a>
-              </li>
-              <!-- Add more projects as needed -->
-            </ul>
-          </section>
-          */}
-
         </nav>
-
-        {/* Footer */}
-        {/* Removed as per your request */}
 
       </div>
     </aside>
