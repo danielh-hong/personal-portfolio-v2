@@ -1,0 +1,91 @@
+/* Landing.module.css */
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.backgroundWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: translateX(0%); /* Center the galaxy */
+  scale: 1;
+  transition: transform 0.5s ease, scale 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .backgroundWrapper {
+    transform: translateX(7%);
+    scale: 1.3;
+  }
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  justify-content: center;
+  text-align: left;
+  padding: 12%;
+  color: #ffffff;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.fadeOut {
+  opacity: 0;
+}
+
+.title {
+  font-size: clamp(2rem, 6vw, 4rem); /* Adjusted for better responsiveness */
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(0, 102, 204, 0.7);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 4vw, 2rem); /* Adjusted for better responsiveness */
+  font-weight: 400;
+  color: rgba(200, 220, 255, 0.9);
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: white;
+  background: rgba(0, 102, 204, 0.8);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: fadeInUp 0.8s ease-out 0.4s forwards;
+}
+
+.button:hover {
+  background: rgba(0, 102, 204, 1);
+  transform: translateY(-10px);
+  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.5);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

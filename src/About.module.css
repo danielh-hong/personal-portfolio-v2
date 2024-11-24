@@ -1,0 +1,143 @@
+/* About.module.css */
+
+.codeBlock {
+  background: var(--container-color);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  font-family: 'Fira Code', monospace;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.line {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.indented {
+  margin-left: 2rem;
+}
+
+.comment {
+  color: #6a9955;
+}
+
+.keyword {
+  color: #569cd6;
+}
+
+.variable {
+  color: #4fc1ff;
+}
+
+.operator {
+  color: #d4d4d4;
+}
+
+.property {
+  color: #9cdcfe;
+}
+
+.string {
+  color: #ce9178;
+  margin: 0 0.5rem;
+}
+
+.bracket, .curly {
+  color: #d4d4d4;
+}
+
+.infoCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.card {
+  background: var(--container-color);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.icon {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.card h3 {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.card p {
+  color: var(--text);
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.personalSection {
+  background: var(--container-color);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.personalSection h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+
+.interests {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.interest {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text);
+}
+
+.interest .icon {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.quote {
+  text-align: center;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--primary);
+  margin: 3rem 0;
+  padding: 2rem;
+  background: var(--container-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 1rem;
+  }
+  
+  .infoCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .interests {
+    grid-template-columns: 1fr;
+  }
+}

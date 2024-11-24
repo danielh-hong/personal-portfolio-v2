@@ -1,0 +1,117 @@
+/* App.css */
+/* Base Variables (Light Theme) */
+:root {
+  /* General Colors */
+  --bg: #f8f8f8;
+  --text: #1a1a1a;
+  --nav-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --hover: #e5e5e5;
+  --primary: #007bff;
+  --secondary: #6c757d; /* For gradients and secondary elements */
+
+  /* Transition for smooth theme changes */
+  --transition-duration: 0.3s;
+  --transition-timing: ease;
+
+  /* Add some layout constants */
+  --max-content-width: 1400px;
+  --navbar-height: 64px;
+  --horizontal-padding: 2rem;
+  
+}
+
+/* Dark Theme Overrides */
+[data-theme='dark'] {
+  --bg: #1a1a1a;
+  --text: #ffffff;
+  --nav-bg: #2a2a2a;
+  --sidebar-bg: #2a2a2a;
+  --hover: #333333;
+  --primary: #4dabff;
+  --secondary: #6c757d; /* Maintained for consistency */
+}
+/* App.css */
+/* Keep your existing root variables and theme setup */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+.app {
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+/* Background container for custom effects */
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: var(--bg);
+  /* Add your custom background here */
+}
+
+/* Centered content wrapper */
+.content-wrapper {
+  display: flex;
+  padding-top: var(--navbar-height);
+  min-height: calc(100vh - var(--navbar-height));
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding-left: var(--horizontal-padding);
+  padding-right: var(--horizontal-padding);
+  gap: 2rem; /* Optional: Adds space between sidebar and main content */
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: calc(var(--max-content-width) - 350px); /* Adjust if needed */
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1500px) {
+  :root {
+    --max-content-width: 1200px;
+  }
+}
+
+@media (max-width: 1300px) {
+  :root {
+    --max-content-width: 1000px;
+  }
+  
+  .content-wrapper {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .content-wrapper {
+    flex-direction: column;
+    padding: var(--navbar-height) 1rem 1rem 1rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+    max-width: 100%;
+  }
+}
