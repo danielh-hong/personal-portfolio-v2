@@ -5,9 +5,10 @@ import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import styles from './Projects.module.css';
 import ProjectsModal from './ProjectsModal';
 
+
 // Configure PDF worker
 import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 // Define media types
 const MEDIA_TYPES = {
@@ -57,40 +58,27 @@ const projects = [
   // Quadcopter Design
   {
     id: 1,
-    title: 'Quadcopter Design',
+    title: 'Quadcopter Fuselage Design',
     brief: 'Autonomous drone system with advanced stabilization',
     tags: ['Robotics', 'Engineering'],
     skills: ['CAD', 'SolidWorks', 'PID Controllers', 'Python'],
-    thumbnail: '/projects/quadcopter/thumbnail.png',
+    thumbnail: '/quadcopter/thumbnail.jpg',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/projects/quadcopter/main.png',
+        url: '/quadcopter/1.jpg',
         caption: 'Complete quadcopter assembly with custom frame design',
         description: 'Detailed view of the quadcopter assembly, highlighting the custom-designed frame and stabilization components.'
       },
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/projects/quadcopter/controller.png',
+        url: '/quadcopter/2.jpg',
         caption: 'Flight controller board and sensor array',
         description: 'Close-up of the flight controller board integrated with multiple sensors for autonomous navigation.'
-      },
-      {
-        type: MEDIA_TYPES.VIDEO,
-        youtubeId: 'VIDEO_ID_HERE',
-        caption: 'Flight test demonstration',
-        description: 'A video demonstrating the quadcopter\'s autonomous flight capabilities and stabilization performance.'
-      },
-      {
-        type: MEDIA_TYPES.PDF,
-        url: '/projects/quadcopter/technical-specs.pdf',
-        caption: 'Technical specifications',
-        description: 'Comprehensive technical specifications of the quadcopter system, including hardware components and software algorithms.'
       }
     ],
     links: {
-      github: 'https://github.com/yourusername/quadcopter',
-      live: 'https://project-website.com'
+
     }
   },
 
@@ -234,23 +222,29 @@ const projects = [
     brief: 'Designing a helmet storage solution for bike commuters',
     tags: ['Engineering', 'Design', 'Teamwork'],
     skills: ['CAD', 'SolidWorks', 'Prototyping', 'Team Collaboration'],
-    thumbnail: '/praxis-i/thumbnail.png',
+    thumbnail: '/praxis_I/thumbnail.png',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/praxis-i/alpha-release.png',
+        url: '/praxis_I/1.jpg',
         caption: 'Praxis I Alpha Release Presentation',
         description: 'Presentation slides from the Praxis I Alpha Release, outlining project objectives and designs.'
       },
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/praxis-i/sketches.png',
+        url: '/praxis_I/2.png',
+        caption: 'Initial helmet storage solutions sketches',
+        description: 'Hand-drawn sketches of initial helmet storage solutions explored during the brainstorming phase.'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/praxis_I/3.png',
         caption: 'Initial helmet storage solutions sketches',
         description: 'Hand-drawn sketches of initial helmet storage solutions explored during the brainstorming phase.'
       },
       {
         type: MEDIA_TYPES.PDF,
-        url: '/praxis-i/design-brief.pdf',
+        url: '/praxis_I/4.pdf',
         caption: 'Praxis I Design Brief',
         description: 'Comprehensive design brief detailing the requirements and specifications for the Helmet Storage Solution.'
       }
@@ -356,37 +350,9 @@ const projects = [
     }
   },
 
-  // Quadcopter Fuselage
-  {
-    id: 9,
-    title: 'Quadcopter Fuselage',
-    brief: 'Design and assembly of quadcopter fuselage for UAV competition',
-    tags: ['Engineering', 'Aerospace', 'Robotics'],
-    skills: ['SolidWorks', 'CAD', '3D Modeling', 'Assembly'],
-    thumbnail: '/quad-fuselage/thumbnail.png',
-    media: [
-      {
-        type: MEDIA_TYPES.IMAGE,
-        url: '/quad-fuselage/render.jpg',
-        caption: 'SolidWorks render of quadcopter fuselage',
-        description: 'High-resolution SolidWorks render of the quadcopter fuselage, highlighting its structural components.'
-      },
-      {
-        type: MEDIA_TYPES.IMAGE,
-        url: '/quad-fuselage/wireframe.jpg',
-        caption: 'Wireframe view of quadcopter design',
-        description: 'Wireframe visualization of the quadcopter fuselage design, showcasing internal structures and layout.'
-      }
-    ],
-    links: {
-      github: 'https://github.com/yourusername/quad-fuselage',
-      live: 'https://utat-quadcopter.designproject.com'
-    }
-  },
-
   // Pendulum Analysis
   {
-    id: 10,
+    id: 9,
     title: 'Pendulum Analysis',
     brief: 'Research paper analyzing the swing dynamics of a pendulum',
     tags: ['Research', 'Physics', 'Engineering'],
@@ -414,7 +380,7 @@ const projects = [
 
   // Model Mania 2019
   {
-    id: 11,
+    id: 10,
     title: 'Model Mania 2019',
     brief: 'SolidWorks model for the 2019 Model Mania design challenge',
     tags: ['Engineering', 'CAD', '3D Modeling'],
@@ -436,7 +402,7 @@ const projects = [
 
   // The Legend of Pakicetus (Animated Short)
   {
-    id: 12,
+    id: 11,
     title: 'The Legend of Pakicetus (Animated Short)',
     brief: 'Animated short film about the first whale on land',
     tags: ['Animation', 'Video Production', 'Storytelling'],
@@ -457,7 +423,7 @@ const projects = [
 
   // Nociception - The Perception of Pain
   {
-    id: 13,
+    id: 12,
     title: 'Nociception - The Perception of Pain',
     brief: 'Animated video explaining how pain is perceived by the body',
     tags: ['Education', 'Animation', 'Biology'],
@@ -478,7 +444,7 @@ const projects = [
 
   // Biking - The Best Form of City Transportation
   {
-    id: 14,
+    id: 13,
     title: 'Biking - The Best Form of City Transportation',
     brief: 'Animated video promoting biking as the best form of transportation',
     tags: ['Advocacy', 'Animation', 'Transportation'],
@@ -499,7 +465,7 @@ const projects = [
 
   // Peto's Paradox
   {
-    id: 15,
+    id: 14,
     title: "Peto's Paradox",
     brief: 'Animated video exploring the biological concept of Peto\'s Paradox',
     tags: ['Biology', 'Animation', 'Education'],
@@ -520,7 +486,7 @@ const projects = [
 
   // Excavator
   {
-    id: 16,
+    id: 15,
     title: 'Excavator (My First Ever Project)',
     brief: 'Hydraulics-powered excavator made from recycled materials',
     tags: ['Engineering', 'Robotics', 'Hydraulics'],
@@ -541,7 +507,7 @@ const projects = [
 
   // Personal Website
   {
-    id: 17,
+    id: 16,
     title: 'Personal Website',
     brief: 'My personal portfolio website built with web technologies',
     tags: ['Web Development', 'Design'],
