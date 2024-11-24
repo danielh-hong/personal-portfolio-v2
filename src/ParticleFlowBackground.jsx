@@ -55,7 +55,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       0.1,
       2000
     );
-    camera.position.z = 10; // Moved back
+    camera.position.z = 12; // Moved back
     camera.position.x = 0; // Adjusted to view galaxy on the right
     camera.position.y = 0; // Offset down
     cameraRef.current = camera;

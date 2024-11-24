@@ -10,7 +10,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: '/', label: 'About' },
+    { path: '/about', label: 'About' },
     { path: '/projects', label: 'Projects' },
     { path: '/resume', label: 'Resume' }
   ];

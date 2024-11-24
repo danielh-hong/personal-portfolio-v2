@@ -31,7 +31,7 @@ const Sidebar = () => {
             <ul className={styles.navList}>
               <li className={styles.navItem}>
                 <a 
-                  href="https://github.com/yourusername" 
+                  href="https://github.com/danielh-hong" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={styles.navLink}
@@ -42,7 +42,7 @@ const Sidebar = () => {
               </li>
               <li className={styles.navItem}>
                 <a 
-                  href="https://linkedin.com/in/yourusername" 
+                  href="https://www.linkedin.com/in/danielh-hong/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={styles.navLink}
@@ -53,7 +53,7 @@ const Sidebar = () => {
               </li>
               <li className={styles.navItem}>
                 <a 
-                  href="mailto:your.email@example.com"
+                  href="mailto:danielh.toronto@gmail.com"
                   className={styles.navLink}
                   aria-label="Send Email"
                 >
