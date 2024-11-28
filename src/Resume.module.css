@@ -1,0 +1,398 @@
+.resumeContainer {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Header Styles */
+.header {
+  text-align: left;
+  margin-bottom: 3.5rem;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, var(--primary), transparent);
+}
+
+.header h1 {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.contactInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contactItem:hover {
+  color: var(--primary);
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 4.5rem;
+}
+
+.section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: var(--primary);
+  position: relative;
+  padding-bottom: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 3rem;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* Education Styles */
+.educationCard {
+  background: var(--container-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+}
+
+.eduHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 2rem;
+}
+
+.eduHeader h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.eduMeta {
+  text-align: right;
+}
+
+.gpa {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.achievements {
+  list-style: none;
+  padding-left: 1.5rem;
+}
+
+.achievements li {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.achievements li::before {
+  content: '•';
+  position: absolute;
+  left: -1rem;
+  color: var(--primary);
+}
+
+/* Experience Styles */
+.experienceCard {
+  background: var(--container-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.experienceCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.expHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 2rem;
+}
+
+.expHeader h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.company {
+  font-size: 1.2rem;
+  color: var(--primary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.expMeta {
+  text-align: right;
+}
+
+.expPoints {
+  list-style: none;
+  padding-left: 1.5rem;
+}
+
+.expPoints li {
+  position: relative;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.expPoints li::before {
+  content: '•';
+  position: absolute;
+  left: -1rem;
+  color: var(--primary);
+}
+
+/* Projects Styles */
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.projectCard {
+  background: var(--container-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.projectCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.projectCard:hover::before {
+  opacity: 1;
+}
+
+.projectCard h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.projectSubtitle {
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.projectDescription {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.techStack {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.projectLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.projectLink:hover {
+  color: var(--text);
+}
+
+/* Skills Styles */
+.skillsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.skillCategory {
+  background: var(--container-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+  transition: transform 0.3s ease;
+}
+
+.skillCategory:hover {
+  transform: translateY(-2px);
+}
+
+.skillCategory h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+  color: var(--primary);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.skillCategory h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 2rem;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+
+.skillCategory p {
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .resumeContainer {
+    padding: 1.5rem;
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .resumeContainer {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .contactInfo {
+    gap: 1rem;
+  }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+
+  .eduHeader,
+  .expHeader {
+    flex-direction: column;
+  }
+
+  .eduMeta,
+  .expMeta {
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contactInfo {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .skillsContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .section h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resumeContainer {
+    padding: 0.75rem;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+  }
+
+  .experienceCard,
+  .educationCard,
+  .projectCard,
+  .skillCategory {
+    padding: 1rem;
+  }
+}

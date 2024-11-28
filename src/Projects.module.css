@@ -3,20 +3,11 @@
 .projectsContainer {
   width: 100%;
   height: 100%;
-  padding: 2rem;
-  padding-right: 1rem;
-  position: relative;
-
-}
-
-.ContainerContent {
-  width: 100%;
-  height: 100%;
-  padding-right: 1rem;
   position: relative;
   overflow-y: auto;
-
+  padding-right: 1.5rem;
 }
+
 
 .filterContainer {
   display: flex;

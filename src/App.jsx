@@ -6,6 +6,7 @@ import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import About from './About'
 import Projects from './Projects'
+import Resume from './Resume'
 import './App.css'
 
 // Wrapper component that handles the layout logic
@@ -20,7 +21,9 @@ const AppContent = () => {
       <div className="content-wrapper">
         <Sidebar />
         <main className="main-content">
-          {children}
+          <div className="main-content-inner">
+            {children}
+          </div>
         </main>
       </div>
     </>
@@ -47,6 +50,14 @@ const AppContent = () => {
           element={
             <PageLayout>
               <About />
+            </PageLayout>
+          }
+        />
+        <Route
+          path="/resume"
+          element={
+            <PageLayout>
+              <Resume />
             </PageLayout>
           }
         />

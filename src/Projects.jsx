@@ -588,77 +588,75 @@ const Projects = () => {
 
   return (
     <div className={styles.projectsContainer}>
-      <div className={styles.ContainerContent}>
 
-        <div className={styles.filterContainer}>
-          {TAGS.map(tag => (
-            <button
-              key={tag}
-              className={`${styles.filterTag} ${selectedTag === tag ? styles.active : ''}`}
-              onClick={() => setSelectedTag(tag)}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-
-        <div className={styles.projectsGrid}>
-          <AnimatePresence>
-            {filteredProjects.map(project => (
-              <motion.div
-                key={project.id}
-                className={styles.projectCard}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => openModal(project)}
-                tabIndex={0} // For accessibility
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') openModal(project);
-                }}
-              >
-                <div 
-                  className={styles.projectImage}
-                  style={{ backgroundImage: `url(${getThumbnail(project)})` }}
-                />
-                {/* Overlay with Gradient and Skills */}
-                <div className={styles.overlay}>
-                  <div className={styles.projectSkills}>
-                    {project.skills.map((skill, index) => (
-                      <span key={index} className={styles.skill}>{skill}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.projectInfo}>
-                  <h3>{project.title}</h3>
-                  <p>{project.brief}</p>
-                  <div className={styles.projectTags}>
-                    {project.tags.map(tag => (
-                      <span key={tag} className={styles.tag}>{tag}</span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-
-        <AnimatePresence>
-          {isModalOpen && selectedProject && (
-            <ProjectsModal 
-              project={selectedProject}
-              currentMediaIndex={currentMediaIndex}
-              setCurrentMediaIndex={setCurrentMediaIndex}
-              navigateMedia={navigateMedia}
-              closeModal={closeModal}
-            />
-          )}
-        </AnimatePresence>
-
-
+      <div className={styles.filterContainer}>
+        {TAGS.map(tag => (
+          <button
+            key={tag}
+            className={`${styles.filterTag} ${selectedTag === tag ? styles.active : ''}`}
+            onClick={() => setSelectedTag(tag)}
+          >
+            {tag}
+          </button>
+        ))}
       </div>
+
+      <div className={styles.projectsGrid}>
+        <AnimatePresence>
+          {filteredProjects.map(project => (
+            <motion.div
+              key={project.id}
+              className={styles.projectCard}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => openModal(project)}
+              tabIndex={0} // For accessibility
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') openModal(project);
+              }}
+            >
+              <div 
+                className={styles.projectImage}
+                style={{ backgroundImage: `url(${getThumbnail(project)})` }}
+              />
+              {/* Overlay with Gradient and Skills */}
+              <div className={styles.overlay}>
+                <div className={styles.projectSkills}>
+                  {project.skills.map((skill, index) => (
+                    <span key={index} className={styles.skill}>{skill}</span>
+                  ))}
+                </div>
+              </div>
+              <div className={styles.projectInfo}>
+                <h3>{project.title}</h3>
+                <p>{project.brief}</p>
+                <div className={styles.projectTags}>
+                  {project.tags.map(tag => (
+                    <span key={tag} className={styles.tag}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      <AnimatePresence>
+        {isModalOpen && selectedProject && (
+          <ProjectsModal 
+            project={selectedProject}
+            currentMediaIndex={currentMediaIndex}
+            setCurrentMediaIndex={setCurrentMediaIndex}
+            navigateMedia={navigateMedia}
+            closeModal={closeModal}
+          />
+        )}
+      </AnimatePresence>
+
+
     </div>
   );
 };
