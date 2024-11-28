@@ -41,7 +41,7 @@
   --secondary: #6c757d; /* Maintained for consistency */
 
   /* Scrollbar Colors */
-  --scrollbar-track-color: #2a2a2a; /* Dark grey for track */
+  --scrollbar-track-color: #010101; /* Dark grey for track */
   --scrollbar-thumb-color: #555555; /* Medium grey for thumb */
   --scrollbar-thumb-hover-color: #777777; /* Lighter grey on hover */
 
@@ -101,7 +101,7 @@ body {
 .main-content {
   flex: 1;
   transition: all var(--transition-duration) var(--transition-timing);
-  overflow-y: auto;
+  overflow-y:hidden;
   height: 100%;
   background: var(--container-bg);
   border-radius: 20px;

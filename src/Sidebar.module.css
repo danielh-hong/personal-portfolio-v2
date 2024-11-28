@@ -6,16 +6,21 @@
   background-color: var(--sidebar-bg);
   border-radius: 20px;
   padding: 1.5rem;
-  overflow-y: auto;
+  padding-right: 0.75rem;
+  overflow-y: none;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all var(--transition-duration) var(--transition-timing);
   box-sizing: border-box;
 }
 
+
 .sidebarContent {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: auto;
+  overflow-x: none;
+  box-sizing: border-box;
 }
 
 /* Profile section */
@@ -74,6 +79,7 @@
   flex-direction: column;
   gap: 0.5rem;
   list-style: none;
+  width: 95%;
 }
 
 .navLink {
@@ -97,19 +103,6 @@
   color: var(--primary);
 }
 
-/* Custom scrollbar */
-.sidebar::-webkit-scrollbar {
-  width: 5px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-}
 
 /* Responsive design */
 @media (max-width: 1400px) {

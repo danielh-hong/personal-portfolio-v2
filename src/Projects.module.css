@@ -4,7 +4,18 @@
   width: 100%;
   height: 100%;
   padding: 2rem;
+  padding-right: 1rem;
+  position: relative;
+
+}
+
+.ContainerContent {
+  width: 100%;
+  height: 100%;
+  padding-right: 1rem;
+  position: relative;
   overflow-y: auto;
+
 }
 
 .filterContainer {
@@ -145,6 +156,7 @@
 @media (max-width: 1200px) {
   .projectsContainer {
     padding: 1.5rem;
+    padding-right: 0.75rem;
   }
 
   .projectImage {
@@ -155,6 +167,8 @@
 @media (max-width: 992px) {
   .projectsContainer {
     padding: 1rem;
+    padding-right: 0.25rem;
+
   }
 
   .projectsGrid {
@@ -170,6 +184,8 @@
 @media (max-width: 768px) {
   .projectsContainer {
     padding: 1rem;
+    padding-right: 0.25rem;
+
   }
 
   .filterContainer {
@@ -190,6 +206,8 @@
 @media (max-width: 480px) {
   .projectsContainer {
     padding: 0.75rem;
+    padding-right: 0.1rem;
+
   }
 
   .filterContainer {
