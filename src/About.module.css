@@ -1,136 +1,131 @@
-
-/* About.module.css */
-.about {
+.container {
   width: 100%;
   max-width: var(--max-content-width);
-  padding: 2rem;
-  padding-bottom: 1rem;
   margin: 0 auto;
-  overflow: hidden;
-}
-
-.codeBlockWrapper {
-  overflow: hidden;
-  background-color: var(--container-bg);
-}
-
-.codeBlockHeader {
-  padding: 1rem 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.terminal {
+  width: 100%;
+  background: var(--container-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--divider-color);
+  position: relative;
+}
+
+.terminal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    transparent 50%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.terminalHeader {
+  padding: 1rem;
+  background: var(--surface-100);
   border-bottom: 1px solid var(--divider-color);
-  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.codeBlockHeader:hover {
-  background-color: var(--hover);
+.terminalDots {
+  display: flex;
+  gap: 0.5rem;
 }
 
-.headerText {
-  font-family: 'Fira Code', monospace;
+.terminalDots span {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  transition: opacity 0.2s ease;
+}
+
+.terminal:hover .terminalDots span {
   opacity: 0.8;
 }
 
-.expandIcon {
-  display: flex;
-  align-items: center;
-  color: var(--primary);
+.terminalDots span:nth-child(1) {
+  background: var(--accent-error);
 }
 
-.codeBlock {
-  padding: 1.5rem 0;
+.terminalDots span:nth-child(2) {
+  background: var(--accent-warning);
+}
+
+.terminalDots span:nth-child(3) {
+  background: var(--accent-success);
+}
+
+.terminalTitle {
   font-family: 'Fira Code', monospace;
-  overflow: hidden;
+  font-size: 0.9rem;
+  color: var(--secondary);
+  opacity: 0.8;
+}
+
+.terminalBody {
+  padding: 1.5rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  background: var(--container-bg);
+  min-height: 400px;
 }
 
 .line {
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
-  animation-delay: calc(var(--line-index, 0) * 0.1s);
+  white-space: pre;
+  padding: 0.25rem 0;
+  color: var(--text);
 }
 
-.divider {
-  width: 100%;
-  height: 1px;
-  background-color: var(--divider-color); /* Light gray for light theme */
-  opacity: 0.6; /* Slightly transparent for a sleek look */
-  transition: background-color 0.3s ease;
+.comment {
+  color: var(--secondary-light);
+  font-style: italic;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.property {
+  color: var(--text);
 }
 
-.indented {
-  margin-left: 2rem;
+.property::before {
+  color: var(--primary-light);
 }
 
-.comment { color: #6a9955; }
-.keyword { color: #569cd6; }
-.variable { color: #4fc1ff; }
-.operator { color: #d4d4d4; }
-.property { color: #9cdcfe; }
-.string { color: #ce9178; margin: 0 0.5rem; }
-.bracket, .curly { color: #d4d4d4; }
-
-.skillsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-}
-
-.skillItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  background-color: var(--container-bg);
-}
-
-.skillItem:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.skillIcon {
-  font-size: 1.5rem;
+.array-start, .array-end {
   color: var(--primary);
-  transition: transform 0.3s ease;
 }
 
-.skillItem:hover .skillIcon {
-  transform: scale(1.1);
-}
-
-.skillContent h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
-  color: var(--text);
-}
-
-.skillContent p {
-  line-height: 1.6;
-  color: var(--text);
-  opacity: 0.9;
+.array-item {
+  color: var(--accent-success);
+  padding-left: 2rem;
 }
 
 .quote {
   text-align: center;
-  font-size: 1.5rem;
-  font-style: italic;
+  font-size: 1.25rem;
+  font-weight: 500;
   color: var(--primary);
-  margin: 3rem 0;
   padding: 2rem;
   position: relative;
+  font-style: italic;
+  opacity: 0.9;
 }
 
 .quote::before,
@@ -138,8 +133,9 @@
   content: '';
   position: absolute;
   height: 2px;
-  width: 100px;
+  width: 60px;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0.3;
 }
 
 .quote::before {
@@ -154,83 +150,34 @@
   transform: translateX(-50%);
 }
 
-@media (max-width: 1024px) {
-  .about {
-    padding: 1.5rem;
-  }
-
-  .skillsGrid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-}
-
 @media (max-width: 768px) {
-  .about {
+  .container {
     padding: 1rem;
   }
 
-  .codeBlock {
+  .terminalBody {
     padding: 1rem;
-  }
-
-  .indented {
-    margin-left: 1rem;
-  }
-
-  .line {
-    font-size: 0.9rem;
-  }
-
-  .skillsGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin: 2rem 0;
-  }
-
-  .skillItem {
-    padding: 0.875rem;
+    font-size: 0.85rem;
+    min-height: 350px;
   }
 
   .quote {
-    font-size: 1.25rem;
-    margin: 2rem 0;
+    font-size: 1.1rem;
     padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .about {
+  .container {
     padding: 0.75rem;
   }
 
-  .codeBlock {
-    padding: 0.75rem;
-  }
-
-  .line {
+  .terminalBody {
     font-size: 0.8rem;
+    min-height: 300px;
   }
 
-  .skillIcon {
-    font-size: 1.25rem;
-  }
-
-  .skillContent h3 {
-    font-size: 1.1rem;
-  }
-
-  .skillContent p {
-    font-size: 0.9rem;
-  }
-
-  .quote {
-    font-size: 1.1rem;
-    padding: 1rem;
-  }
-
-  .quote::before,
-  .quote::after {
-    width: 60px;
+  .array-item {
+    padding-left: 1.5rem;
   }
 }

@@ -1,70 +1,106 @@
 /* App.css */
 /* Base Variables (Light Theme) */
+/* App.css color updates */
 :root {
-  /* General Colors */
-  --bg: #f8f8f8;
-  --text: #1a1a1a;
+  /* Core Colors */
+  --bg: #f8f9fa;
+  --text: #111827;
   --nav-bg: #ffffff;
   --sidebar-bg: #ffffff;
   --container-bg: #ffffff;
-  --hover: #e5e5e5;
-  --primary: #007bff;
-  --secondary: #6c757d; /* For gradients and secondary elements */
+  
+  /* Primary Colors - Keeping blue for interaction */
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --primary-hover: #60a5fa;
+  
+  /* Secondary/Gray Colors - Main UI elements */
+  --secondary: #64748b;
+  --secondary-light: #94a3b8;
+  --secondary-dark: #475569;
+  
+  /* Surface Colors - Refined grays */
+  --surface-0: #ffffff;
+  --surface-50: #f8fafc;
+  --surface-100: #f1f5f9;
+  --surface-200: #e2e8f0;
+  
+  /* Interactive States */
+  --hover: #f1f5f9;
+  --hover-light: #f8fafc;
+  --hover-dark: #e2e8f0;
+  
+  /* Accent Colors */
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-error: #ef4444;
+  
+  /* Dividers and Lines */
+  --divider-color: #e2e8f0;
+  --nav-line-color: #cbd5e1;
+  
+  /* Media Viewer */
+  --media-bg: var(--surface-50);
+  --media-overlay: rgba(15, 23, 42, 0.03);
+  --media-controls-bg: rgba(255, 255, 255, 0.92);
+  --media-controls-border: rgba(15, 23, 42, 0.08);
+  --media-controls-shadow: rgba(15, 23, 42, 0.06);
+  --media-loading-bg: rgba(15, 23, 42, 0.04);
 
-  /* Scrollbar Colors */
-  --scrollbar-track-color: #e5e5e5; /* Light grey for track */
-  --scrollbar-thumb-color: #cccccc; /* Slightly darker grey for thumb */
-  --scrollbar-thumb-hover-color: #b3b3b3; /* Darker grey on hover */
-
-  /* Transition for smooth theme changes */
-  --transition-duration: 0.3s;
-  --transition-timing: ease;
-
-  /* Add some layout constants */
-  --max-content-width: 1400px;
-  --navbar-height: 25px;
-  --horizontal-padding: 2rem;
-
-  --divider-color: #cccccc; /* Light grey for dividers */
-  --nav-line-color: #b1b1b1; /* Light grey for navbar lines */
-
-
-  --media-bg: #ffffff;
-  --media-overlay: rgba(0, 0, 0, 0.02);
-  --media-controls-bg: rgba(255, 255, 255, 0.95);
-  --media-controls-border: rgba(0, 0, 0, 0.08);
-  --media-controls-shadow: rgba(0, 0, 0, 0.08);
-  --media-error: #dc2626;
-  --media-loading-bg: rgba(0, 0, 0, 0.06);
-
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08);
 }
 
-/* Dark Theme Overrides */
+/* Dark Theme */
 [data-theme='dark'] {
-  --bg: #1a1a1a;
-  --container-bg: #2a2a2a;
-  --text: #ffffff;
-  --nav-bg: #2a2a2a;
-  --sidebar-bg: #2a2a2a;
+  /* Core Colors - More gray-focused */
+  --bg: #1e1e1e;
+  --text: #f9fafb;
+  --nav-bg: #2d2d2d;
+  --sidebar-bg: #2d2d2d;
+  --container-bg: #2d2d2d;
+  
+  /* Primary Colors - Keeping blue but slightly muted */
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #2563eb;
+  --primary-hover: #93c5fd;
+  
+  /* Secondary/Gray Colors */
+  --secondary: #9ca3af;
+  --secondary-light: #d1d5db;
+  --secondary-dark: #6b7280;
+  
+  /* Surface Colors - Refined dark grays */
+  --surface-0: #2d2d2d;
+  --surface-50: #333333;
+  --surface-100: #2d2d2d;
+  --surface-200: #404040;
+  
+  /* Interactive States */
   --hover: #333333;
-  --primary: #4dabff;
-  --secondary: #6c757d; /* Maintained for consistency */
+  --hover-light: #404040;
+  --hover-dark: #262626;
+  
+  /* Dividers and Lines */
+  --divider-color: #404040;
+  --nav-line-color: #4d4d4d;
+  
+  /* Media Viewer */
+  --media-bg: var(--surface-50);
+  --media-overlay: rgba(249, 250, 251, 0.03);
+  --media-controls-bg: rgba(45, 45, 45, 0.95);
+  --media-controls-border: rgba(249, 250, 251, 0.1);
+  --media-controls-shadow: rgba(0, 0, 0, 0.25);
+  --media-loading-bg: rgba(249, 250, 251, 0.04);
 
-  /* Scrollbar Colors */
-  --scrollbar-track-color: #010101; /* Dark grey for track */
-  --scrollbar-thumb-color: #555555; /* Medium grey for thumb */
-  --scrollbar-thumb-hover-color: #777777; /* Lighter grey on hover */
-
-  --divider-color: #7e7e7e; /* Dark grey for dividers */
-  --nav-line-color: #bdbdbd; /* Dark grey for navbar lines */
-
-  --media-bg: #1f1f1f;
-  --media-overlay: rgba(255, 255, 255, 0.03);
-  --media-controls-bg: rgba(42, 42, 42, 0.95);
-  --media-controls-border: rgba(255, 255, 255, 0.1);
-  --media-controls-shadow: rgba(0, 0, 0, 0.3);
-  --media-error: #ef4444;
-  --media-loading-bg: rgba(255, 255, 255, 0.06);
+  /* Shadows - adjusted for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
 }
 
 

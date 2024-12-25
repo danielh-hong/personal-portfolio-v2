@@ -1,5 +1,4 @@
 /* Projects.module.css */
-
 .projectsContainer {
   width: 100%;
   height: 100%;
@@ -7,7 +6,6 @@
   overflow-y: auto;
   padding-right: 1.5rem;
 }
-
 
 .filterContainer {
   display: flex;
@@ -18,24 +16,27 @@
 }
 
 .filterTag {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 50px;
-  background-color: var(--container-bg);
-  color: var(--text);
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+  background-color: var(--surface-0);
+  color: var(--secondary);
+  font-weight: 500;
+  border: 1px solid var(--divider-color);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .filterTag:hover {
-  background-color: var(--hover);
+  background-color: var(--surface-100);
+  color: var(--primary);
+  border-color: var(--primary-light);
 }
 
 .filterTag.active {
   background-color: var(--primary);
   color: white;
+  border-color: var(--primary-dark);
 }
 
 .projectsGrid {
@@ -46,80 +47,93 @@
 }
 
 .projectCard {
-  background-color: var(--container-bg);
-  border-radius: 12px;
+  background-color: var(--surface-0);
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  border: 1px solid var(--divider-color);
 }
 
 .projectCard:hover {
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-light);
 }
 
 .projectImage {
   width: 100%;
-  aspect-ratio: 3 / 2; /* Maintains a 3:2 aspect ratio */
+  aspect-ratio: 3 / 2;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* Overlay Styles */
-/* Overlay Styles */
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  /* Remove fixed height to allow content-driven height */
-  /* height: 60px; */ 
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.5),
+    rgba(15, 23, 42, 0)
+  );
   display: flex;
-  align-items: flex-start; /* Corrected alignment */
-  padding: 0.75rem; /* Adjusted padding */
-  box-sizing: border-box; /* Ensure padding is included in width/height */
+  align-items: flex-start;
+  padding: 0.75rem;
+  box-sizing: border-box;
 }
 
-/* Project Skills Container */
+[data-theme='dark'] .overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.7),
+    rgba(15, 23, 42, 0)
+  );
+}
+
 .projectSkills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem; /* Reduced gap between skill tags */
-  max-height: 100%; /* Prevent overflow */
-  overflow: hidden; /* Hide any overflow if necessary */
+  gap: 0.4rem;
+  max-height: 100%;
+  overflow: hidden;
 }
 
-/* Individual Skill Tag */
 .skill {
-  padding: 0.1rem 0.4rem; /* Reduced padding */
-  border-radius: 50px;
-  background-color: var(--secondary);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background-color: var(--primary);
   color: white;
-  font-size: 0.65rem; /* Reduced font size */
-  opacity: 0.85;
-  white-space: nowrap; /* Prevents text from wrapping within a tag */
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
 }
 
-/* Project Info */
 .projectInfo {
   padding: 1.5rem;
+  border-top: 1px solid var(--divider-color);
 }
 
 .projectInfo h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
   color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .projectInfo p {
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
-  color: var(--text);
-  opacity: 0.8;
-  line-height: 1.5;
+  color: var(--secondary);
+  line-height: 1.6;
 }
 
 .projectTags {
@@ -129,12 +143,20 @@
 }
 
 .tag {
-  padding: 0.25rem 0.75rem;
-  border-radius: 50px;
-  background-color: var(--primary);
-  color: white;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  background-color: var(--surface-100);
+  color: var(--primary);
   font-size: 0.8rem;
-  opacity: 0.9;
+  font-weight: 500;
+  border: 1px solid var(--primary-light);
+}
+
+/* Accessibility */
+.filterTag:focus,
+.projectCard:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* Responsive Design */
