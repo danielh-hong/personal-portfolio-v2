@@ -5,7 +5,7 @@ import MouseTrail from './MouseTrail'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import About from './About'
-import Projects from './Projects'
+import Projects from './Projects/Projects'
 import Resume from './Resume'
 import './App.css'
 
