@@ -1,65 +1,89 @@
 /* Sidebar.module.css */
 .sidebar {
-  position: relative;
   width: 300px;
   height: 100%;
   background-color: var(--sidebar-bg);
-  border-radius: 20px;
-  padding: 1.5rem;
-  padding-right: 0.75rem;
-  overflow-y: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: all var(--transition-duration) var(--transition-timing);
-  box-sizing: border-box;
+  border-radius: 24px;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--divider-color);
+  transition: all 0.3s ease;
 }
-
 
 .sidebarContent {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  gap: 2rem;
   overflow-y: auto;
-  overflow-x: none;
-  box-sizing: border-box;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-/* Profile section */
-.userInfo {
+.sidebarContent::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Profile Section */
+.profileSection {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
+}
+
+.avatarContainer {
+  position: relative;
+  padding: 3px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--primary) 0%, var(--primary-light) 100%);
 }
 
 .avatarWrapper {
-  width: 175px;
-  height: 175px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   overflow: hidden;
+  border: 3px solid var(--sidebar-bg);
+  transition: transform 0.3s ease;
+}
+
+.avatarContainer:hover .avatarWrapper {
+  transform: scale(1.03);
 }
 
 .avatarImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
 .username {
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text);
+  margin: 0;
 }
 
 .location {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text);
-  opacity: 0.7;
-  font-size: 0.9rem;
+  color: var(--secondary);
+  font-size: 0.925rem;
 }
 
-/* Navigation sections */
+/* Navigation */
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -67,56 +91,70 @@
 }
 
 .sectionHeader {
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--secondary);
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--hover);
-  margin-top: 1rem;
+  border-bottom: 1px solid var(--divider-color);
+  margin: 0;
 }
 
-.navList {
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  list-style: none;
-  width: 95%;
 }
 
-.navLink {
+.link {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
   color: var(--text);
   text-decoration: none;
-  border-radius: 8px;
-  transition: all var(--transition-duration) var(--transition-timing);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  background: transparent;
 }
 
-.navLink:hover {
-  background-color: var(--hover);
+.link:hover {
+  background: var(--hover);
   transform: translateX(4px);
 }
 
-.navLink svg {
-  font-size: 1.2rem;
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--surface-50);
   color: var(--primary);
+  transition: all 0.2s ease;
 }
 
+.link:hover .iconWrapper {
+  background: var(--primary);
+  color: white;
+}
 
-/* Responsive design */
+/* Responsive Design */
 @media (max-width: 1400px) {
   .sidebar {
     width: 270px;
   }
 
   .avatarWrapper {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
 
   .username {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
   }
 }
 
@@ -129,24 +167,24 @@
 @media (max-width: 992px) {
   .sidebar {
     position: static;
-    width: calc(100% - 2rem);
+    width: 100%;
+    height: auto;
     margin: 1rem;
-    top: auto;
-    left: auto;
-    bottom: auto;
+    padding: 1.5rem;
+    border-radius: 16px;
   }
 
   .sidebarContent {
     gap: 1.5rem;
   }
 
-  .navList {
+  .linkList {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .navLink {
+  .link {
     min-width: 150px;
     justify-content: center;
   }
@@ -154,13 +192,17 @@
 
 @media (max-width: 480px) {
   .sidebar {
-    width: calc(100% - 1rem);
     margin: 0.5rem;
     padding: 1rem;
   }
 
-  .navLink {
+  .link {
     min-width: 130px;
     font-size: 0.9rem;
+  }
+
+  .avatarWrapper {
+    width: 100px;
+    height: 100px;
   }
 }

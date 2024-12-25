@@ -1,74 +1,79 @@
 // Sidebar.jsx
 import React from 'react';
-import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaYoutube, FaMapMarkerAlt } from 'react-icons/fa';
+import { FiGithub, FiLinkedin, FiMail, FiYoutube, FiDownload, FiMapPin } from 'react-icons/fi';
 import styles from './Sidebar.module.css';
 
 const Sidebar = () => {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.sidebarContent}>
-        
-        {/* User Information Section */}
-        <div className={styles.userInfo}>
-          <div className={styles.avatarWrapper}>
-            <div className={styles.avatar}>
-              {/* Profile picture from public folder */}
+        {/* Profile Section */}
+        <div className={styles.profileSection}>
+          <div className={styles.avatarContainer}>
+            <div className={styles.avatarWrapper}>
               <img src="/pfp.png" alt="Daniel Hong" className={styles.avatarImg} />
             </div>
           </div>
-          <div className={styles.username}>Daniel Hong</div>
+          <h1 className={styles.username}>Daniel Hong</h1>
           <div className={styles.location}>
-            <FaMapMarkerAlt /> Toronto, Ontario
+            <FiMapPin /> Toronto, Ontario
           </div>
         </div>
 
-        {/* Navigation Sections */}
+        {/* Navigation */}
         <nav className={styles.nav}>
-          
-          {/* Contact Section */}
+          {/* Connect Section */}
           <section className={styles.section}>
-            <h3 className={styles.sectionHeader}>Contact</h3>
-            <ul className={styles.navList}>
-              <li className={styles.navItem}>
+            <h2 className={styles.sectionHeader}>Connect</h2>
+            <ul className={styles.linkList}>
+              <li>
                 <a 
                   href="https://github.com/danielh-hong" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={styles.navLink}
-                  aria-label="GitHub Profile"
+                  className={styles.link}
                 >
-                  <FaGithub /> <span>GitHub</span>
+                  <span className={styles.iconWrapper}>
+                    <FiGithub />
+                  </span>
+                  <span>GitHub</span>
                 </a>
               </li>
-              <li className={styles.navItem}>
+              <li>
                 <a 
                   href="https://www.linkedin.com/in/danielh-hong/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={styles.navLink}
-                  aria-label="LinkedIn Profile"
+                  className={styles.link}
                 >
-                  <FaLinkedin /> <span>LinkedIn</span>
+                  <span className={styles.iconWrapper}>
+                    <FiLinkedin />
+                  </span>
+                  <span>LinkedIn</span>
                 </a>
               </li>
-              <li className={styles.navItem}>
+              <li>
                 <a 
                   href="mailto:danielh.toronto@gmail.com"
-                  className={styles.navLink}
-                  aria-label="Send Email"
+                  className={styles.link}
                 >
-                  <FaEnvelope /> <span>Email</span>
+                  <span className={styles.iconWrapper}>
+                    <FiMail />
+                  </span>
+                  <span>Email</span>
                 </a>
               </li>
-              <li className={styles.navItem}>
+              <li>
                 <a 
                   href="https://youtube.com/yourchannel" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className={styles.navLink}
-                  aria-label="YouTube Channel"
+                  className={styles.link}
                 >
-                  <FaYoutube /> <span>YouTube</span>
+                  <span className={styles.iconWrapper}>
+                    <FiYoutube />
+                  </span>
+                  <span>YouTube</span>
                 </a>
               </li>
             </ul>
@@ -76,23 +81,23 @@ const Sidebar = () => {
 
           {/* Resume Section */}
           <section className={styles.section}>
-            <h3 className={styles.sectionHeader}>Resume</h3>
-            <ul className={styles.navList}>
-              <li className={styles.navItem}>
+            <h2 className={styles.sectionHeader}>Resume</h2>
+            <ul className={styles.linkList}>
+              <li>
                 <a 
                   href="/resume.pdf" 
                   download
-                  className={styles.navLink}
-                  aria-label="Download CV"
+                  className={styles.link}
                 >
-                  <FaFileDownload /> <span>Download CV</span>
+                  <span className={styles.iconWrapper}>
+                    <FiDownload />
+                  </span>
+                  <span>Download CV</span>
                 </a>
               </li>
             </ul>
           </section>
-
         </nav>
-
       </div>
     </aside>
   );
