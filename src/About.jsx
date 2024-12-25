@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Cpu, Code2, Rocket, GraduationCap } from 'lucide-react';
 import styles from './About.module.css';
 
 const About = () => {
   const [codeVisible, setCodeVisible] = useState(false);
   const [activeLine, setActiveLine] = useState(0);
+  const [hoveredSkill, setHoveredSkill] = useState(null);
 
   useEffect(() => {
     const timeout = setTimeout(() => setCodeVisible(true), 500);
@@ -21,34 +23,68 @@ const About = () => {
   }, [codeVisible, activeLine]);
 
   const codeLines = [
-    { type: 'comment', content: '// Welcome to my digital space' },
-    { type: 'code', content: 'const profile = {' },
-    { type: 'property', content: '  name: "Daniel Hong",' },
-    { type: 'property', content: '  role: "Engineering Science Student",' },
-    { type: 'property', content: '  university: "University of Toronto",' },
-    { type: 'array-start', content: '  expertise: [' },
+    { type: 'comment', content: '// Engineering the future' },
+    { type: 'code', content: 'const daniel = {' },
+    { type: 'property', content: '  role: "Engineering Science @ UofT",' },
+    { type: 'array-start', content: '  focus: [' },
     { type: 'array-item', content: '    "Robotics & Controls",' },
     { type: 'array-item', content: '    "Full-Stack Development",' },
     { type: 'array-item', content: '    "Machine Learning"' },
-    { type: 'array-end', content: '  ],' },
-    { type: 'array-start', content: '  projects: [' },
-    { type: 'array-item', content: '    "Quadcopter Design @ UTAT",' },
-    { type: 'array-item', content: '    "Wind Turbine Nacelle @ UWind"' },
-    { type: 'array-end', content: '  ],' },
-    { type: 'array-start', content: '  passions: [' },
-    { type: 'array-item', content: '    "Piano & Violin",' },
-    { type: 'array-item', content: '    "Photography",' },
-    { type: 'array-item', content: '    "Track Athletics"' },
     { type: 'array-end', content: '  ]' },
-    { type: 'code', content: '};' },
-    { type: 'comment', content: '// Building the future through innovation' }
+    { type: 'code', content: '};' }
+  ];
+
+  const focusAreas = [
+    { 
+      icon: <Rocket strokeWidth={1.5} />, 
+      title: "Aerospace",
+      desc: "Design & Controls",
+      color: "var(--primary)"
+    },
+    { 
+      icon: <Cpu strokeWidth={1.5} />, 
+      title: "Robotics",
+      desc: "Autonomy & Systems",
+      color: "var(--accent-success)"
+    },
+    { 
+      icon: <Code2 strokeWidth={1.5} />, 
+      title: "Software",
+      desc: "Full-Stack Dev",
+      color: "var(--accent-warning)"
+    },
+    { 
+      icon: <GraduationCap strokeWidth={1.5} />, 
+      title: "Research",
+      desc: "ML & Controls",
+      color: "var(--accent-error)"
+    }
+  ];
+
+  const skills = [
+    { name: "Python", category: "languages", color: "var(--primary)" },
+    { name: "C++", category: "languages", color: "var(--primary)" },
+    { name: "JavaScript", category: "languages", color: "var(--primary)" },
+    { name: "React", category: "frontend", color: "var(--accent-success)" },
+    { name: "Node.js", category: "backend", color: "var(--accent-warning)" },
+    { name: "MongoDB", category: "database", color: "var(--accent-error)" },
+    { name: "PostgreSQL", category: "database", color: "var(--accent-error)" },
+    { name: "ROS", category: "robotics", color: "var(--primary-dark)" },
+    { name: "TensorFlow", category: "ml", color: "var(--primary-light)" },
+    { name: "Docker", category: "devops", color: "var(--secondary-dark)" },
+    { name: "AWS", category: "cloud", color: "var(--secondary-light)" },
+    { name: "Git", category: "devops", color: "var(--secondary-dark)" },
+    { name: "Linux", category: "devops", color: "var(--secondary-dark)" },
+    { name: "MATLAB", category: "languages", color: "var(--primary)" },
+    { name: "SolidWorks", category: "cad", color: "var(--secondary)" },
+    { name: "Fusion360", category: "cad", color: "var(--secondary)" }
   ];
 
   return (
     <motion.div 
       className={styles.container}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
       <div className={styles.terminal}>
@@ -58,7 +94,7 @@ const About = () => {
             <span></span>
             <span></span>
           </div>
-          <div className={styles.terminalTitle}>profile.js</div>
+          <div className={styles.terminalTitle}>daniel.config.js</div>
         </div>
         
         <motion.div 
@@ -87,14 +123,64 @@ const About = () => {
         </motion.div>
       </div>
 
-      <motion.div 
-        className={styles.quote}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-      >
-        "Creating the future through code and innovation"
-      </motion.div>
+      <div className={styles.content}>
+        <motion.div 
+          className={styles.focusGrid}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+        >
+          {focusAreas.map((area, index) => (
+            <motion.div 
+              key={area.title}
+              className={styles.focusItem}
+              style={{ '--focus-color': area.color }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 400 }
+              }}
+            >
+              <div className={styles.focusIcon}>{area.icon}</div>
+              <div className={styles.focusText}>
+                <div className={styles.focusTitle}>{area.title}</div>
+                <div className={styles.focusDesc}>{area.desc}</div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div 
+          className={styles.skillsGrid}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.6 }}
+        >
+          {skills.map((skill, index) => (
+            <motion.div
+              key={skill.name}
+              className={styles.skillItem}
+              style={{ '--skill-color': skill.color }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                delay: 1.2 + index * 0.05,
+                type: "spring",
+                stiffness: 400
+              }}
+              whileHover={{ 
+                scale: 1.1,
+                transition: { type: "spring", stiffness: 400 }
+              }}
+              onHoverStart={() => setHoveredSkill(index)}
+              onHoverEnd={() => setHoveredSkill(null)}
+            >
+              <span className={styles.skillText}>{skill.name}</span>
+              <div className={styles.skillCategory}>{skill.category}</div>
+              <div className={styles.skillGlow} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </motion.div>
   );
 };
