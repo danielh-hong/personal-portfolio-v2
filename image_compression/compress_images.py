@@ -1,14 +1,11 @@
-# https://tinify.com/dashboard/api <-- tinify dashboard
 import os
 import tinify
-import glob
 from PIL import Image
-import sys
+import glob
 from tqdm import tqdm
 from dotenv import load_dotenv
-from pathlib import Path
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
 # Get API key from environment variables
@@ -33,52 +30,50 @@ def compress_with_tinify(image_path, output_path):
         print(f"Error with TinyPNG compression: {str(e)}")
         return False
 
-def compress_with_pillow(image_path, output_path, quality=65):
+def compress_with_pillow(image_path, output_path):
     """
-    Fallback compression using Pillow with optimized settings.
+    Fallback compression using Pillow with aggressive settings.
     """
     try:
         img = Image.open(image_path)
         
+        # Keep track of original mode
+        original_mode = img.mode
+        
         # Convert RGBA to RGB if necessary
-        if img.mode == 'RGBA':
+        if original_mode == 'RGBA':
             background = Image.new('RGB', img.size, (255, 255, 255))
             background.paste(img, mask=img.split()[3])
             img = background
-        
-        # Optimize based on format
-        if img.format == 'PNG':
+
+        # Aggressive compression settings based on format
+        if image_path.lower().endswith('.png'):
             img.save(output_path, 
                     'PNG',
                     optimize=True,
-                    quality=quality,
+                    quality=0,
                     progressive=True)
-        else:  # JPEG/JPG
+        else:
             img.save(output_path, 
                     'JPEG',
-                    quality=quality,
+                    quality=30,
                     optimize=True,
                     progressive=True,
-                    subsampling=0)  # Better color quality
+                    subsampling=2)
+        
         return True
     except Exception as e:
         print(f"Error with Pillow compression: {str(e)}")
         return False
 
-def compress_image(image_path, output_path, use_tinify=True):
+def compress_image(image_path, output_path):
     """
     Compress image using TinyPNG first, fall back to Pillow if needed.
     """
-    # Create output directory if it doesn't exist
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    
-    # Try TinyPNG first if API key is provided
-    if use_tinify and TINIFY_API_KEY:
+    if TINIFY_API_KEY:
         if compress_with_tinify(image_path, output_path):
             return True
-        print("Falling back to Pillow compression...")
-    
-    # Use Pillow as fallback
+        print(f"Falling back to Pillow compression for {image_path}...")
     return compress_with_pillow(image_path, output_path)
 
 def format_size(size):
@@ -88,47 +83,52 @@ def format_size(size):
     return f"{size / 1024:.1f}KB"
 
 def main():
-    # Set up paths relative to the project root
-    project_root = Path(__file__).parent  # imagecompression folder
-    public_folder = project_root.parent / 'public'  # public folder
+    if not TINIFY_API_KEY:
+        print("Warning: No TinyPNG API key found in .env file. Using Pillow compression only.")
     
-    # Supported image formats
-    formats = ['.jpg', '.jpeg', '.png']
+    # Supported image formats - only look in current directory
+    formats = ['*.jpg', '*.jpeg', '*.png', '*.JPG', '*.JPEG', '*.PNG']
     
-    # Create compressed folder inside public
-    compressed_folder = public_folder / "compressed"
+    # Create compressed folder in current directory
+    compressed_folder = "compressed"
     os.makedirs(compressed_folder, exist_ok=True)
     
-    # Get all image files from public folder
+    # Get all image files in current directory only (no recursion)
     image_files = []
-    for ext in formats:
-        image_files.extend(glob.glob(str(public_folder / f"**/*{ext}"), recursive=True))
-        image_files.extend(glob.glob(str(public_folder / f"**/*{ext.upper()}"), recursive=True))
+    for pattern in formats:
+        image_files.extend(glob.glob(pattern))
+    
+    # Remove duplicates and sort
+    image_files = sorted(set(image_files))
     
     if not image_files:
-        print("No image files found in the public folder!")
+        print("No image files found in current directory!")
         return
     
-    print(f"Found {len(image_files)} images to compress...")
+    print(f"\nFound {len(image_files)} images to compress:")
+    for file in image_files:
+        print(f"- {file}")
     
-    # Process each image with progress bar
+    print("\nStarting compression...")
+    
+    # Process each image
     for image_path in tqdm(image_files, desc="Compressing images"):
-        # Get relative path from public folder
-        rel_path = Path(image_path).relative_to(public_folder)
-        output_path = compressed_folder / rel_path
-        
-        # Create necessary subdirectories
-        os.makedirs(output_path.parent, exist_ok=True)
+        # Skip if it's in the compressed folder
+        if image_path.startswith(compressed_folder):
+            continue
+            
+        # Create output path
+        output_path = os.path.join(compressed_folder, os.path.basename(image_path))
         
         # Compress the image
-        if compress_image(image_path, str(output_path)):
+        if compress_image(image_path, output_path):
             # Calculate compression stats
             original_size = os.path.getsize(image_path)
             compressed_size = os.path.getsize(output_path)
             ratio = (1 - compressed_size / original_size) * 100
             
             # Print compression results
-            print(f"\n{rel_path}:")
+            print(f"\n{image_path}:")
             print(f"Original size: {format_size(original_size)}")
             print(f"Compressed size: {format_size(compressed_size)}")
             print(f"Compression ratio: {ratio:.1f}%")

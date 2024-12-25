@@ -1,280 +1,174 @@
 // ProjectsModal.jsx
-import React, { useState, useCallback, Suspense } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
+import dayjs from 'dayjs';
 import { 
   FaTimes, FaGithub, FaExternalLinkAlt, 
   FaChevronLeft, FaChevronRight,
-  FaYoutube, FaFilePdf,
-  FaSearchPlus, FaSearchMinus, FaUndo
+  FaCalendar
 } from 'react-icons/fa';
 import styles from './ProjectsModal.module.css';
+import MediaViewer from './MediaViewer'; // Import the new MediaViewer component
 
-// Define media types constant
-export const MEDIA_TYPES = {
-  IMAGE: 'image',
-  VIDEO: 'video',
-  PDF: 'pdf'
+const DateDisplay = ({ startDate, endDate }) => {
+  if (!startDate && !endDate) return null;
+
+  const formatDate = (date) => {
+    return date ? dayjs(date).format('MMMM YYYY') : '';
+  };
+
+  const isOngoing = startDate && !endDate;
+  
+  return (
+    <div className={styles.dateContainer}>
+      <FaCalendar />
+      <span>
+        {formatDate(startDate)}
+        {startDate && endDate && ' - '}
+        {formatDate(endDate)}
+        {isOngoing && <span className={styles.ongoingBadge}>Ongoing</span>}
+      </span>
+    </div>
+  );
 };
 
-// Lazy load heavy components
-const TransformWrapper = React.lazy(() => import("react-zoom-pan-pinch").then(module => ({ default: module.TransformWrapper })));
-const TransformComponent = React.lazy(() => import("react-zoom-pan-pinch").then(module => ({ default: module.TransformComponent })));
-const YouTube = React.lazy(() => import('react-youtube'));
-const Document = React.lazy(() => import('react-pdf').then(module => ({ default: module.Document })));
-const Page = React.lazy(() => import('react-pdf').then(module => ({ default: module.Page })));
-
-// Loading fallback component
-const LoadingSpinner = () => (
-  <div className={styles.spinnerContainer}>
-    <div className={styles.spinner}></div>
-  </div>
-);
-
-const MediaViewer = ({ media }) => {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
-
-  const handleImageLoad = useCallback(() => {
-    setIsLoading(false);
-  }, []);
-
-  const handleImageError = useCallback((e) => {
-    setImageError(true);
-    setIsLoading(false);
-  }, []);
-
-  if (!media) return null;
-
-  switch (media.type) {
-    case MEDIA_TYPES.IMAGE:
-      return (
-        <Suspense fallback={<LoadingSpinner />}>
-          <TransformWrapper
-            initialScale={0.5}
-            centerZoomedOut={true}
-            centerOnInit={true}
-            alignContent="center"
-            justifyContent="center"
-            minScale={0.5}
-            maxScale={3}
-            wheel={{ step: 0.1 }}
-          >
-            {({ zoomIn, zoomOut, resetTransform }) => (
-              <>
-                <div className={styles.imageControls}>
-                  <button onClick={() => zoomIn(0.2)} aria-label="Zoom In">
-                    <FaSearchPlus />
-                  </button>
-                  <button onClick={() => zoomOut(0.2)} aria-label="Zoom Out">
-                    <FaSearchMinus />
-                  </button>
-                  <button onClick={resetTransform} aria-label="Reset Zoom">
-                    <FaUndo />
-                  </button>
-                </div>
-                
-                {isLoading && !imageError && <LoadingSpinner />}
-                
-                <TransformComponent>
-                  <img 
-                    src={media.url}
-                    alt={media.caption}
-                    className={`${styles.modalImage} ${isLoading ? styles.hidden : ''}`}
-                    onLoad={handleImageLoad}
-                    onError={handleImageError}
-                    loading="lazy"
-                  />
-                  {imageError && (
-                    <div className={styles.errorMessage}>
-                      Failed to load image
-                    </div>
-                  )}
-                </TransformComponent>
-              </>
-            )}
-          </TransformWrapper>
-        </Suspense>
-      );
-
-    case MEDIA_TYPES.VIDEO:
-      return (
-        <Suspense fallback={<LoadingSpinner />}>
-          <div className={styles.videoWrapper}>
-            <YouTube
-              videoId={media.youtubeId}
-              opts={{
-                height: '100%',
-                width: '100%',
-                playerVars: {
-                  autoplay: 0,
-                },
-              }}
-              onError={() => console.error('YouTube player error')}
-            />
-          </div>
-        </Suspense>
-      );
-
-    case MEDIA_TYPES.PDF:
-      return (
-        <Suspense fallback={<LoadingSpinner />}>
-          <div className={styles.pdfWrapper}>
-            <Document
-              file={media.url}
-              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-              loading={<LoadingSpinner />}
-              error={
-                <div className={styles.errorMessage}>
-                  Failed to load PDF
-                </div>
-              }
-            >
-              <Page 
-                pageNumber={pageNumber}
-                loading={<LoadingSpinner />}
-                renderTextLayer={false}
-                renderAnnotationLayer={false}
-                scale={1.0}
-              />
-            </Document>
-            {numPages && (
-              <div className={styles.pdfControls}>
-                <button 
-                  disabled={pageNumber <= 1}
-                  onClick={() => setPageNumber(prev => Math.max(1, prev - 1))}
-                >
-                  Previous
-                </button>
-                <span>Page {pageNumber} of {numPages}</span>
-                <button 
-                  disabled={pageNumber >= numPages}
-                  onClick={() => setPageNumber(prev => Math.min(numPages, prev + 1))}
-                >
-                  Next
-                </button>
-              </div>
-            )}
-          </div>
-        </Suspense>
-      );
-
-    default:
-      return null;
-  }
-};
-
-const ProjectsModal = ({
-  project,
-  currentMediaIndex,
-  setCurrentMediaIndex,
-  navigateMedia,
-  closeModal
-}) => {
-  const handleModalClick = useCallback((e) => {
-    if (e.target.classList.contains(styles.modal)) {
-      closeModal();
-    }
-  }, [closeModal]);
-
+const ProjectsModal = ({ project, currentMediaIndex, setCurrentMediaIndex, navigateMedia, closeModal }) => {
   if (!project) return null;
 
   const currentMedia = project.media[currentMediaIndex];
 
   return (
     <motion.div
-      className={styles.modal}
+      className={styles.modalOverlay}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={handleModalClick}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
+      onClick={(e) => e.target === e.currentTarget && closeModal()}
     >
       <motion.div
-        className={styles.modalContent}
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 50, opacity: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className={styles.modalContainer}
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
       >
-        <button
-          className={styles.closeButton}
-          onClick={closeModal}
-          aria-label="Close modal"
-        >
-          <FaTimes />
-        </button>
-
-        <div className={styles.modalHeader}>
-          <h2 id="modal-title">{project.title}</h2>
-          <div className={styles.modalSkills}>
-            {project.skills.map((skill, index) => (
-              <span key={index} className={styles.skill}>
-                {skill}
-              </span>
-            ))}
+        {/* Left side - Media Section */}
+        <div className={styles.mediaSection}>
+          <div className={styles.mediaWrapper}>
+            {currentMedia && <MediaViewer media={currentMedia} />}
           </div>
-        </div>
-
-        <div className={styles.divider}></div>
-
-        <div className={styles.modalImageContainer}>
-          <MediaViewer media={currentMedia} />
-
+          
           <button
-            className={`${styles.navigationButton} ${styles.prev}`}
+            className={`${styles.navigationButton} ${styles.prevButton}`}
             onClick={() => navigateMedia(-1)}
             disabled={currentMediaIndex === 0}
             aria-label="Previous media"
           >
             <FaChevronLeft />
           </button>
-
+          
           <button
-            className={`${styles.navigationButton} ${styles.next}`}
+            className={`${styles.navigationButton} ${styles.nextButton}`}
             onClick={() => navigateMedia(1)}
             disabled={currentMediaIndex === project.media.length - 1}
             aria-label="Next media"
           >
             <FaChevronRight />
           </button>
+
+          <div className={styles.paginationDots}>
+            {project.media.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentMediaIndex(idx)}
+                className={`${styles.paginationDot} ${
+                  idx === currentMediaIndex ? styles.active : ''
+                }`}
+                aria-label={`Go to media ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className={styles.paginationDots}>
-          {project.media.map((item, index) => (
-            <button
-              key={index}
-              className={`${styles.paginationDot} ${
-                index === currentMediaIndex ? styles.activeDot : ''
-              }`}
-              onClick={() => setCurrentMediaIndex(index)}
-              aria-label={`Go to ${item.type} ${index + 1}`}
-            >
-              {item.type !== MEDIA_TYPES.IMAGE && (
-                <span className={styles.mediaTypeIcon}>
-                  {item.type === MEDIA_TYPES.VIDEO ? <FaYoutube /> : <FaFilePdf />}
-                </span>
+        {/* Right side - Content Section */}
+        <div className={styles.contentSection}>
+          <button
+            onClick={closeModal}
+            className={styles.closeButton}
+            aria-label="Close modal"
+          >
+            <FaTimes />
+          </button>
+
+          <div className={styles.tags}>
+            {project.tags.map(tag => (
+              <span key={tag} className={styles.tag}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <h2 className={styles.title}>{project.title}</h2>
+          
+          <DateDisplay 
+            startDate={project.startDate} 
+            endDate={project.endDate}
+          />
+
+          {project.links && (
+            <div className={styles.links}>
+              {project.links.github && (
+                <a
+                  href={project.links.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
+                  <FaGithub />
+                  <span>GitHub</span>
+                </a>
               )}
-            </button>
-          ))}
-        </div>
+              {project.links.live && (
+                <a
+                  href={project.links.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
+                  <FaExternalLinkAlt />
+                  <span>Live Demo</span>
+                </a>
+              )}
+            </div>
+          )}
 
-        <div className={styles.imageCaption}>{currentMedia.caption}</div>
+          {project.brief && (
+            <div className={styles.description}>
+              <h3>Project Overview</h3>
+              <p>{project.brief}</p>
+            </div>
+          )}
 
-        <div className={styles.mediaDescription}>
-          <p>{currentMedia.description || 'No description available.'}</p>
-        </div>
+          {currentMedia.description && (
+            <div className={styles.description}>
+              <h3>About this view</h3>
+              <p>{currentMedia.description}</p>
+            </div>
+          )}
 
-        <div className={styles.modalTags}>
-          {project.tags.map((tag) => (
-            <span key={tag} className={styles.tag}>
-              {tag}
-            </span>
-          ))}
+          <div className={styles.skills}>
+            <h3>Technologies Used</h3>
+            <div className={styles.skillTags}>
+              {project.skills.map(skill => (
+                <span key={skill} className={styles.skillTag}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.caption}>
+            {currentMedia.caption}
+          </div>
         </div>
       </motion.div>
     </motion.div>

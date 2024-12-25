@@ -8,17 +8,14 @@ export const MEDIA_TYPES = {
 // Define project tags for filtering
 export const TAGS = [
   'All',
-  'Web Development',
+  'Full Stack Software Development',
+  'Hardware Projects',
   'Machine Learning',
   'Robotics',
   'Engineering',
   'Design',
   'AI',
   'Hackathon',
-  'IoT',
-  'Sustainability',
-  'Advocacy',
-  'Biology',
   'Education',
   'Physics',
   'Transportation',
@@ -35,6 +32,8 @@ export const projects = [
     tags: ['Robotics', 'Engineering'],
     skills: ['CAD', 'SolidWorks', 'PID Controllers', 'Python'],
     thumbnail: '/quadcopter/thumbnail.jpg',
+    startDate: '2023-09',
+    endDate: '2024-01',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
@@ -62,6 +61,8 @@ export const projects = [
     tags: ['Engineering', 'Web Development', 'AI'],
     skills: ['MERN Stack', 'React Native', 'Python', 'Vertex AI', 'MongoDB', 'Express.js', 'Node.js', 'Flask'],
     thumbnail: '/pocket_fridge/thumbnail.png',
+    startDate: '2024-03',
+    endDate: '2024-03',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
@@ -233,29 +234,35 @@ export const projects = [
     brief: 'Designing an efficient vermicompost worm separation system',
     tags: ['Engineering', 'Sustainability', 'Design'],
     skills: ['CAD', 'SolidWorks', 'Sustainable Design', 'Machine Learning'],
-    thumbnail: '/praxis-ii/thumbnail.png',
+    thumbnail: '/praxis_II/1.png',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/praxis-ii/one-pager.png',
-        caption: 'Praxis II Final Design One Pager',
-        description: 'One-page summary of the final design, highlighting key features and sustainability aspects.'
+        url: '/praxis_II/1.png',
+        caption: 'CAD Render created with Solidworks of our Final Worm-Wheel Design.',
+        description: 'WormWheel Vermicompost Device created for Allen Gardens, as part of the Praxis-II Course Project.'
       },
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/praxis-ii/poster.png',
-        caption: 'Praxis II Project Poster',
-        description: 'Project poster showcasing the design process, features, and benefits of the vermicompost separation system.'
+        url: '/praxis_II/2.jpg',
+        caption: 'My Praxis team.',
+        description: 'My Praxis team practicing for the final showcase of our Vermicompost Device.'
       },
       {
-        type: MEDIA_TYPES.VIDEO,
-        youtubeId: '8pEG_k_MoH0',
-        caption: 'Praxis II Final Presentation',
-        description: 'Final presentation video detailing the project development, challenges faced, and solutions implemented.'
+        type: MEDIA_TYPES.IMAGE,
+        url: '/praxis_II/3.png',
+        caption: 'Poster I designed',
+        description: 'The 6 foot x 3 foot Poster of our Worm Wheel device highlighting key features and sustainability aspects.'
+      },
+      {
+        type: MEDIA_TYPES.PDF,
+        url: '/praxis_II/4.pdf',
+        caption: 'PDF Featuring Worm Wheel Features',
+        description: 'A PDF I designed detailing all the key features of the Worm Wheel Vermicomposting device.'
       }
     ],
     links: {
-      github: 'https://github.com/yourusername/praxis-ii',
+      github: 'https://github.com/yourusername/praxis_II',
       live: 'https://praxis2.designproject.com'
     }
   },

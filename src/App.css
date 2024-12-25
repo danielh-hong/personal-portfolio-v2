@@ -27,6 +27,16 @@
 
   --divider-color: #cccccc; /* Light grey for dividers */
   --nav-line-color: #b1b1b1; /* Light grey for navbar lines */
+
+
+  --media-bg: #ffffff;
+  --media-overlay: rgba(0, 0, 0, 0.02);
+  --media-controls-bg: rgba(255, 255, 255, 0.95);
+  --media-controls-border: rgba(0, 0, 0, 0.08);
+  --media-controls-shadow: rgba(0, 0, 0, 0.08);
+  --media-error: #dc2626;
+  --media-loading-bg: rgba(0, 0, 0, 0.06);
+
 }
 
 /* Dark Theme Overrides */
@@ -47,6 +57,14 @@
 
   --divider-color: #7e7e7e; /* Dark grey for dividers */
   --nav-line-color: #bdbdbd; /* Dark grey for navbar lines */
+
+  --media-bg: #1f1f1f;
+  --media-overlay: rgba(255, 255, 255, 0.03);
+  --media-controls-bg: rgba(42, 42, 42, 0.95);
+  --media-controls-border: rgba(255, 255, 255, 0.1);
+  --media-controls-shadow: rgba(0, 0, 0, 0.3);
+  --media-error: #ef4444;
+  --media-loading-bg: rgba(255, 255, 255, 0.06);
 }
 
 

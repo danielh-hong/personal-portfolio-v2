@@ -4,29 +4,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import styles from './Projects.module.css';
 import ProjectsModal from './ProjectsModal';
-import { projects, MEDIA_TYPES, TAGS } from './ProjectsData'; // Adjust the path as necessary
-
-
-// Configure PDF worker
-import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
-
+import { projects, MEDIA_TYPES, TAGS } from './ProjectsData';
 
 // In Projects.jsx
 const getThumbnail = (project) => {
-  // If project has a dedicated thumbnail, use it
   if (project.thumbnail) {
     return project.thumbnail;
   }
   
-  // Otherwise, use the first image from media
   const firstImage = project.media.find(item => item.type === MEDIA_TYPES.IMAGE);
   if (firstImage) {
     return firstImage.url;
   }
   
-  // Fallback for projects without images
-  return '/images/project-placeholder.png';  // Make sure to add a placeholder image
+  return '/images/project-placeholder.png';
 };
 
 const Projects = () => {
@@ -87,7 +78,6 @@ const Projects = () => {
 
   return (
     <div className={styles.projectsContainer}>
-
       <div className={styles.filterContainer}>
         {TAGS.map(tag => (
           <button
@@ -112,7 +102,7 @@ const Projects = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => openModal(project)}
-              tabIndex={0} // For accessibility
+              tabIndex={0}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') openModal(project);
               }}
@@ -121,7 +111,6 @@ const Projects = () => {
                 className={styles.projectImage}
                 style={{ backgroundImage: `url(${getThumbnail(project)})` }}
               />
-              {/* Overlay with Gradient and Skills */}
               <div className={styles.overlay}>
                 <div className={styles.projectSkills}>
                   {project.skills.map((skill, index) => (
@@ -154,8 +143,6 @@ const Projects = () => {
           />
         )}
       </AnimatePresence>
-
-
     </div>
   );
 };
