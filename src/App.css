@@ -52,6 +52,13 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+
+  /* Scrollbar Styles */
+  --scrollbar-track-color: #f1f5f9;  /* Light gray background */
+  --scrollbar-thumb-color: #60a5fa;  /* Nice blue color */
+  --scrollbar-thumb-hover-color: #3b82f6;  /* Darker blue on hover */
+
+  --navbar-height: 40px;
 }
 
 /* Dark Theme */
@@ -101,6 +108,11 @@
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+
+  /* Scrollbar Styles */
+  --scrollbar-track-color: #1e293b;  /* Dark background */
+  --scrollbar-thumb-color: #3d5781;  /* Slightly darker blue for dark mode */
+  --scrollbar-thumb-hover-color: #2563eb;  /* Even darker blue on hover for dark mode */
 }
 
 
@@ -204,9 +216,13 @@ body {
 @media (max-width: 992px) {
   .content-wrapper {
     width: 100%;
+    display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     height: fit-content;
-    padding: var(--navbar-height) 1rem 1rem 1rem;
+    padding: 1rem;
+    padding-top: calc(var(--navbar-height) + 2rem);
+    gap: 1rem;
   }
 
   .main-content {

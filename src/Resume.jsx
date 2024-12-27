@@ -1,14 +1,15 @@
+// Resume.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import styles from './Resume.module.css';
 
 const Resume = () => {
   const education = {
     school: "University of Toronto (UofT)",
-    degree: "BASc in Engineering Science",
+    degree: "BASc in Electrical & Computer Engineering (Engineering Science)",
     location: "Toronto, ON",
-    duration: "Sep 2023 -- Apr 2028",
+    duration: "Sep 2023 — Apr 2028",
     gpa: "4.0 GPA",
     achievements: [
       "Frank Howard Admission Scholarship ($5,000)",
@@ -23,25 +24,35 @@ const Resume = () => {
 
   const experience = [
     {
-      title: "Microfluidics Lab Researcher",
+      title: "Summer Research Intern - Microfluidics Lab",
       company: "UofT Laboratory of Complex Fluids",
       location: "Toronto, ON",
-      duration: "May 2024 -- Sep 2024",
+      duration: "May 2024 — Sep 2024",
       points: [
-        "Investigated the relationship between substrate elasticity and microfluidic island growth in emulsions using Reflection Interference Contrast Microscopy (RICM)",
-        "Designed and built a custom setup using motorized linear stages and Arduino for fluid-material interaction studies",
-        "Developed camera algorithms using grayscale imaging to detect shim movement and dynamically adjust linear stages"
+        "Investigated the relationship between substrate elasticity and microfluidic island growth in emulsions using Reflection Interference Contrast Microscopy (RICM), discovering new phenomena of water-induced wetting and island formation",
+        "Designed and built a 100 µm metal shim control system with custom-designed motorized linear stages, Arduino, and stepper drivers",
+        "Developed camera algorithms in MATLAB using grayscale imaging techniques to detect shim movement in real time"
       ]
     },
     {
       title: "UWind & UTAT Team Member",
-      company: "University of Toronto Engineering Design Team",
+      company: "University of Toronto Engineering Design Teams",
       location: "Toronto, ON",
-      duration: "Dec 2023 -- Aug 2024",
+      duration: "Dec 2023 — Aug 2024",
       points: [
-        "Designed the nacelle of a small-scale wind turbine using Ansys and SolidWorks",
-        "Achieved 1st Place Overall at the International Wind Turbine Competition (ISWTC)",
-        "Designed and optimized quadcopter fuselage bulkheads and stringers for the 2024 National UAS competition"
+        "Designed the nacelle of a small-scale wind turbine using Ansys and SolidWorks, optimizing for component accessibility and aerodynamics",
+        "Achieved 1st Place Overall at the International Wind Turbine Competition (ISWTC) in the Netherlands",
+        "Designed and optimized quadcopter fuselage bulkheads and stringers, enhancing structural integrity by 150%"
+      ]
+    },
+    {
+      title: "GEARS Mentor",
+      company: "Department of Engineering Science, UofT",
+      location: "Toronto, ON",
+      duration: "Sep 2024 — Current",
+      points: [
+        "Lead weekly sessions with 10—20+ engineering science students, covering advanced topics such as low-level programming, data structures, algorithms, and circuit analysis",
+        "Provide step-by-step guidance for debugging algorithms, deriving equations, and solving circuit problems"
       ]
     }
   ];
@@ -49,31 +60,33 @@ const Resume = () => {
   const projects = [
     {
       title: "LureLore",
-      subtitle: "Winner @ HackTheNorth ($5000+ prize)",
-      description: "Memorabilia app for fishing enthusiasts with AI fish identification and 3D interactive aquarium",
+      subtitle: "1st Place @ HackTheNorth ($5000)",
+      description: "Created an immersive fishing memory platform with AI fish identification and interactive 3D aquarium",
       tech: "MERN, Gemini AI, Three.js, Leaflet.js",
-      link: "#"
+      link: "https://github.com/danielh-hong/hackthenorth2024",
+      devpost: "https://devpost.com/software/lurelore"
     },
     {
-      title: "Basemint",
-      subtitle: "Winner @ HawkHacks2024 ($3,000 prize)",
-      description: "Web3 esports marketplace built on NEAR blockchain for fan engagement and NFT trading",
-      tech: "NEAR, React, Node.js, Mintbase Wallet",
-      link: "#"
+      title: "EngSci 2T7 Major Survey",
+      subtitle: "Full Stack Web Application",
+      description: "Built and deployed platform enabling 250+ Engineering Science students to track major preferences with real-time visualization",
+      tech: "MERN Stack, Vercel, Render",
+      link: "https://github.com/danielh-hong/2t7-major-survey",
+      live: "https://2t7-major-survey.vercel.app/vote"
     },
     {
-      title: "Pocket Fridge",
-      subtitle: "Winner @ Google AI Hackathon",
-      description: "AI-powered food management app with receipt scanning and recipe suggestions",
-      tech: "MERN Stack, React Native, Vertex AI",
-      link: "https://devpost.com/software/pocket-fridge"
+      title: "MarketBaseMint",
+      subtitle: "1st Place @ HawkHacks ($3,000)",
+      description: "Built decentralized NFT marketplace for e-sports tickets on NEAR Protocol with full trading functionality",
+      tech: "NEAR Blockchain, React, TypeScript",
+      link: "https://github.com/audgeviolin07/marketbasemint",
+      live: "https://marketbasemint.vercel.app/"
     }
   ];
 
   const skills = {
-    software: "Python, C, System Verilog, RISC-V Assembly, SolidWorks, MATLAB, Java, CSS, JavaScript, HTML, MERN Stack, Adobe Suite",
-    languages: "English, Chinese, French",
-    interests: "High Jump, Basketball, Chess"
+    technical: "Python, JavaScript/TypeScript, C/C++, Java, RISC-V Assembly, System Verilog, React.js, Node.js, Express.js, Next.js, HTML/CSS, Tailwind CSS, MongoDB, Render, Git, CI/CD, Postman, MATLAB, SolidWorks, Ansys, Arduino, Raspberry Pi",
+    languages: "English (Native), Chinese (Fluent), French (Intermediate)"
   };
 
   return (
@@ -96,20 +109,16 @@ const Resume = () => {
             <FaEnvelope /> danielh.toronto@gmail.com
           </a>
           <a href="https://daniel-hong.org" className={styles.contactItem}>
-            daniel-hong.org
+            <span>daniel-hong.org</span>
           </a>
-          <span className={styles.contactItem}>
-            <FaPhone /> (647) 614-2306
-          </span>
-          <span className={styles.contactItem}>
-            <FaMapMarkerAlt /> Toronto, ON
-          </span>
           <a href="https://www.linkedin.com/in/danielh-hong/" className={styles.contactItem}>
             <FaLinkedin /> LinkedIn
           </a>
         </div>
       </motion.header>
 
+      {/* Rest of the component remains the same, continuing with Education section... */}
+      
       {/* Education Section */}
       <motion.section 
         className={styles.section}
@@ -187,11 +196,23 @@ const Resume = () => {
               <p className={styles.projectSubtitle}>{project.subtitle}</p>
               <p className={styles.projectDescription}>{project.description}</p>
               <p className={styles.techStack}>Tech Stack: {project.tech}</p>
-              {project.link && (
-                <a href={project.link} className={styles.projectLink}>
-                  View Project <FaGithub />
-                </a>
-              )}
+              <div className={styles.projectLinks}>
+                {project.link && (
+                  <a href={project.link} className={styles.projectLink}>
+                    <FaGithub /> GitHub
+                  </a>
+                )}
+                {project.devpost && (
+                  <a href={project.devpost} className={styles.projectLink}>
+                    DevPost
+                  </a>
+                )}
+                {project.live && (
+                  <a href={project.live} className={styles.projectLink}>
+                    Live Site
+                  </a>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>
@@ -204,19 +225,15 @@ const Resume = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.6 }}
       >
-        <h2>Skills & Interests</h2>
+        <h2>Skills</h2>
         <div className={styles.skillsContainer}>
           <div className={styles.skillCategory}>
-            <h3>Software & Technologies</h3>
-            <p>{skills.software}</p>
+            <h3>Technical Skills</h3>
+            <p>{skills.technical}</p>
           </div>
           <div className={styles.skillCategory}>
             <h3>Languages</h3>
             <p>{skills.languages}</p>
-          </div>
-          <div className={styles.skillCategory}>
-            <h3>Interests</h3>
-            <p>{skills.interests}</p>
           </div>
         </div>
       </motion.section>

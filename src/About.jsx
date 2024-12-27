@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Cpu, Code2, Rocket, GraduationCap } from 'lucide-react';
+import { Cpu, Code2, Brain, Layers } from 'lucide-react';
 import styles from './About.module.css';
 
 const About = () => {
@@ -23,40 +23,40 @@ const About = () => {
   }, [codeVisible, activeLine]);
 
   const codeLines = [
-    { type: 'comment', content: '// Engineering the future' },
+    { type: 'comment', content: '// Building the future ...' },
     { type: 'code', content: 'const daniel = {' },
-    { type: 'property', content: '  role: "Engineering Science @ UofT",' },
+    { type: 'property', content: '  role: "Electrical & Computer Engineering",' },
     { type: 'array-start', content: '  focus: [' },
-    { type: 'array-item', content: '    "Robotics & Controls",' },
-    { type: 'array-item', content: '    "Full-Stack Development",' },
-    { type: 'array-item', content: '    "Machine Learning"' },
+    { type: 'array-item', content: '    "Software Engineering",' },
+    { type: 'array-item', content: '    "Product Development",' },
+    { type: 'array-item', content: '    "Machine Intelligence"' },
     { type: 'array-end', content: '  ]' },
     { type: 'code', content: '};' }
   ];
 
   const focusAreas = [
     { 
-      icon: <Rocket strokeWidth={1.5} />, 
-      title: "Aerospace",
-      desc: "Design & Controls",
-      color: "var(--primary)"
-    },
-    { 
       icon: <Cpu strokeWidth={1.5} />, 
-      title: "Robotics",
-      desc: "Autonomy & Systems",
-      color: "var(--accent-success)"
+      title: "ECE",
+      desc: "Hardware & Systems",
+      color: "var(--primary)"
     },
     { 
       icon: <Code2 strokeWidth={1.5} />, 
       title: "Software",
-      desc: "Full-Stack Dev",
+      desc: "Engineering & Architecture",
+      color: "var(--accent-success)"
+    },
+    { 
+      icon: <Layers strokeWidth={1.5} />, 
+      title: "Products",
+      desc: "Design & Development",
       color: "var(--accent-warning)"
     },
     { 
-      icon: <GraduationCap strokeWidth={1.5} />, 
-      title: "Research",
-      desc: "ML & Controls",
+      icon: <Brain strokeWidth={1.5} />, 
+      title: "ML/AI",
+      desc: "Intelligence Systems",
       color: "var(--accent-error)"
     }
   ];
@@ -69,15 +69,15 @@ const About = () => {
     { name: "Node.js", category: "backend", color: "var(--accent-warning)" },
     { name: "MongoDB", category: "database", color: "var(--accent-error)" },
     { name: "PostgreSQL", category: "database", color: "var(--accent-error)" },
-    { name: "ROS", category: "robotics", color: "var(--primary-dark)" },
+    { name: "PyTorch", category: "ml", color: "var(--primary-light)" },
     { name: "TensorFlow", category: "ml", color: "var(--primary-light)" },
     { name: "Docker", category: "devops", color: "var(--secondary-dark)" },
     { name: "AWS", category: "cloud", color: "var(--secondary-light)" },
     { name: "Git", category: "devops", color: "var(--secondary-dark)" },
-    { name: "Linux", category: "devops", color: "var(--secondary-dark)" },
-    { name: "MATLAB", category: "languages", color: "var(--primary)" },
-    { name: "SolidWorks", category: "cad", color: "var(--secondary)" },
-    { name: "Fusion360", category: "cad", color: "var(--secondary)" }
+    { name: "Linux", category: "systems", color: "var(--secondary-dark)" },
+    { name: "TypeScript", category: "languages", color: "var(--primary)" },
+    { name: "Kubernetes", category: "devops", color: "var(--secondary-dark)" },
+    { name: "Redux", category: "frontend", color: "var(--accent-success)" }
   ];
 
   return (

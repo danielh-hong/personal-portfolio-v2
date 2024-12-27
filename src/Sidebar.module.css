@@ -4,7 +4,6 @@
   height: 100%;
   background-color: var(--sidebar-bg);
   border-radius: 24px;
-  padding: 2rem 1.5rem;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
@@ -17,13 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.sidebarContent::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  padding: 2rem 1.5rem; /* first is top and bottom, second is left and right */
 }
 
 /* Profile Section */
@@ -39,6 +32,7 @@
   padding: 3px;
   border-radius: 50%;
   background: linear-gradient(45deg, var(--primary) 0%, var(--primary-light) 100%);
+  margin-bottom: 1rem;
 }
 
 .avatarWrapper {
@@ -58,7 +52,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .username {
@@ -78,7 +78,6 @@
 
 /* Navigation */
 .nav {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -105,19 +104,23 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
+}
+
+.linkItem {
+  width: 100%;
 }
 
 .link {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   color: var(--text);
   text-decoration: none;
   border-radius: 12px;
   transition: all 0.2s ease;
-  background: transparent;
+  width: 100%;
 }
 
 .link:hover {
@@ -129,7 +132,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  min-width: 32px;
   height: 32px;
   border-radius: 8px;
   background: var(--surface-50);
@@ -142,67 +145,16 @@
   color: white;
 }
 
-/* Responsive Design */
-@media (max-width: 1400px) {
-  .sidebar {
-    width: 270px;
-  }
-
-  .avatarWrapper {
-    width: 120px;
-    height: 120px;
-  }
-
-  .username {
-    font-size: 1.25rem;
-  }
+.downloadLink {
+  background: var(--primary);
+  color: white;
 }
 
-@media (max-width: 1200px) {
-  .sidebar {
-    width: 240px;
-  }
+.downloadLink .iconWrapper {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
-@media (max-width: 992px) {
-  .sidebar {
-    position: static;
-    width: 100%;
-    height: auto;
-    margin: 1rem;
-    padding: 1.5rem;
-    border-radius: 16px;
-  }
-
-  .sidebarContent {
-    gap: 1.5rem;
-  }
-
-  .linkList {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .link {
-    min-width: 150px;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .sidebar {
-    margin: 0.5rem;
-    padding: 1rem;
-  }
-
-  .link {
-    min-width: 130px;
-    font-size: 0.9rem;
-  }
-
-  .avatarWrapper {
-    width: 100px;
-    height: 100px;
-  }
+.downloadLink:hover {
+  background: var(--primary-dark);
 }

@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './ThemeContext'
+import { useState, useEffect } from 'react' // Add this import
 import Landing from './Landing'
 import MouseTrail from './MouseTrail'
 import Navbar from './Navbar'
-import Sidebar from './Sidebar'
 import About from './About'
+import Sidebar from './sidebar'
+import SidebarMobile from './SidebarMobile'
 import Projects from './Projects/Projects'
 import Resume from './Resume'
 import './App.css'
@@ -15,27 +17,44 @@ const AppContent = () => {
   const isLandingPage = location.pathname === '/'
 
   // Separate layout for regular pages
-  const PageLayout = ({ children }) => (
-    <>
-      <Navbar />
-      <div className="content-wrapper">
-        <Sidebar />
-        <main className="main-content">
-          <div className="main-content-inner">
-            {children}
-          </div>
-        </main>
-      </div>
-    </>
-  )
+  const PageLayout = ({ children }) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 992)
+
+    useEffect(() => {
+      // Function to handle window resize
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 992)
+      }
+
+      // Add event listener
+      window.addEventListener('resize', handleResize)
+
+      // Cleanup
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }, []) // Empty dependency array means this effect runs once on mount
+    
+    return (
+      <>
+        <Navbar />
+        <div className="content-wrapper">
+          {isMobile ? <SidebarMobile /> : <Sidebar />}
+          <main className="main-content">
+            <div className="main-content-inner">
+              {children}
+            </div>
+          </main>
+        </div>
+      </>
+    )
+  }
 
   return (
     <div className="app">
       <MouseTrail />
       <Routes>
-        {/* Landing page route */}
         <Route path="/" element={<Landing />} />
-        {/* Projects page with PageLayout */}
         <Route
           path="/projects"
           element={
@@ -44,7 +63,6 @@ const AppContent = () => {
             </PageLayout>
           }
         />
-        {/* About page with PageLayout */}
         <Route
           path="/about"
           element={

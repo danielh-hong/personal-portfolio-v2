@@ -184,7 +184,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 0.75rem;
-  padding: 0.5rem;
 }
 
 .skillItem {
