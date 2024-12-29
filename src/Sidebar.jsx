@@ -98,7 +98,7 @@ const Sidebar = () => {
                 </li>
                 <li className={currentStyles.linkItem}>
                   <a 
-                    href="https://youtube.com/yourchannel" 
+                    href="https://www.youtube.com/@danielhong2817" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className={currentStyles.link}
