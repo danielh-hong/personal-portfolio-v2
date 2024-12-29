@@ -183,7 +183,7 @@ const Resume = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <h2>Projects</h2>
+        <h2>Sample Projects</h2>
         <div className={styles.projectsGrid}>
           {projects.map((project, index) => (
             <motion.div 

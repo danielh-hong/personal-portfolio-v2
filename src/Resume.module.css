@@ -12,16 +12,17 @@
   margin-bottom: 3.5rem;
   position: relative;
   padding-bottom: 2rem;
-  border-bottom: 1px solid var(--divider-color);
+  border-bottom: 2px solid rgba(74, 144, 226, 0.2);
 }
 
 .header h1 {
-  font-size: 3.5rem;
+  font-size: 4.5rem;
   margin-bottom: 0.5rem;
-  color: var(--text);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+  color: var(--primary);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  text-shadow: 0 2px 10px rgba(74, 144, 226, 0.15);
 }
 
 .contactInfo {
@@ -38,11 +39,28 @@
   gap: 0.5rem;
   color: var(--text);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .contactItem:hover {
   color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.contactItem::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.contactItem:hover::after {
+  width: 100%;
 }
 
 /* Section Styles */
@@ -51,12 +69,12 @@
 }
 
 .section h2 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin-bottom: 2rem;
   color: var(--primary);
   position: relative;
   padding-bottom: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
@@ -77,11 +95,12 @@
 .projectCard,
 .skillCategory {
   background: var(--container-bg);
-  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
   padding: 2rem;
-  border: 1px solid var(--divider-color);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
+  border: 1px solid rgba(74, 144, 226, 0.1);
+  box-shadow: 0 4px 20px rgba(74, 144, 226, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Education Styles */
@@ -94,22 +113,24 @@
 }
 
 .eduHeader h3 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-bottom: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   line-height: 1.3;
 }
 
 .eduMeta {
   text-align: right;
   color: var(--secondary);
+  font-weight: 500;
 }
 
 .gpa {
   color: var(--primary);
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
 .achievements {
@@ -119,7 +140,7 @@
 
 .achievements li {
   position: relative;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   line-height: 1.6;
   color: var(--text);
 }
@@ -129,16 +150,18 @@
   position: absolute;
   left: -1rem;
   color: var(--primary);
+  font-weight: 700;
 }
 
 /* Experience Styles */
 .experienceCard {
   margin-bottom: 2rem;
+  border-left: 3px solid var(--primary);
 }
 
 .experienceCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(74, 144, 226, 0.12);
 }
 
 .expHeader {
@@ -150,24 +173,25 @@
 }
 
 .expHeader h3 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   margin-bottom: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.3;
   color: var(--text);
 }
 
 .company {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--primary);
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .expMeta {
   text-align: right;
   color: var(--secondary);
+  font-weight: 500;
 }
 
 .expPoints {
@@ -183,10 +207,11 @@
 }
 
 .expPoints li::before {
-  content: '•';
+  content: '→';
   position: absolute;
-  left: -1rem;
+  left: -1.5rem;
   color: var(--primary);
+  font-weight: 700;
 }
 
 /* Projects Styles */
@@ -201,17 +226,19 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
+  border-top: 4px solid var(--primary);
 }
 
 .projectCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(74, 144, 226, 0.12);
 }
 
 .projectCard h3 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin-bottom: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.3;
   color: var(--text);
@@ -219,8 +246,8 @@
 
 .projectSubtitle {
   color: var(--primary);
-  font-weight: 500;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
   letter-spacing: -0.01em;
 }
@@ -237,6 +264,7 @@
   color: var(--secondary);
   margin-bottom: 1.25rem;
   line-height: 1.5;
+  font-weight: 500;
 }
 
 .projectLinks {
@@ -251,17 +279,20 @@
   gap: 0.5rem;
   color: var(--primary);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.95rem;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--hover);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(74, 144, 226, 0.1);
 }
 
 .projectLink:hover {
   background: var(--hover-dark);
   color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.08);
 }
 
 /* Skills Styles */
@@ -273,18 +304,19 @@
 
 .skillCategory {
   height: 100%;
+  border-right: 3px solid var(--primary);
 }
 
 .skillCategory:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(74, 144, 226, 0.12);
 }
 
 .skillCategory h3 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   margin-bottom: 1.25rem;
   color: var(--primary);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.01em;
   position: relative;
   padding-bottom: 0.75rem;
@@ -315,8 +347,11 @@
 }
 
 @media (max-width: 992px) {
+  .resumeContainer {
+    padding: 0;
+  }
   .header h1 {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
   }
 
   .contactInfo {
@@ -324,7 +359,7 @@
   }
 
   .section h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
   .eduHeader,
@@ -354,11 +389,11 @@
   }
 
   .section h2 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 
   .header h1 {
-    font-size: 2rem;
+    font-size: 2.8rem;
   }
 }
 
