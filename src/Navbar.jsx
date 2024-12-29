@@ -2,7 +2,7 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeContext } from './ThemeContext';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, User, Briefcase, FileText } from 'lucide-react'; // Added icons
 import styles from './Navbar.module.css';
 
 const Navbar = () => {
@@ -11,58 +11,52 @@ const Navbar = () => {
   const [hoveredPath, setHoveredPath] = useState(null);
 
   const navItems = [
-    { path: '/about', label: 'About' },
-    { path: '/projects', label: 'Projects' },
-    { path: '/resume', label: 'Resume' }
+    { path: '/about', label: 'About', icon: User },
+    { path: '/projects', label: 'Projects', icon: Briefcase },
+    { path: '/resume', label: 'Resume', icon: FileText }
   ];
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.content}>
-        <div className={styles.lineContainer}>
-          <div className={styles.line} />
-        </div>
-
-        <ul className={styles.navItems}>
-          {navItems.map(({ path, label }, index) => (
-            <li key={path} className={styles.navItem}>
-              {index > 0 && <div className={styles.divider} />}
+        <div className={styles.navContent}>
+          <div className={styles.linksContainer}>
+            {navItems.map(({ path, label, icon: Icon }) => (
               <Link
+                key={path}
                 to={path}
-                className={`${styles.navLink} ${
-                  location.pathname === path ? styles.active : ''
+                className={`${styles.link} ${
+                  location.pathname === path ? styles.activeLink : ''
                 }`}
                 onMouseEnter={() => setHoveredPath(path)}
                 onMouseLeave={() => setHoveredPath(null)}
               >
+                <Icon className={styles.linkIcon} />
                 <span className={styles.linkText}>{label}</span>
                 {(location.pathname === path || hoveredPath === path) && (
-                  <div className={styles.activeBackground} />
+                  <div className={styles.activeIndicator} />
                 )}
               </Link>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
 
-        <div className={styles.lineContainer}>
-          <div className={styles.line} />
+          <div className={styles.divider}></div>
+
+          <button
+            onClick={toggleTheme}
+            className={styles.themeToggle}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          >
+            {theme === 'dark' ? (
+              <Sun className={styles.icon} />
+            ) : (
+              <Moon className={styles.icon} />
+            )}
+          </button>
         </div>
-
-        <button
-          onClick={toggleTheme}
-          className={styles.themeToggle}
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-        >
-          {theme === 'dark' ? (
-            <Sun className={styles.icon} />
-          ) : (
-            <Moon className={styles.icon} />
-          )}
-        </button>
       </div>
     </nav>
   );
 };
 
 export default Navbar;
-

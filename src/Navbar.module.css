@@ -1,138 +1,129 @@
+/* Navbar.module.css */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 64px;
-  background: rgba(var(--bg-rgb), 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(var(--border-rgb), 0.1);
   z-index: 50;
+  background: none;
 }
 
 .content {
   height: 100%;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
+}
+
+.navContent {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.linksContainer {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-.lineContainer {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.line {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(var(--text-rgb), 0.1) 50%,
-    transparent
-  );
-  transition: all 0.3s ease;
-}
-
-.navItems {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  height: 100%;
-}
-
-.navItem {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
 .divider {
-  width: 1px;
-  height: 16px;
-  background-color: rgba(var(--text-rgb), 0.1);
-  margin: 0 0.75rem;
+  height: 1px;
+  background-color: var(--text);
+  opacity: 0.2;
+  flex: 1;
+  min-width: 50px;
+  margin: 0 1rem;
 }
 
-.navLink {
+.link {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 0 1rem;
-  color: rgba(var(--text-rgb), 0.7);
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  transition: color 0.2s ease;
+  border-radius: 6px;
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+.linkIcon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition-duration) var(--transition-timing);
 }
 
 .linkText {
   position: relative;
-  z-index: 1;
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-duration) var(--transition-timing);
 }
 
-.navLink:hover {
-  color: var(--text);
+.link:hover {
+  background-color: var(--hover);
 }
 
-.navLink:hover .linkText {
-  transform: translateY(-1px);
+.link:hover .linkIcon {
+  transform: scale(1.1);
 }
 
-.activeBackground {
+.link:hover .linkText {
+  transform: translateX(2px);
+}
+
+.activeLink {
+  color: var(--primary);
+}
+
+.activeLink .linkIcon {
+  color: var(--primary);
+}
+
+.activeIndicator {
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   left: 0;
   right: 0;
   height: 2px;
   background-color: var(--primary);
-  animation: slideIn 0.2s ease forwards;
-}
-
-.navLink.active {
-  color: var(--primary);
+  transform-origin: left;
+  animation: slideIn 0.3s var(--transition-timing) forwards;
 }
 
 .themeToggle {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
   padding: 0;
-  background: none;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  background: none;
+  transition: background-color var(--transition-duration) var(--transition-timing);
 }
 
 .themeToggle:hover {
-  background-color: rgba(var(--primary-rgb), 0.1);
+  background-color: var(--hover);
+}
+
+.themeToggle:focus {
+  outline: none;
 }
 
 .icon {
   width: 20px;
   height: 20px;
   color: var(--text);
-  transition: all 0.3s ease;
+  transition: transform var(--transition-duration) var(--transition-timing);
 }
 
 .themeToggle:hover .icon {
-  color: var(--primary);
-  transform: rotate(15deg) scale(1.1);
+  transform: rotate(15deg);
 }
 
 @keyframes slideIn {
@@ -147,46 +138,35 @@
 @media (max-width: 768px) {
   .content {
     padding: 0 1rem;
+  }
+
+  .navContent {
+    gap: 0.75rem;
+  }
+
+  .linksContainer {
     gap: 1rem;
   }
 
-  .lineContainer {
-    display: none;
-  }
-
-  .navItems {
-    flex: 1;
-    justify-content: center;
-  }
-
-  .navLink {
-    padding: 0 0.75rem;
-    font-size: 0.875rem;
+  .divider {
+    margin: 0 0.5rem;
+    min-width: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .navbar {
     height: 56px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
   }
 
   .content {
     padding: 0 0.75rem;
+  }
+
+  .navContent {
     gap: 0.5rem;
-  }
-
-  .navItems {
-    gap: 0.25rem;
-  }
-
-  .divider {
-    height: 12px;
-    margin: 0 0.5rem;
-  }
-
-  .navLink {
-    padding: 0 0.5rem;
-    font-size: 0.8125rem;
   }
 
   .themeToggle {
@@ -197,5 +177,15 @@
   .icon {
     width: 18px;
     height: 18px;
+  }
+
+  .link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.875rem;
+  }
+
+  .linkIcon {
+    width: 14px;
+    height: 14px;
   }
 }

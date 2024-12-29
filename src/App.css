@@ -190,16 +190,13 @@ body {
 /* Main content area */
 .main-content {
   flex: 1;
-  background: var(--container-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* For Safari */
-  border-radius: 20px;
-  box-shadow: var(--shadow-lg);
-  padding: 2rem;
-  transition: background var(--transition-duration) var(--transition-timing),
-              box-shadow var(--transition-duration) var(--transition-timing);
-  overflow-y: auto;
+  transition: all var(--transition-duration) var(--transition-timing);
+  overflow-y:hidden;
   height: 100%;
+  background: var(--container-bg);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
 }
 
 .main-content-inner {
@@ -239,7 +236,17 @@ body {
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 992px) {  
+  .app {
+    min-height: 100vh;
+    position: relative;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
   .content-wrapper {
     width: 100%;
     display: flex;
