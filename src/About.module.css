@@ -188,7 +188,7 @@
 
 .skillItem {
   position: relative;
-  background: var(--surface-50);
+  background: var(--surface-0);
   padding: 0.6rem 0.75rem;
   border-radius: 0.6rem;
   text-align: center;
@@ -196,6 +196,7 @@
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease;
+  height: 2.5rem; /* Fixed height to prevent layout shifts */
 }
 
 .skillItem::before {
@@ -212,15 +213,21 @@
 }
 
 .skillItem:hover::before {
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 .skillText {
-  position: relative;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text);
+  background: var(--surface-0);
   transition: transform 0.3s ease;
+  backface-visibility: hidden;
 }
 
 .skillCategory {
@@ -231,14 +238,13 @@
   justify-content: center;
   font-size: 0.7rem;
   color: var(--skill-color);
-  opacity: 0;
+  background: var(--surface-0);
   transform: translateY(100%);
-  transition: all 0.3s ease;
-  background: var(--surface-50);
+  transition: transform 0.3s ease;
+  backface-visibility: hidden;
 }
 
 .skillItem:hover .skillCategory {
-  opacity: 1;
   transform: translateY(0);
 }
 
@@ -319,6 +325,7 @@
 
   .skillItem {
     padding: 0.5rem 0.6rem;
+    height: 2.2rem;
   }
 
   .skillText {
@@ -336,7 +343,7 @@
 }
 
 [data-theme='dark'] .skillItem:hover::before {
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
 [data-theme='dark'] .skillGlow {
@@ -344,7 +351,7 @@
 }
 
 [data-theme='dark'] .skillItem:hover .skillGlow {
-  opacity: 0.1;
+  opacity: 0.08;
 }
 
 /* Animation keyframes for potential use */
