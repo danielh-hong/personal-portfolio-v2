@@ -23,13 +23,13 @@ const About = () => {
   }, [codeVisible, activeLine]);
 
   const codeLines = [
-    { type: 'comment', content: '// Building the future ...' },
+    { type: 'comment', content: '// Learning, Building, Growing :)' },
     { type: 'code', content: 'const daniel = {' },
     { type: 'property', content: '  role: "Electrical & Computer Engineering",' },
     { type: 'array-start', content: '  focus: [' },
-    { type: 'array-item', content: '    "Software Engineering",' },
-    { type: 'array-item', content: '    "Product Development",' },
-    { type: 'array-item', content: '    "Machine Intelligence"' },
+    { type: 'array-item', content: '    "Building Ideas",' },
+    { type: 'array-item', content: '    "Challenging Myself",' },
+    { type: 'array-item', content: '    "Acquiring Knowledge"' },
     { type: 'array-end', content: '  ]' },
     { type: 'code', content: '};' }
   ];

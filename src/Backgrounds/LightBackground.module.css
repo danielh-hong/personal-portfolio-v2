@@ -1,0 +1,47 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #dbdce2 0%,
+    #e4e4e9 50%,
+    #cdd8d5 100%
+  );
+  overflow: hidden;
+  z-index: 0; /* ensure background stays behind other content */
+  pointer-events: none; /* do not intercept pointer events */
+  transition: background 1s ease-in-out;
+}
+
+.background::before,
+.background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.background::before {
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(120, 120, 200, 0.2) 0%,
+    rgba(70, 100, 180, 0.1) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.background::after {
+  background: radial-gradient(
+    circle at 70% 70%,
+    rgba(100, 150, 220, 0.15) 0%,
+    rgba(130, 80, 180, 0.08) 45%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}

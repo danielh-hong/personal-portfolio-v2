@@ -1,0 +1,15 @@
+/* DarkBackground.module.css */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, 
+    #000000 0%,
+    #010224 50%,
+    #070318 100%
+  );
+}

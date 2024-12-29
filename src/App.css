@@ -3,42 +3,42 @@
 /* App.css color updates */
 :root {
   /* Core Colors */
-  --bg: #f8f9fa;
-  --text: #111827;
-  --nav-bg: #ffffff;
-  --sidebar-bg: #ffffff;
-  --container-bg: #ffffff;
+  --bg: #f0f4f8; /* Soft light blue */
+  --text: #1f2937; /* Dark gray for high contrast */
+  --nav-bg: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+  --sidebar-bg: rgba(255, 255, 255, 0.6); /* Frosty effect */
+  --container-bg: rgba(255, 255, 255, 0.6); /* Frosty effect */
   
-  /* Primary Colors - Keeping blue for interaction */
-  --primary: #2563eb;
-  --primary-light: #3b82f6;
-  --primary-dark: #1d4ed8;
-  --primary-hover: #60a5fa;
+  /* Primary Colors - Cool blue tones for interaction */
+  --primary: #4a90e2; /* Soft blue */
+  --primary-light: #6fb8f5; /* Light blue */
+  --primary-dark: #357ab8; /* Darker blue */
+  --primary-hover: #63a4f9; /* Hover blue */
   
-  /* Secondary/Gray Colors - Main UI elements */
-  --secondary: #64748b;
-  --secondary-light: #94a3b8;
-  --secondary-dark: #475569;
+  /* Secondary/Gray Colors - Complementary cool tones */
+  --secondary: #5a6a7d; /* Slate gray */
+  --secondary-light: #8fa4b7; /* Light slate */
+  --secondary-dark: #4a5568; /* Dark slate */
   
-  /* Surface Colors - Refined grays */
-  --surface-0: #ffffff;
-  --surface-50: #f8fafc;
-  --surface-100: #f1f5f9;
-  --surface-200: #e2e8f0;
+  /* Surface Colors - Light, semi-transparent grays */
+  --surface-0: rgba(255, 255, 255, 0.6); /* Frosty white */
+  --surface-50: rgba(240, 244, 248, 0.6); /* Frosty light blue */
+  --surface-100: rgba(225, 230, 240, 0.6); /* Frosty medium blue */
+  --surface-200: rgba(209, 213, 219, 0.6); /* Frosty gray */
   
   /* Interactive States */
-  --hover: #f1f5f9;
-  --hover-light: #f8fafc;
-  --hover-dark: #e2e8f0;
+  --hover: rgba(225, 230, 240, 0.6); /* Frosty medium blue */
+  --hover-light: rgba(240, 244, 248, 0.6); /* Frosty light blue */
+  --hover-dark: rgba(209, 213, 219, 0.6); /* Frosty gray */
   
   /* Accent Colors */
-  --accent-success: #10b981;
-  --accent-warning: #f59e0b;
-  --accent-error: #ef4444;
+  --accent-success: #34d399; /* Emerald green */
+  --accent-warning: #fbbf24; /* Amber yellow */
+  --accent-error: #f87171; /* Light red */
   
   /* Dividers and Lines */
-  --divider-color: #e2e8f0;
-  --nav-line-color: #cbd5e1;
+  --divider-color: rgba(209, 213, 219, 0.6); /* Frosty gray */
+  --nav-line-color: rgba(203, 213, 225, 0.6); /* Frosty blue-gray */
   
   /* Media Viewer */
   --media-bg: var(--surface-50);
@@ -49,52 +49,60 @@
   --media-loading-bg: rgba(15, 23, 42, 0.04);
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08);
-
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+  
   /* Scrollbar Styles */
-  --scrollbar-track-color: #f1f5f9;  /* Light gray background */
-  --scrollbar-thumb-color: #60a5fa;  /* Nice blue color */
-  --scrollbar-thumb-hover-color: #3b82f6;  /* Darker blue on hover */
-
-  --navbar-height: 40px;
+  --scrollbar-track-color: #e0e7ff;  /* Light blue-gray background */
+  --scrollbar-thumb-color: #4a90e2;  /* Soft blue color */
+  --scrollbar-thumb-hover-color: #357ab8;  /* Darker blue on hover */
+  
+  --navbar-height: 50px;
+  --transition-duration: 0.3s;
+  --transition-timing: ease;
+  --max-content-width: 1400px;
 }
 
 /* Dark Theme */
 [data-theme='dark'] {
-  /* Core Colors - More gray-focused */
-  --bg: #1e1e1e;
-  --text: #f9fafb;
-  --nav-bg: #2d2d2d;
-  --sidebar-bg: #2d2d2d;
-  --container-bg: #2d2d2d;
+  /* Core Colors - Dark cool tones */
+  --bg: #121212; /* Near-black */
+  --text: #e0e6ed; /* Light gray for high contrast */
+  --nav-bg: rgba(30, 30, 30, 0.7); /* Semi-transparent dark gray */
+  --sidebar-bg: rgba(45, 45, 45, 0.6); /* Frosty dark gray */
+  --container-bg: rgba(45, 45, 45, 0.6); /* Frosty dark gray */
   
-  /* Primary Colors - Keeping blue but slightly muted */
-  --primary: #3b82f6;
-  --primary-light: #60a5fa;
-  --primary-dark: #2563eb;
-  --primary-hover: #93c5fd;
+  /* Primary Colors - Cool blue tones */
+  --primary: #4a90e2; /* Soft blue */
+  --primary-light: #6fb8f5; /* Light blue */
+  --primary-dark: #357ab8; /* Darker blue */
+  --primary-hover: #63a4f9; /* Hover blue */
   
   /* Secondary/Gray Colors */
-  --secondary: #9ca3af;
-  --secondary-light: #d1d5db;
-  --secondary-dark: #6b7280;
+  --secondary: #a0aec0; /* Cool gray */
+  --secondary-light: #cbd5e0; /* Light gray */
+  --secondary-dark: #718096; /* Dark gray */
   
-  /* Surface Colors - Refined dark grays */
-  --surface-0: #2d2d2d;
-  --surface-50: #333333;
-  --surface-100: #2d2d2d;
-  --surface-200: #404040;
+  /* Surface Colors - Dark, semi-transparent grays */
+  --surface-0: rgba(45, 45, 45, 0.6); /* Frosty dark gray */
+  --surface-50: rgba(51, 51, 51, 0.6); /* Frosty darker gray */
+  --surface-100: rgba(45, 45, 45, 0.6); /* Frosty dark gray */
+  --surface-200: rgba(64, 64, 64, 0.6); /* Frosty medium dark gray */
   
   /* Interactive States */
-  --hover: #333333;
-  --hover-light: #404040;
-  --hover-dark: #262626;
+  --hover: rgba(45, 45, 45, 0.6); /* Frosty dark gray */
+  --hover-light: rgba(64, 64, 64, 0.6); /* Frosty medium dark gray */
+  --hover-dark: rgba(38, 38, 38, 0.6); /* Frosty darker gray */
+  
+  /* Accent Colors */
+  --accent-success: #34d399; /* Emerald green */
+  --accent-warning: #fbbf24; /* Amber yellow */
+  --accent-error: #f87171; /* Light red */
   
   /* Dividers and Lines */
-  --divider-color: #404040;
-  --nav-line-color: #4d4d4d;
+  --divider-color: rgba(64, 64, 64, 0.6); /* Frosty medium dark gray */
+  --nav-line-color: rgba(77, 77, 77, 0.6); /* Frosty dark gray */
   
   /* Media Viewer */
   --media-bg: var(--surface-50);
@@ -104,17 +112,19 @@
   --media-controls-shadow: rgba(0, 0, 0, 0.25);
   --media-loading-bg: rgba(249, 250, 251, 0.04);
 
-  /* Shadows - adjusted for dark mode */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
-
+  /* Shadows - Dark mode */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  
   /* Scrollbar Styles */
-  --scrollbar-track-color: #1e293b;  /* Dark background */
-  --scrollbar-thumb-color: #3d5781;  /* Slightly darker blue for dark mode */
-  --scrollbar-thumb-hover-color: #2563eb;  /* Even darker blue on hover for dark mode */
+  --scrollbar-track-color: #2d3748;  /* Dark blue-gray background */
+  --scrollbar-thumb-color: #4a90e2;  /* Soft blue color */
+  --scrollbar-thumb-hover-color: #357ab8;  /* Darker blue on hover */
+  
+  /* Adjust max content width for dark theme if needed */
+  --max-content-width: 1400px;
 }
-
 
 * {
   margin: 0;
@@ -126,7 +136,8 @@ body {
   background-color: var(--bg);
   color: var(--text);
   font-family: 'Inter', sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--transition-duration) var(--transition-timing),
+              color var(--transition-duration) var(--transition-timing);
   overflow-x: hidden;
 }
 
@@ -163,47 +174,62 @@ body {
   width: var(--max-content-width);
 }
 
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  border-radius: 15px;
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  transition: background var(--transition-duration) var(--transition-timing),
+              box-shadow var(--transition-duration) var(--transition-timing);
+}
+
 /* Main content area */
 .main-content {
   flex: 1;
-  transition: all var(--transition-duration) var(--transition-timing);
-  overflow-y:hidden;
-  height: 100%;
   background: var(--container-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   padding: 2rem;
+  transition: background var(--transition-duration) var(--transition-timing),
+              box-shadow var(--transition-duration) var(--transition-timing);
+  overflow-y: auto;
+  height: 100%;
 }
 
 .main-content-inner {
   flex: 1;
   transition: all var(--transition-duration) var(--transition-timing);
-  overflow-y:hidden;
+  overflow-y: hidden;
   height: 100%;
 }
 
 @media (max-width: 2000px) {
-  :root {
+  :root, [data-theme='dark'] {
     --max-content-width: 1500px;
   }
 }
 
 @media (max-width: 1800px) {
-  :root {
+  :root, [data-theme='dark'] {
     --max-content-width: 1400px;
   }
 }
 
-
 /* Responsive adjustments */
 @media (max-width: 1500px) {
-  :root {
+  :root, [data-theme='dark'] {
     --max-content-width: 1200px;
   }
 }
 
 @media (max-width: 1300px) {
-  :root {
+  :root, [data-theme='dark'] {
     --max-content-width: 1150px;
   }
   
@@ -230,14 +256,18 @@ body {
     max-width: 100%;
     flex: 1;
   }
+  
+  .sidebar {
+    width: 100%;
+    padding: 1rem;
+  }
 }
 
-
-/* custom scrollbar styles */
+/* Custom scrollbar styles */
 
 ::-webkit-scrollbar {
-  width: 4px; /* Increased width for better visibility */
-  height: 4px;
+  width: 8px; /* Increased width for better visibility */
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {

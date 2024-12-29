@@ -1,6 +1,8 @@
+// App.jsx
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './ThemeContext'
-import { useState, useEffect } from 'react' // Add this import
+import { useState, useEffect, useContext } from 'react'
+import { ThemeContext } from './ThemeContext'
 import Landing from './Landing'
 import MouseTrail from './MouseTrail'
 import Navbar from './Navbar'
@@ -9,7 +11,25 @@ import Sidebar from './sidebar'
 import SidebarMobile from './SidebarMobile'
 import Projects from './Projects/Projects'
 import Resume from './Resume'
+import LightBackground from './Backgrounds/LightBackground'
+import DarkBackground from './Backgrounds/DarkBackground'
 import './App.css'
+
+// Background component that switches based on theme
+const ThemeBackground = () => {
+  const { theme } = useContext(ThemeContext);
+  const [mounting, setMounting] = useState(false);
+  
+  useEffect(() => {
+    setMounting(true);
+    const timer = setTimeout(() => setMounting(false), 50);
+    return () => clearTimeout(timer);
+  }, [theme]);
+
+  if (mounting) return null; // Prevent flickering during mount/unmount
+  
+  return theme === 'light' ? <LightBackground /> : <DarkBackground />;
+};
 
 // Wrapper component that handles the layout logic
 const AppContent = () => {
@@ -21,19 +41,15 @@ const AppContent = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 992)
 
     useEffect(() => {
-      // Function to handle window resize
       const handleResize = () => {
         setIsMobile(window.innerWidth <= 992)
       }
 
-      // Add event listener
       window.addEventListener('resize', handleResize)
-
-      // Cleanup
       return () => {
         window.removeEventListener('resize', handleResize)
       }
-    }, []) // Empty dependency array means this effect runs once on mount
+    }, [])
     
     return (
       <>
@@ -52,6 +68,7 @@ const AppContent = () => {
 
   return (
     <div className="app">
+      <ThemeBackground />
       <MouseTrail />
       <Routes>
         <Route path="/" element={<Landing />} />
