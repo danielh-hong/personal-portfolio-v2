@@ -204,6 +204,27 @@
   background: var(--primary-dark);
 }
 
+.statusBar {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--surface-50);
+  border-bottom: 1px solid var(--divider-color);
+  color: var(--secondary);
+  font-size: 0.9rem;
+}
+
+.statusText {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusText span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .modalContent {
@@ -253,6 +274,9 @@
   .applyButton {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
+  }
+  .statusBar {
+    padding: 0.75rem 1rem;
   }
 }
 

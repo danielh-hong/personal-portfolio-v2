@@ -10,7 +10,8 @@ const FilterModal = ({
   selectedTags, 
   setSelectedTags,
   sortOrder,
-  setSortOrder 
+  setSortOrder,
+  totalProjects 
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -40,11 +41,21 @@ const FilterModal = ({
 
   if (!isOpen) return null;
 
+  const getActiveFilterCount = () => {
+    return selectedTags.filter(tag => tag !== 'All').length;
+  };
+
   const handleTagClick = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter(t => t !== tag));
+    if (tag === 'All') {
+      setSelectedTags(['All']);
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      if (selectedTags.includes(tag)) {
+        const newTags = selectedTags.filter(t => t !== tag);
+        setSelectedTags(newTags.length === 0 ? ['All'] : newTags);
+      } else {
+        const newTags = [...selectedTags.filter(t => t !== 'All'), tag];
+        setSelectedTags(newTags);
+      }
     }
   };
 
@@ -78,6 +89,18 @@ const FilterModal = ({
           </button>
         </div>
 
+        <div className={styles.statusBar}>
+          <div className={styles.statusText}>
+            <span>
+              <Filter size={16} />
+              {getActiveFilterCount()} {getActiveFilterCount() === 1 ? 'filter' : 'filters'} applied
+            </span>
+            <span>
+              {totalProjects} {totalProjects === 1 ? 'project' : 'projects'} found
+            </span>
+          </div>
+        </div>
+
         <div className={styles.modalBody}>
           <div className={styles.section}>
             <h3>Sort by Date</h3>
@@ -102,6 +125,13 @@ const FilterModal = ({
           <div className={styles.section}>
             <h3>Filter by Category</h3>
             <div className={styles.tagGrid}>
+              <button
+                key="All"
+                className={`${styles.tagButton} ${selectedTags.includes('All') ? styles.active : ''}`}
+                onClick={() => handleTagClick('All')}
+              >
+                All
+              </button>
               {tags.filter(tag => tag !== 'All').map(tag => (
                 <button
                   key={tag}
@@ -119,7 +149,7 @@ const FilterModal = ({
           <button 
             className={styles.resetButton}
             onClick={() => {
-              setSelectedTags([]);
+              setSelectedTags(['All']);
               setSortOrder('desc');
             }}
           >

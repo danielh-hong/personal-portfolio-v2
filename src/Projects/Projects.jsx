@@ -125,12 +125,13 @@ ProjectCard.displayName = 'ProjectCard';
 
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTags, setSelectedTags] = useState([]);
   const [sortOrder, setSortOrder] = useState('desc');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [selectedTags, setSelectedTags] = useState(['All']);
+
 
   // Memoized filter function
   const getFilteredProjects = useCallback(() => {
@@ -143,7 +144,7 @@ const Projects = () => {
             skill.toLowerCase().includes(searchTerm.toLowerCase())
           );
         
-        const matchesTags = selectedTags.length === 0 || 
+        const matchesTags = selectedTags.includes('All') || 
           selectedTags.every(tag => project.tags.includes(tag));
         
         return matchesSearch && matchesTags;
@@ -154,6 +155,7 @@ const Projects = () => {
         return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
       });
   }, [searchTerm, selectedTags, sortOrder]);
+  
 
   const filteredProjects = getFilteredProjects();
 
@@ -229,17 +231,16 @@ const Projects = () => {
         </AnimatePresence>
 
         <AnimatePresence>
-          {isFilterModalOpen && (
-            <FilterModal
-              isOpen={isFilterModalOpen}
-              onClose={() => setIsFilterModalOpen(false)}
-              tags={TAGS}
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              sortOrder={sortOrder}
-              setSortOrder={setSortOrder}
-            />
-          )}
+          <FilterModal
+            isOpen={isFilterModalOpen}
+            onClose={() => setIsFilterModalOpen(false)}
+            tags={TAGS}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            totalProjects={filteredProjects.length}  // Add this line
+          />
         </AnimatePresence>
       </div>
     </div>
