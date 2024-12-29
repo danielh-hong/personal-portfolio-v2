@@ -1,0 +1,269 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.modalContent {
+  background-color: var(--surface-0);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--divider-color);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  background-color: var(--surface-100);
+  color: var(--text);
+}
+
+.modalBody {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.sortButtons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sortButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background-color: var(--surface-50);
+  color: var(--secondary);
+  border: 1px solid var(--divider-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.sortButton:hover {
+  background-color: var(--surface-100);
+  color: var(--primary);
+  border-color: var(--primary-light);
+}
+
+.sortButton.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary-dark);
+}
+
+.tagGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.tagButton {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background-color: var(--surface-50);
+  color: var(--secondary);
+  border: 1px solid var(--divider-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  text-align: left;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.tagButton:hover {
+  background-color: var(--surface-100);
+  color: var(--primary);
+  border-color: var(--primary-light);
+}
+
+.tagButton.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary-dark);
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--divider-color);
+  background-color: var(--surface-0);
+}
+
+.resetButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  background-color: var(--surface-50);
+  color: var(--secondary);
+  border: 1px solid var(--divider-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.resetButton:hover {
+  background-color: var(--surface-100);
+  color: var(--text);
+}
+
+.applyButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  background-color: var(--primary);
+  color: white;
+  border: 1px solid var(--primary-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.applyButton:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Scrollbar Styles */
+.modalBody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+  background: var(--surface-50);
+  border-radius: 4px;
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+.modalBody::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+  }
+
+  .modalHeader,
+  .modalBody,
+  .modalFooter {
+    padding: 1.25rem;
+  }
+
+  .tagGrid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .sortButtons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .modalHeader {
+    padding: 1rem;
+  }
+
+  .modalBody {
+    padding: 1rem;
+  }
+
+  .tagGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .modalFooter {
+    padding: 1rem;
+  }
+
+  .resetButton,
+  .applyButton {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .modalContent,
+  .sortButton,
+  .tagButton,
+  .resetButton,
+  .applyButton,
+  .closeButton {
+    transition: none;
+  }
+}
