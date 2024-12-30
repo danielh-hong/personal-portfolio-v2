@@ -2,9 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const MouseTrail = () => {
   const [particles, setParticles] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
   const requestRef = useRef();
   const counterRef = useRef(0);
   const particleIdCounter = useRef(0);
+
+  // Check for mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || window.innerHeight <= 500);
+    };
+
+    checkMobile(); // Initial check
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   // Create mouse trail particle
   const createTrailParticle = (x, y) => {
@@ -43,6 +58,8 @@ const MouseTrail = () => {
   };
 
   useEffect(() => {
+    if (isMobile) return; // Skip adding listeners on mobile
+
     const handleMouseMove = (e) => {
       counterRef.current++;
 
@@ -95,7 +112,9 @@ const MouseTrail = () => {
       document.removeEventListener('click', handleClick);
       cancelAnimationFrame(requestRef.current);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) return null; // Don't render component on mobile
 
   return (
     <div 
