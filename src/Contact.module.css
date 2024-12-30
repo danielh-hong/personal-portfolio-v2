@@ -1,19 +1,23 @@
 .container {
+  position: relative;
   width: 100%;
   max-width: var(--max-content-width);
   margin: 0 auto;
-  height: calc(100vh - var(--navbar-height));
+  height: 100%;
   display: flex;
   align-items: stretch;
+  overflow: hidden;
 }
 
 .contactGrid {
   width: 100%;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   padding: 2rem;
   height: 100%;
+  overflow: hidden;
 }
 
 .formSection {
@@ -21,12 +25,16 @@
   flex-direction: column;
   gap: 2rem;
   max-width: 600px;
+  overflow-y: auto;
+  padding-right: 1rem;
+  height: 100%;
 }
 
 .contactInfo {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 .title {
@@ -34,6 +42,7 @@
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
 }
@@ -64,6 +73,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 .formGrid {
@@ -74,7 +84,6 @@
 
 .formGroup {
   position: relative;
-  transition: all var(--transition-duration) var(--transition-timing);
 }
 
 .input,
@@ -89,15 +98,18 @@
   transition: all var(--transition-duration) var(--transition-timing);
 }
 
+.textarea {
+  resize: none;
+  flex: 1;
+  min-height: 150px;
+  max-height: 300px;
+  font-family: inherit;
+}
+
 .formGroup.focused .input,
 .formGroup.focused .textarea {
   border-color: var(--primary);
   background: var(--surface-100);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 150px;
 }
 
 .submitButton {
@@ -119,6 +131,15 @@
 .submitButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .buttonIcon {
@@ -148,6 +169,15 @@
   animation-delay: 0.2s;
 }
 
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
 .alert {
   display: flex;
   align-items: center;
@@ -155,6 +185,18 @@
   padding: 1rem;
   border-radius: 0.75rem;
   font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .success {
@@ -186,16 +228,6 @@
   z-index: 1;
 }
 
-/* Animations */
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-0.5rem);
-  }
-}
-
 /* Input focus and hover states */
 .input:focus,
 .textarea:focus {
@@ -209,14 +241,19 @@
   background: var(--surface-100);
 }
 
-/* Button hover effects */
-.submitButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+/* Placeholder styles */
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--secondary);
+  opacity: 0.7;
 }
 
-.submitButton:active:not(:disabled) {
-  transform: translateY(0);
+/* Focus outline for accessibility */
+.input:focus-visible,
+.textarea:focus-visible,
+.submitButton:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* Dark mode enhancements */
@@ -257,31 +294,46 @@
   background: var(--surface-100) !important;
 }
 
-/* Placeholder styles */
-.input::placeholder,
-.textarea::placeholder {
-  color: var(--secondary);
-  opacity: 0.7;
+/* Leaflet Map Theme Specific Styles */
+[data-theme='dark'] :global(.leaflet-tile-pane) {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
 }
 
-/* Focus outline for accessibility */
-.input:focus-visible,
-.textarea:focus-visible,
-.submitButton:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+[data-theme='dark'] :global(.leaflet-control-zoom a) {
+  background: var(--surface-50) !important;
+  border-color: var(--divider-color) !important;
+}
+
+[data-theme='dark'] :global(.leaflet-control-zoom a:hover) {
+  background: var(--surface-100) !important;
+}
+
+[data-theme='dark'] :global(.leaflet-control-attribution) {
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: var(--secondary-light) !important;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .container {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+
   .contactGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     padding: 1.5rem;
+    height: auto;
+    overflow: visible;
   }
 
   .formSection {
     max-width: 100%;
+    overflow-y: auto;
+    padding-right: 0;
+    height: 100%;
   }
 
   .mapSection {
@@ -294,16 +346,6 @@
 }
 
 @media (max-width: 768px) {
-  .container {
-    height: auto;
-    min-height: calc(100vh - var(--navbar-height));
-  }
-
-  .contactGrid {
-    padding: 1rem;
-    gap: 1rem;
-  }
-
   .formGrid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -324,7 +366,7 @@
 
 @media (max-width: 480px) {
   .contactGrid {
-    padding: 0.75rem;
+    padding: 1rem;
   }
 
   .title {
@@ -348,23 +390,4 @@
   .subtitle {
     font-size: 0.9rem;
   }
-}
-
-/* Leaflet Map Theme Specific Styles */
-[data-theme='dark'] :global(.leaflet-tile-pane) {
-  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-}
-
-[data-theme='dark'] :global(.leaflet-control-zoom a) {
-  background: var(--surface-50) !important;
-  border-color: var(--divider-color) !important;
-}
-
-[data-theme='dark'] :global(.leaflet-control-zoom a:hover) {
-  background: var(--surface-100) !important;
-}
-
-[data-theme='dark'] :global(.leaflet-control-attribution) {
-  background: rgba(0, 0, 0, 0.5) !important;
-  color: var(--secondary-light) !important;
 }

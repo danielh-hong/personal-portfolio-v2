@@ -122,7 +122,7 @@ const Contact = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               <p>If you're interested in collaboration, have a project in mind, or just want to chat about tech and ideas, I'd love to hear from you!</p>
-              <p>Feel free to send me a message below or reach out via email at your@email.com.</p>
+              <p>Feel free to send me a message below or reach out via email at danielh.toronto@gmail.com.</p>
             </motion.div>
           </div>
 
