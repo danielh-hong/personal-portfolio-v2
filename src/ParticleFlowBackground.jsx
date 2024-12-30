@@ -3,6 +3,18 @@ import * as THREE from 'three';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 
+/**
+ * Simple helper to detect a mobile device using userAgent.
+ * (Feel free to tweak or just check window.innerWidth < 768, etc.)
+ */
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  const ua = navigator.userAgent || navigator.vendor || (window.opera ?? '');
+  if (/Android/i.test(ua)) return true;
+  if (/iPhone|iPad|iPod/i.test(ua)) return true;
+  return false;
+}
+
 const ParticleFlowBackground = ({ triggerZoom }) => {
   const navigate = useNavigate();
   const containerRef = useRef(null);
@@ -15,17 +27,22 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
   const shootingStarsRef = useRef([]);
 
   const triggerZoomRef = useRef(triggerZoom); // Ref to track triggerZoom
-
   const [sceneReady, setSceneReady] = useState(false);
+
+  // Check for mobile device once
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   // Update the triggerZoomRef whenever triggerZoom changes
   useEffect(() => {
     triggerZoomRef.current = triggerZoom;
   }, [triggerZoom]);
 
-  // Updated galaxy parameters for more subtle effect
+  // Galaxy parameters (we'll reduce these if on mobile)
   const params = useRef({
-    count: 40000, // You can adjust this number for less particles
+    count: 40000, // Desktop default
     size: 0.015,
     radius: 12,
     branches: 5,
@@ -35,41 +52,44 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     insideColor: '#ff6b6b',
     middleColor: '#4ecdc4',
     outsideColor: '#8a2be2',
-    rotationSpeed: 0.15, // Reduced rotation speed
+    rotationSpeed: 0.15,
   });
 
-  // Function to adjust the number of particles
-  const adjustParticleCount = (newCount) => {
-    params.current.count = newCount;
-  };
-
-  // Example usage: adjustParticleCount(40000); // Reduce to 40,000 particles
+  // If mobile, drastically reduce
+  useEffect(() => {
+    if (isMobile) {
+      params.current.count = 10000; // e.g. 10k vs 40k
+      params.current.radius = 10;   // slightly smaller radius
+    }
+  }, [isMobile]);
 
   useEffect(() => {
+    // Scene
     const scene = new THREE.Scene();
 
-    // Move camera back further and offset position
+    // Camera
     const camera = new THREE.PerspectiveCamera(
       60,
       window.innerWidth / window.innerHeight,
       0.1,
       2000
     );
-    camera.position.z = 12; // Moved back
-    camera.position.x = 0; // Adjusted to view galaxy on the right
-    camera.position.y = 0; // Offset down
+    // Slightly different camera position for mobile
+    camera.position.z = isMobile ? 14 : 12;
+    camera.position.x = 0;
+    camera.position.y = 0;
     cameraRef.current = camera;
 
+    // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // Softer ambient light
+    // Lights
     const ambientLight = new THREE.AmbientLight(0x162447, 0.4);
     scene.add(ambientLight);
 
-    // Adjusted point lights
     const centerLight = new THREE.PointLight(0xff6b6b, 2, 50);
     centerLight.position.set(0, 0, 2);
     scene.add(centerLight);
@@ -78,7 +98,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     rimLight.position.set(-10, 5, -5);
     scene.add(rimLight);
 
-    // Create a custom star texture
+    // Simple radial star texture
     const starTexture = (() => {
       const canvas = document.createElement('canvas');
       canvas.width = 32;
@@ -90,7 +110,6 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       gradient.addColorStop(0.4, 'rgba(255,255,255,0.8)');
       gradient.addColorStop(0.8, 'rgba(255,255,255,0.1)');
       gradient.addColorStop(1, 'rgba(255,255,255,0)');
-
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 32, 32);
 
@@ -99,25 +118,22 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       return texture;
     })();
 
-    // Create a texture atlas with '1' and '0' for galaxy particles
+    // Digit texture for galaxy: '1' and '0'
     const digitTexture = (() => {
       const canvas = document.createElement('canvas');
-      canvas.width = 128; // Increased size for better resolution
+      canvas.width = 128;
       canvas.height = 64;
       const ctx = canvas.getContext('2d');
 
-      // Make background transparent
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       ctx.fillStyle = 'white';
       ctx.font = 'bold 60px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Draw '1' on the left half
+      // Draw '1' on left half
       ctx.fillText('1', 32, 32);
-
-      // Draw '0' on the right half
+      // Draw '0' on right half
       ctx.fillText('0', 96, 32);
 
       const texture = new THREE.Texture(canvas);
@@ -125,19 +141,20 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       return texture;
     })();
 
+    // ShootingStarWithTrail class
     class ShootingStarWithTrail {
       constructor() {
-        this.maxPoints = Math.floor(Math.random() * 15) + 30;
+        // If mobile, drastically reduce
+        const maxPointsRange = isMobile ? { min: 10, max: 20 } : { min: 15, max: 30 };
+        this.maxPoints = Math.floor(Math.random() * (maxPointsRange.max - maxPointsRange.min)) + maxPointsRange.min;
+
         this.points = new Array(this.maxPoints)
           .fill(0)
           .map(() => new THREE.Vector3());
 
         this.trailGeometry = new THREE.BufferGeometry();
         const positions = new Float32Array(this.maxPoints * 3);
-        this.trailGeometry.setAttribute(
-          'position',
-          new THREE.BufferAttribute(positions, 3)
-        );
+        this.trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
         this.trailMaterial = new THREE.ShaderMaterial({
           uniforms: {
@@ -197,21 +214,25 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           (Math.random() - 0.7) * params.current.radius * 0.5,
           (Math.random() - 0.5) * params.current.radius * 0.3
         );
-
-        const target = new THREE.Vector3(15, -5, 0).add(targetOffset); // Updated target position
+        const target = new THREE.Vector3(15, -5, 0).add(targetOffset);
 
         this.velocity = target.clone().sub(this.position).normalize();
-        this.speed = 0.25 + Math.random() * 0.15; // Increased speed from 0.15-0.25 to 0.25-0.4
+        // Slightly slower on mobile
+        const speedBase = isMobile ? 0.15 : 0.25;
+        const speedRange = isMobile ? 0.1 : 0.15;
+        this.speed = speedBase + Math.random() * speedRange;
         this.velocity.multiplyScalar(this.speed);
 
         this.life = 1.0;
-        this.decay = 0.002 + Math.random() * 0.003; // Reduced decay from 0.005-0.01 to 0.002-0.005
+        // Slower decay on desktop, a bit faster on mobile to reduce overhead
+        const baseDecay = isMobile ? 0.004 : 0.002;
+        const rangeDecay = isMobile ? 0.002 : 0.003;
+        this.decay = baseDecay + Math.random() * rangeDecay;
 
         for (let i = 0; i < this.maxPoints; i++) {
           this.points[i].copy(this.position);
         }
-
-        this.size = 1.0 + Math.random() * 0.6; // Smaller size range
+        this.size = 1.0 + Math.random() * 0.6;
       }
 
       update() {
@@ -233,19 +254,11 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           positions[i3 + 2] = this.points[i].z;
 
           alphas[i] =
-            Math.pow(1 - i / (this.maxPoints - 1), 1.5) *
-            this.size *
-            this.life;
+            Math.pow(1 - i / (this.maxPoints - 1), 1.5) * this.size * this.life;
         }
 
-        this.trailGeometry.setAttribute(
-          'position',
-          new THREE.BufferAttribute(positions, 3)
-        );
-        this.trailGeometry.setAttribute(
-          'vertexAlpha',
-          new THREE.BufferAttribute(alphas, 1)
-        );
+        this.trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        this.trailGeometry.setAttribute('vertexAlpha', new THREE.BufferAttribute(alphas, 1));
 
         if (this.life <= 0) {
           this.reset();
@@ -259,27 +272,26 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       }
     }
 
+    // Galaxy geometry
     const createGalaxyGeometry = () => {
       const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(params.current.count * 3);
-      const colors = new Float32Array(params.current.count * 3);
-      const scales = new Float32Array(params.current.count);
-      const digitType = new Float32Array(params.current.count); // New attribute for '1's and '0's
+      const count = params.current.count;
+      const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+      const scales = new Float32Array(count);
+      const digitType = new Float32Array(count);
 
       const colorInside = new THREE.Color(params.current.insideColor);
       const colorMiddle = new THREE.Color(params.current.middleColor);
       const colorOutside = new THREE.Color(params.current.outsideColor);
 
-      for (let i = 0; i < params.current.count; i++) {
+      for (let i = 0; i < count; i++) {
         const i3 = i * 3;
         const radius = Math.random() * params.current.radius;
         const spinAngle = radius * params.current.spin;
         const branchAngle =
-          ((i % params.current.branches) / params.current.branches) *
-          Math.PI *
-          2;
+          ((i % params.current.branches) / params.current.branches) * Math.PI * 2;
 
-        // Reduced randomness for more structured look
         const randomX =
           Math.pow(Math.random(), params.current.randomnessPower) *
           (Math.random() < 0.5 ? 1 : -1) *
@@ -296,12 +308,9 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           radius *
           0.15;
 
-        positions[i3] =
-          Math.cos(branchAngle + spinAngle) * radius + randomX;
-        positions[i3 + 1] =
-          randomY + Math.sin(radius * 0.5) * 0.5;
-        positions[i3 + 2] =
-          Math.sin(branchAngle + spinAngle) * radius + randomZ;
+        positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+        positions[i3 + 1] = randomY + Math.sin(radius * 0.5) * 0.5;
+        positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
         let color = new THREE.Color();
         if (radius < params.current.radius * 0.4) {
@@ -314,8 +323,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           color.lerpColors(
             colorMiddle,
             colorOutside,
-            (radius - params.current.radius * 0.4) /
-              (params.current.radius * 0.6)
+            (radius - params.current.radius * 0.4) / (params.current.radius * 0.6)
           );
         }
 
@@ -323,61 +331,54 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         colors[i3 + 1] = color.g;
         colors[i3 + 2] = color.b;
 
-        scales[i] = 1.0 + Math.random() * 2.0; // Increased scale for visibility
+        // Slightly smaller scale on mobile
+        const baseScale = isMobile ? 1.0 : 1.0;
+        const randomScale = isMobile ? 1.5 : 2.0;
+        scales[i] = baseScale + Math.random() * randomScale;
 
-        // Determine if the particle is a '1' or '0'
-        digitType[i] = Math.random() < 0.5 ? 0.0 : 1.0;
+        digitType[i] = Math.random() < 0.5 ? 0.0 : 1.0; // '1' or '0'
       }
 
-      geometry.setAttribute(
-        'position',
-        new THREE.BufferAttribute(positions, 3)
-      );
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
       geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
       geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
-      geometry.setAttribute(
-        'digitType',
-        new THREE.BufferAttribute(digitType, 1)
-      ); // Set the new attribute
-
+      geometry.setAttribute('digitType', new THREE.BufferAttribute(digitType, 1));
       return geometry;
     };
 
+    // Background starfield
     const createBackgroundStars = () => {
       const starsGeometry = new THREE.BufferGeometry();
-      const starsCount = 4000; // Reduced count
-      const starsPositions = new Float32Array(starsCount * 3);
+      // Much fewer on mobile
+      const starCount = isMobile ? 1500 : 4000;
+      const starsPositions = new Float32Array(starCount * 3);
 
-      for (let i = 0; i < starsCount; i++) {
+      for (let i = 0; i < starCount; i++) {
         const i3 = i * 3;
         const radius = Math.random() * 120 + params.current.radius;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(Math.random() * 2 - 1);
 
         starsPositions[i3] = radius * Math.sin(phi) * Math.cos(theta);
-        starsPositions[i3 + 1] =
-          radius * Math.sin(phi) * Math.sin(theta);
+        starsPositions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
         starsPositions[i3 + 2] = radius * Math.cos(phi);
       }
 
-      starsGeometry.setAttribute(
-        'position',
-        new THREE.BufferAttribute(starsPositions, 3)
-      );
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
       return starsGeometry;
     };
 
-    // Updated shader material with custom point sprite for galaxy particles
+    // Galaxy material
     const galaxyMaterial = new THREE.ShaderMaterial({
       uniforms: {
-        digitTexture: { value: digitTexture }, // Use the digit texture
+        digitTexture: { value: digitTexture },
         uOpacity: { value: 1.0 },
       },
       vertexShader: `
         attribute float aScale;
-        attribute float digitType; // New attribute
+        attribute float digitType;
         varying vec3 vColor;
-        varying float vDigitType; // Pass to fragment shader
+        varying float vDigitType;
 
         void main() {
           vec4 modelPosition = modelMatrix * vec4(position, 1.0);
@@ -385,10 +386,10 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
           vec4 projectedPosition = projectionMatrix * viewPosition;
 
           gl_Position = projectedPosition;
-          gl_PointSize = aScale * 30.0 * (1.0 / -viewPosition.z); // Increased size for visibility
+          gl_PointSize = aScale * 30.0 * (1.0 / -viewPosition.z);
 
           vColor = color;
-          vDigitType = digitType; // Pass to fragment shader
+          vDigitType = digitType;
         }
       `,
       fragmentShader: `
@@ -399,17 +400,14 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
 
         void main() {
           vec2 uv = gl_PointCoord;
-
           // Shift uv.x based on vDigitType
           if (vDigitType < 0.5) {
-            uv.x = uv.x * 0.5; // Left half for '1'
+            uv.x = uv.x * 0.5;        // left half => '1'
           } else {
-            uv.x = 0.5 + uv.x * 0.5; // Right half for '0'
+            uv.x = 0.5 + uv.x * 0.5;  // right half => '0'
           }
-
           vec4 texColor = texture2D(digitTexture, uv);
           float strength = texColor.a;
-
           vec3 finalColor = mix(vec3(0.0), vColor, strength);
           float alpha = strength * uOpacity;
 
@@ -421,18 +419,20 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       depthWrite: false,
       vertexColors: true,
     });
-    galaxyMaterialRef.current = galaxyMaterial; // Assign to ref
+    galaxyMaterialRef.current = galaxyMaterial;
 
+    // Stars material
     const starsMaterial = new THREE.PointsMaterial({
-      size: 0.1,
+      size: isMobile ? 0.08 : 0.1,
       sizeAttenuation: true,
-      map: starTexture, // Use the original star texture
+      map: starTexture,
       transparent: true,
       opacity: 0.8,
       blending: THREE.AdditiveBlending,
     });
-    starsMaterialRef.current = starsMaterial; // Assign to ref
+    starsMaterialRef.current = starsMaterial;
 
+    // Create galaxy & stars
     const galaxyGeometry = createGalaxyGeometry();
     const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
     galaxyRef.current = galaxy;
@@ -442,21 +442,16 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     const stars = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(stars);
 
-    // Position galaxy and stars offset to the right and down
-    galaxy.position.x = 20; // Moved to the right
-    galaxy.position.y = -5; // Moved down
-    galaxy.position.z = -5; // Pushed back
-    stars.position.x = 15;
-    stars.position.y = -5;
-    stars.position.z = -5;
+    // Position offset
+    galaxy.position.set(20, -5, -5);
+    stars.position.set(15, -5, -5);
 
-    const shootingStarCount = 30; // Increased count from 15 to 30
-    const shootingStars = Array.from(
-      { length: shootingStarCount },
-      () => new ShootingStarWithTrail()
-    );
-    shootingStarsRef.current = shootingStars; // Assign to ref
+    // Shooting stars
+    const shootingStarCount = isMobile ? 10 : 30; 
+    const shootingStars = Array.from({ length: shootingStarCount }, () => new ShootingStarWithTrail());
+    shootingStarsRef.current = shootingStars;
 
+    // Mouse parallax
     let targetX = 0;
     let targetY = 0;
     const handleMouseMove = (event) => {
@@ -465,6 +460,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Animate
     const clock = new THREE.Clock();
     let previousTime = 0;
 
@@ -475,20 +471,17 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
 
       shootingStars.forEach((star) => star.update());
 
-      mousePosition.current.x +=
-        (targetX - mousePosition.current.x) * 2 * deltaTime;
-      mousePosition.current.y +=
-        (targetY - mousePosition.current.y) * 2 * deltaTime;
+      mousePosition.current.x += (targetX - mousePosition.current.x) * 2 * deltaTime;
+      mousePosition.current.y += (targetY - mousePosition.current.y) * 2 * deltaTime;
 
-      const galaxyBasePosX = 20; // Updated base position to match galaxy position
+      const galaxyBasePosX = 20;
       const galaxyBasePosY = -5;
-
-      const maxOffset = 1.5; // Reduced movement range
+      const maxOffset = 1.5;
       const galaxySensitivity = 1.5;
       const starSensitivity = 3;
 
       if (!triggerZoomRef.current) {
-        // Use ref to check the latest triggerZoom
+        // only move if not zooming
         const targetGalaxyX =
           galaxyBasePosX + mousePosition.current.x * galaxySensitivity;
         const targetGalaxyY =
@@ -518,15 +511,11 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
 
       camera.lookAt(galaxy.position);
 
-      // Smoother rotation
-      galaxy.rotation.y +=
-        deltaTime * params.current.rotationSpeed * 0.3; // Reduced from 0.8
-      galaxy.rotation.z +=
-        deltaTime * params.current.rotationSpeed * 0.1; // Reduced from 0.3
-      stars.rotation.y +=
-        deltaTime * params.current.rotationSpeed * 0.1; // Reduced from 0.2
+      // Gentle rotation
+      galaxy.rotation.y += deltaTime * params.current.rotationSpeed * 0.3;
+      galaxy.rotation.z += deltaTime * params.current.rotationSpeed * 0.1;
+      stars.rotation.y += deltaTime * params.current.rotationSpeed * 0.1;
 
-      // Gentler light pulsing
       centerLight.intensity = 2.0 + Math.sin(elapsedTime * 0.5) * 0.5;
       rimLight.intensity = 1.2 + Math.cos(elapsedTime * 0.3) * 0.2;
 
@@ -535,6 +524,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     };
     animate();
 
+    // Resize handling
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -542,24 +532,27 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
     };
     window.addEventListener('resize', handleResize);
 
-    setSceneReady(true); // Indicate that the scene is ready
+    setSceneReady(true);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       containerRef.current?.removeChild(renderer.domElement);
+
       galaxyGeometry.dispose();
       starsGeometry.dispose();
       galaxyMaterial.dispose();
-      digitTexture.dispose(); // Dispose the digit texture
-      starTexture.dispose(); // Dispose the star texture
+      digitTexture.dispose();
+      starTexture.dispose();
       shootingStars.forEach((star) => star.dispose());
       starsMaterial.dispose();
     };
-  }, []);
+  }, [isMobile]);
 
+  // Zoom & fade animations
   useEffect(() => {
     if (triggerZoom && sceneReady) {
+      // Zoom in
       gsap.to(cameraRef.current.position, {
         z: 0.1,
         duration: 4,
@@ -575,7 +568,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         ease: 'power2.in',
       });
 
-      // Animate galaxy opacity
+      // Galaxy fade
       if (galaxyMaterialRef.current) {
         gsap.to(galaxyMaterialRef.current.uniforms.uOpacity, {
           value: 0,
@@ -584,7 +577,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         });
       }
 
-      // Animate stars opacity
+      // Stars fade
       if (starsMaterialRef.current) {
         gsap.to(starsMaterialRef.current, {
           opacity: 0,
@@ -593,7 +586,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
         });
       }
 
-      // Animate shooting stars opacity
+      // Shooting stars fade
       shootingStarsRef.current.forEach((star) => {
         gsap.to(star.trailMaterial.uniforms.uOpacity, {
           value: 0,
@@ -609,8 +602,7 @@ const ParticleFlowBackground = ({ triggerZoom }) => {
       ref={containerRef}
       className="fixed inset-0"
       style={{
-        background:
-          'radial-gradient(circle at center, #1a1025 0%, #0a0510 100%)',
+        background: 'radial-gradient(circle at center, #1a1025 0%, #0a0510 100%)',
         zIndex: -1,
       }}
     />

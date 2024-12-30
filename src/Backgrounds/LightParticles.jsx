@@ -40,11 +40,12 @@ export const SphereParticle = ({ position, size, rotation, color }) => (
   </mesh>
 )
 
+// We'll skip some heavier geometry on mobile
 export const CrystalParticle = ({ position, size, rotation, color }) => (
   <mesh position={position} rotation={rotation}>
     <polyhedronGeometry
       args={[
-        [1, 0, 0, 0, 1, 0, 0, 0, 1], // minimal set of vertices
+        [1, 0, 0, 0, 1, 0, 0, 0, 1],
         [0, 1, 2],
         size * 0.8
       ]}
@@ -126,8 +127,8 @@ export const BlobParticle = ({ position, size, rotation, color }) => (
     <sphereGeometry args={[size, 32, 32]} />
     <MeshDistortMaterial
       color={color}
-      distort={0.4}   // Distortion amount
-      speed={2}       // Distortion speed
+      distort={0.4}
+      speed={2}
       roughness={0.2}
       metalness={0.3}
       envMapIntensity={0.6}
@@ -154,12 +155,11 @@ export const OctahedronParticle = ({ position, size, rotation, color }) => (
 export const StarParticle = ({ position, size, rotation, color }) => {
   const geometry = useMemo(() => {
     const starShape = new THREE.Shape()
-    // simple 5-point star
     const outerRadius = size
     const innerRadius = size * 0.45
     const spikes = 5
 
-    let rot = Math.PI / 2 * 3
+    let rot = (Math.PI / 2) * 3
     let step = Math.PI / spikes
 
     starShape.moveTo(0, -outerRadius)
@@ -176,7 +176,6 @@ export const StarParticle = ({ position, size, rotation, color }) => {
     }
     starShape.closePath()
 
-    // Extrude a little to give the star some thickness
     const extrudeSettings = { depth: size * 0.1, bevelEnabled: false }
     return new THREE.ExtrudeGeometry(starShape, extrudeSettings)
   }, [size])
@@ -198,7 +197,7 @@ export const StarParticle = ({ position, size, rotation, color }) => {
 // -----------------------------------------------------------------------------
 // ParticleField
 // -----------------------------------------------------------------------------
-export function ParticleField({ mouse, onParticleExplode }) {
+export function ParticleField({ mouse, onParticleExplode, isMobile }) {
   const group = useRef()
   const cameraRotation = useRef({ x: 0, y: 0 })
   const { size } = useThree()
@@ -208,7 +207,7 @@ export function ParticleField({ mouse, onParticleExplode }) {
     height: window.innerHeight
   })
 
-  // Responsive updates
+  // Watch for window resize
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -220,24 +219,27 @@ export function ParticleField({ mouse, onParticleExplode }) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Generate particles
+  // Generate fewer shapes if mobile
   const particles = useMemo(() => {
-    const items = []
-    const count = 85
+    // We drastically reduce count on mobile
+    const count = isMobile ? 20 : 85
     const colors = [
       '#ffa3a3', '#ff91c1', '#e68fff',
       '#9fa3ff', '#9ffff8', '#91ffd0',
       '#fdff91', '#ffd59f', '#ff9f9f',
       '#ffe0f7', '#b4ffe0', '#9feaff'
     ]
-    const types = [
+    // Decide which shapes to include on mobile vs. desktop
+    const desktopTypes = [
       'crystal', 'torus', 'prism', 'spiral',
       'cube', 'sphere', 'blob', 'octahedron', 'star'
     ]
+    const mobileTypes = ['cube', 'sphere', 'octahedron', 'star']
+    const chosenTypes = isMobile ? mobileTypes : desktopTypes
 
+    const items = []
     for (let i = 0; i < count; i++) {
-      const type = types[Math.floor(Math.random() * types.length)]
-      // Spread them further out
+      const type = chosenTypes[Math.floor(Math.random() * chosenTypes.length)]
       const x = (Math.random() - 0.5) * (windowSize.width / 9)
       const y = (Math.random() - 0.5) * (windowSize.height / 9)
       const z = (Math.random() - 0.5) * 50
@@ -265,9 +267,9 @@ export function ParticleField({ mouse, onParticleExplode }) {
       })
     }
     return items
-  }, [windowSize])
+  }, [windowSize, isMobile])
 
-  // Render correct shape
+  // Renders the correct shape
   const renderParticle = (particle, i) => {
     switch (particle.type) {
       case 'crystal':    return <CrystalParticle   key={i} {...particle} />
@@ -294,6 +296,7 @@ export function ParticleField({ mouse, onParticleExplode }) {
       const dy = mesh.position.y - position.y
       const dz = mesh.position.z - position.z
       const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
+
       if (distance < 0.001) return
 
       const rippleForce = Math.sin(
@@ -307,7 +310,7 @@ export function ParticleField({ mouse, onParticleExplode }) {
       particle.velocity[1] += (dy / distance) * rippleForce + Math.sin(randomAngle) * randomForce
       particle.velocity[2] += (dz / distance) * rippleForce * 0.5
 
-      // Increase rotation on explosion
+      // Tweak rotation on explosion
       particle.rotationSpeed = [
         particle.rotationSpeed[0] + (Math.random() - 0.5) * 0.003,
         particle.rotationSpeed[1] + (Math.random() - 0.5) * 0.003,
@@ -316,14 +319,14 @@ export function ParticleField({ mouse, onParticleExplode }) {
     })
   }
 
-  // Expose explodeParticles
+  // Expose explode to parent
   useEffect(() => {
     if (onParticleExplode) {
       onParticleExplode.current = explodeParticles
     }
   }, [onParticleExplode, particles])
 
-  // Handle clicks on shapes => explode
+  // Click => explode
   const handlePointerDown = (event) => {
     event.stopPropagation()
     if (event.point) {
@@ -335,11 +338,11 @@ export function ParticleField({ mouse, onParticleExplode }) {
   useFrame((state) => {
     const time = state.clock.elapsedTime
 
-    // Slight camera rotation
+    // Subtle base camera rotation
     cameraRotation.current.x = Math.sin(time * 0.15) * 0.08
     cameraRotation.current.y = Math.cos(time * 0.2) * 0.08
 
-    // Incorporate mouse-based offset
+    // Mouse-based offset
     const targetRotationX = cameraRotation.current.x + mouse.current.y * 0.12
     const targetRotationY = cameraRotation.current.y + mouse.current.x * 0.12
 
@@ -357,9 +360,9 @@ export function ParticleField({ mouse, onParticleExplode }) {
     // Update each particle
     particles.forEach((particle, i) => {
       const mesh = group.current.children[i]
-
-      // Bobbing
       const depthFactor = 1 - Math.abs(particle.position[2]) / 50
+
+      // Gentle bobbing
       mesh.position.y += Math.sin(time * 0.5 + particle.phase) * 0.0015 * depthFactor
       mesh.position.x += Math.cos(time * 0.3 + particle.phase) * 0.0015 * depthFactor
 
@@ -378,7 +381,7 @@ export function ParticleField({ mouse, onParticleExplode }) {
       particle.velocity[1] *= 0.96
       particle.velocity[2] *= 0.96
 
-      // Pull back
+      // Pull back toward original
       mesh.position.x += (particle.originalPosition[0] - mesh.position.x) * 0.01
       mesh.position.y += (particle.originalPosition[1] - mesh.position.y) * 0.01
       mesh.position.z += (particle.originalPosition[2] - mesh.position.z) * 0.01

@@ -1,13 +1,28 @@
 // LightBackground.jsx
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import LightScene from './LightScene'
 import styles from './LightBackground.module.css'
 
+// Detect mobile devices
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false
+  const ua = navigator.userAgent || navigator.vendor || (window.opera ?? '')
+  if (/Android/i.test(ua)) return true
+  if (/iPhone|iPad|iPod/i.test(ua)) return true
+  return false
+}
+
 const LightBackground = () => {
   const mouse = useRef({ x: 0, y: 0 })
   const targetMouse = useRef({ x: 0, y: 0 })
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Check for mobile once on mount
+  useEffect(() => {
+    setIsMobile(isMobileDevice())
+  }, [])
 
   // Smooth mouse movement
   useEffect(() => {
@@ -44,12 +59,13 @@ const LightBackground = () => {
         }}
         camera={{ position: [0, 0, 30], fov: 70 }}
         onCreated={({ gl }) => {
-          // Attempt to clamp pixel ratio to reduce WebGL crashes at extreme zooms
+          // Clamp pixel ratio for performance
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
           gl.setSize(window.innerWidth, window.innerHeight)
         }}
       >
-        <LightScene mouse={mouse} />
+        {/* Pass mouse + isMobile down so we can optimize further */}
+        <LightScene mouse={mouse} isMobile={isMobile} />
       </Canvas>
     </div>
   )

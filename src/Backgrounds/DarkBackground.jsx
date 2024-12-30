@@ -14,6 +14,18 @@ import { useMemo, useRef, useState, useEffect } from 'react'
 import styles from './DarkBackground.module.css'
 
 // -----------------------------------------------------------------------------
+// Detect mobile
+// -----------------------------------------------------------------------------
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false
+  const ua = navigator.userAgent || navigator.vendor || (window.opera ?? '')
+  // Quick, simple check for iOS or Android
+  if (/Android/i.test(ua)) return true
+  if (/iPhone|iPad|iPod/i.test(ua)) return true
+  return false
+}
+
+// -----------------------------------------------------------------------------
 // 1. Cube Particle
 const CubeParticle = ({ position, size, rotation, color }) => (
   <mesh position={position} rotation={rotation}>
@@ -106,6 +118,7 @@ const PrismParticle = ({ position, size, rotation, color }) => (
 )
 
 // 6. Spiral Particle
+// (We’ll still define it, but we can skip using it on mobile if desired)
 const SpiralParticle = ({ position, size, rotation, color }) => {
   const geometry = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3([
@@ -211,7 +224,7 @@ const StarParticle = ({ position, size, rotation, color }) => {
 }
 
 // -----------------------------------------------------------------------------
-// Utility functions for bounding and randoms
+// Utility functions
 // -----------------------------------------------------------------------------
 function getBounds(width, height) {
   const xExtent = Math.max(30, width / 25) + 5
@@ -231,6 +244,9 @@ function randomRange(min, max) {
   return Math.random() * (max - min) + min
 }
 
+// -----------------------------------------------------------------------------
+// ShootingStars - We'll skip this entirely on mobile
+// -----------------------------------------------------------------------------
 function getRandomStarData(bounds) {
   const edge = Math.floor(Math.random() * 4)
   let start = new THREE.Vector3()
@@ -265,9 +281,6 @@ function getRandomStarData(bounds) {
   }
 }
 
-// -----------------------------------------------------------------------------
-// ShootingStars: now includes visibility handling to prevent bursts
-// -----------------------------------------------------------------------------
 function ShootingStars({ bounds }) {
   const [stars, setStars] = useState([])
   const spawnStarTimeout = useRef(null)
@@ -287,14 +300,12 @@ function ShootingStars({ bounds }) {
     }, randomRange(2000, 5000))
   }
 
-  // Tab visibility change handler
+  // Tab visibility
   const handleVisibilityChange = () => {
     isTabVisible.current = !document.hidden
     if (isTabVisible.current) {
-      // Tab is visible -> resume
       scheduleNextSpawn()
     } else {
-      // Tab hidden -> clear any queued spawns
       if (spawnStarTimeout.current) {
         clearTimeout(spawnStarTimeout.current)
         spawnStarTimeout.current = null
@@ -302,7 +313,7 @@ function ShootingStars({ bounds }) {
     }
   }
 
-  // On mount, listen to page visibility and schedule spawns if visible
+  // On mount
   useEffect(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange)
     if (!document.hidden) scheduleNextSpawn()
@@ -314,14 +325,14 @@ function ShootingStars({ bounds }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bounds])
 
-  // Move/clean stars in the render loop
+  // Move/clean stars each frame
   useFrame(() => {
     setStars((prevStars) => {
       return prevStars
         .map((star) => {
           // move
           star.position.add(star.direction.clone().multiplyScalar(star.speed))
-          // add tail
+          // tail
           star.tailPositions.push(star.position.clone())
           if (star.tailPositions.length > 8) {
             star.tailPositions.shift()
@@ -330,7 +341,7 @@ function ShootingStars({ bounds }) {
         })
         .filter((star) => {
           const { x, y, z } = star.position
-          // remove star if fully out of bounding area
+          // remove if fully out of bounding area
           if (
             x < bounds.xMin - 10 ||
             x > bounds.xMax + 10 ||
@@ -357,7 +368,7 @@ function ShootingStars({ bounds }) {
               <sphereGeometry args={[0.08, 8, 8]} />
               <meshBasicMaterial color="#ffffff" />
             </mesh>
-            {/* Tail: small spheres behind it */}
+            {/* Tail */}
             {star.tailPositions.map((pos, j) => {
               const fade = j / star.tailPositions.length
               const size = 0.08 * fade
@@ -383,7 +394,7 @@ function ShootingStars({ bounds }) {
 // -----------------------------------------------------------------------------
 // ParticleField
 // -----------------------------------------------------------------------------
-const ParticleField = ({ mouse, onParticleExplode }) => {
+const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
   const group = useRef()
   const cameraRotation = useRef({ x: 0, y: 0 })
   const { size } = useThree()
@@ -393,7 +404,7 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
     height: window.innerHeight
   })
 
-  // Update window size
+  // Watch for window resize
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -405,23 +416,30 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Generate particles
+  // Generate fewer particles on mobile
   const particles = useMemo(() => {
     const items = []
-    const count = 85
+    const count = isMobile ? 20 : 85 // drastically reduce for mobile
+
+    // If you also want to skip certain shapes on mobile:
+    const desktopTypes = [
+      'crystal', 'torus', 'prism', 'spiral', 'cube',
+      'sphere', 'blob', 'octahedron', 'star'
+    ]
+    const mobileTypes = [
+      'cube', 'sphere', 'octahedron', 'star'
+    ]
+
+    const chosenTypes = isMobile ? mobileTypes : desktopTypes
     const colors = [
       '#ffa3a3', '#ff91c1', '#e68fff',
       '#9fa3ff', '#9ffff8', '#91ffd0',
       '#fdff91', '#ffd59f', '#ff9f9f',
       '#ffe0f7', '#b4ffe0', '#9feaff'
     ]
-    const types = [
-      'crystal', 'torus', 'prism', 'spiral', 'cube',
-      'sphere', 'blob', 'octahedron', 'star'
-    ]
 
     for (let i = 0; i < count; i++) {
-      const type = types[Math.floor(Math.random() * types.length)]
+      const type = chosenTypes[Math.floor(Math.random() * chosenTypes.length)]
       const x = (Math.random() - 0.5) * (windowSize.width / 9)
       const y = (Math.random() - 0.5) * (windowSize.height / 9)
       const z = (Math.random() - 0.5) * 50
@@ -449,9 +467,9 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
       })
     }
     return items
-  }, [windowSize])
+  }, [windowSize, isMobile])
 
-  // Render based on type
+  // Render by type
   const renderParticle = (particle, i) => {
     switch (particle.type) {
       case 'crystal':    return <CrystalParticle   key={i} {...particle} />
@@ -507,7 +525,7 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
     }
   }, [onParticleExplode, particles])
 
-  // Handle pointer down => direct explosion
+  // Click => direct explosion
   const handlePointerDown = (event) => {
     event.stopPropagation()
     if (event.point) {
@@ -583,13 +601,12 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
 // -----------------------------------------------------------------------------
 // Scene
 // -----------------------------------------------------------------------------
-const Scene = ({ mouse }) => {
+const Scene = ({ mouse, isMobile }) => {
   const particleExplodeRef = useRef()
   const { size, camera } = useThree()
-
   const [bounds, setBounds] = useState(() => getBounds(window.innerWidth, window.innerHeight))
 
-  // Keep aspect ratio correct, update bounding on resize
+  // Keep aspect ratio correct & update bounding on resize
   useEffect(() => {
     camera.aspect = size.width / size.height
     camera.updateProjectionMatrix()
@@ -599,15 +616,16 @@ const Scene = ({ mouse }) => {
   // Blow all particles away if user clicks on empty space
   const handlePointerMissed = () => {
     if (particleExplodeRef.current) {
-      // Explode at center (or any chosen point)
       particleExplodeRef.current(new THREE.Vector3(0, 0, 0))
     }
   }
 
   return (
     <>
-      {/* "night" environment suits the dark background well */}
-      <Environment preset="night" background={false} />
+      {/* Skip environment on mobile for performance if desired */}
+      {!isMobile && (
+        <Environment preset="night" background={false} />
+      )}
 
       {/* Lights */}
       <hemisphereLight
@@ -628,28 +646,34 @@ const Scene = ({ mouse }) => {
       <ambientLight intensity={0.15} />
 
       {/* Particle field */}
-      <ParticleField mouse={mouse} onParticleExplode={particleExplodeRef} />
+      <ParticleField
+        mouse={mouse}
+        onParticleExplode={particleExplodeRef}
+        isMobile={isMobile}
+      />
 
-      {/* Shooting stars with updated spawn logic */}
-      <ShootingStars bounds={bounds} />
+      {/* Shooting stars: skip on mobile */}
+      {!isMobile && <ShootingStars bounds={bounds} />}
 
-      {/* Post-processing */}
-      <EffectComposer>
-        <DepthOfField
-          focusDistance={0.02}
-          focalLength={0.02}
-          bokehScale={2}
-          height={480}
-        />
-        <Bloom
-          intensity={0.7}
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.9}
-        />
-        <ChromaticAberration offset={[0.0015, 0.0012]} />
-      </EffectComposer>
+      {/* Post-processing: skip or reduce on mobile */}
+      {!isMobile && (
+        <EffectComposer>
+          <DepthOfField
+            focusDistance={0.02}
+            focalLength={0.02}
+            bokehScale={2}
+            height={480}
+          />
+          <Bloom
+            intensity={0.7}
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.9}
+          />
+          <ChromaticAberration offset={[0.0015, 0.0012]} />
+        </EffectComposer>
+      )}
 
-      {/* Pointer missed => explode everything */}
+      {/* Missed click => explode everything */}
       <mesh onPointerMissed={handlePointerMissed} />
     </>
   )
@@ -661,6 +685,12 @@ const Scene = ({ mouse }) => {
 const DarkBackground = () => {
   const mouse = useRef({ x: 0, y: 0 })
   const targetMouse = useRef({ x: 0, y: 0 })
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Determine if mobile once on mount
+  useEffect(() => {
+    setIsMobile(isMobileDevice())
+  }, [])
 
   // Smoothly track mouse
   useEffect(() => {
@@ -701,7 +731,7 @@ const DarkBackground = () => {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         }}
       >
-        <Scene mouse={mouse} />
+        <Scene mouse={mouse} isMobile={isMobile} />
       </Canvas>
     </div>
   )
