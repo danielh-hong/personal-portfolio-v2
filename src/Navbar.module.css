@@ -136,6 +136,14 @@
 }
 
 @media (max-width: 768px) {
+  .linkIcon {
+    display: none;
+  }
+
+  .linkText {
+    font-size: 0.75rem;
+  }
+  
   .content {
     padding: 0 1rem;
   }
