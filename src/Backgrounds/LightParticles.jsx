@@ -40,7 +40,6 @@ export const SphereParticle = ({ position, size, rotation, color }) => (
   </mesh>
 )
 
-// We'll skip some heavier geometry on mobile
 export const CrystalParticle = ({ position, size, rotation, color }) => (
   <mesh position={position} rotation={rotation}>
     <polyhedronGeometry
@@ -221,7 +220,6 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
 
   // Generate fewer shapes if mobile
   const particles = useMemo(() => {
-    // We drastically reduce count on mobile
     const count = isMobile ? 20 : 85
     const colors = [
       '#ffa3a3', '#ff91c1', '#e68fff',
@@ -229,7 +227,6 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
       '#fdff91', '#ffd59f', '#ff9f9f',
       '#ffe0f7', '#b4ffe0', '#9feaff'
     ]
-    // Decide which shapes to include on mobile vs. desktop
     const desktopTypes = [
       'crystal', 'torus', 'prism', 'spiral',
       'cube', 'sphere', 'blob', 'octahedron', 'star'

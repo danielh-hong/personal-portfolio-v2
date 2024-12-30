@@ -2,7 +2,7 @@
 
 import { useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
-import { Environment } from '@react-three/drei'
+import { Environment, useProgress } from '@react-three/drei'
 import { EffectComposer } from '@react-three/postprocessing'
 import { DepthOfField, Bloom, ChromaticAberration } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -29,7 +29,7 @@ export default function LightScene({ mouse, isMobile }) {
 
   return (
     <>
-      {/* Light environment: Skip or lower intensity on mobile if needed */}
+      {/* Light environment: skip or reduce intensity on mobile if wanted */}
       {!isMobile && <Environment preset="night" background={false} />}
 
       {/* Lighting */}
@@ -38,13 +38,13 @@ export default function LightScene({ mouse, isMobile }) {
       <directionalLight color="#ffffff" position={[-15, -10, 5]} intensity={0.8} />
       <ambientLight intensity={0.2} />
 
-      {/* Particle Field (reduced on mobile) */}
+      {/* Particle Field (fewer on mobile) */}
       <ParticleField mouse={mouse} onParticleExplode={particleExplodeRef} isMobile={isMobile} />
 
-      {/* Optional sparkly stars: skip entirely on mobile if you want more performance */}
+      {/* Optional sparkly stars: skip or reduce on mobile */}
       {!isMobile && <LightSparklingStars />}
 
-      {/* Post-processing: either skip or reduce on mobile */}
+      {/* Post-processing: skip or reduce on mobile */}
       {!isMobile && (
         <EffectComposer>
           <DepthOfField focusDistance={0.02} focalLength={0.02} bokehScale={2} height={480} />

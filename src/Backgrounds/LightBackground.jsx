@@ -49,24 +49,27 @@ const LightBackground = () => {
 
   return (
     <div className={styles.background}>
-      <Canvas
-        resize={{ debounce: 100 }}
-        gl={{
-          antialias: true,
-          alpha: true,
-          powerPreference: 'high-performance',
-          preserveDrawingBuffer: false,
-        }}
-        camera={{ position: [0, 0, 30], fov: 70 }}
-        onCreated={({ gl }) => {
-          // Clamp pixel ratio for performance
-          gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-          gl.setSize(window.innerWidth, window.innerHeight)
-        }}
-      >
-        {/* Pass mouse + isMobile down so we can optimize further */}
-        <LightScene mouse={mouse} isMobile={isMobile} />
-      </Canvas>
+      {/* If on mobile, do NOT render the 3D Canvas at all */}
+      {isMobile ? null : (
+        <Canvas
+          resize={{ debounce: 100 }}
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: 'high-performance',
+            preserveDrawingBuffer: false,
+          }}
+          camera={{ position: [0, 0, 30], fov: 70 }}
+          onCreated={({ gl }) => {
+            // Clamp pixel ratio for performance
+            gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+            gl.setSize(window.innerWidth, window.innerHeight)
+          }}
+        >
+          {/* Pass mouse + isMobile down so we can optimize further */}
+          <LightScene mouse={mouse} isMobile={isMobile} />
+        </Canvas>
+      )}
     </div>
   )
 }
