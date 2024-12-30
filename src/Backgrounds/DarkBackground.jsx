@@ -211,14 +211,12 @@ const StarParticle = ({ position, size, rotation, color }) => {
 }
 
 // -----------------------------------------------------------------------------
-// Dynamic bounding box for star spawn & removal, updated on resize
+// Utility functions for bounding and randoms
 // -----------------------------------------------------------------------------
 function getBounds(width, height) {
-  // Some approximate bounding based on screen size (with buffer)
-  // Example logic: narrower dimension => smaller bounding
-  const xExtent = Math.max(30, width / 25) + 5  // buffer of +5
-  const yExtent = Math.max(20, height / 25) + 5 // buffer of +5
-  const zExtent = 20 // keep a fixed Z for simplicity
+  const xExtent = Math.max(30, width / 25) + 5
+  const yExtent = Math.max(20, height / 25) + 5
+  const zExtent = 20
   return {
     xMin: -xExtent,
     xMax: xExtent,
@@ -229,16 +227,12 @@ function getBounds(width, height) {
   }
 }
 
-// For random numbers
 function randomRange(min, max) {
   return Math.random() * (max - min) + min
 }
 
-// Decide which "edge" to spawn from: left / right / top / bottom
-// Then produce (start, end, speed, direction)
 function getRandomStarData(bounds) {
   const edge = Math.floor(Math.random() * 4)
-
   let start = new THREE.Vector3()
   let end = new THREE.Vector3()
 
@@ -272,61 +266,78 @@ function getRandomStarData(bounds) {
 }
 
 // -----------------------------------------------------------------------------
-// ShootingStars: small, trailing tail, crossing from one side to another
-// with random intervals so we don't overload
+// ShootingStars: now includes visibility handling to prevent bursts
 // -----------------------------------------------------------------------------
 function ShootingStars({ bounds }) {
   const [stars, setStars] = useState([])
-
-  // We'll spawn stars at random intervals so they don't appear all at once
-  // We'll do a recursive pattern: after each spawn, set a new random timeout
   const spawnStarTimeout = useRef(null)
+  const isTabVisible = useRef(!document.hidden)
 
+  // Single star spawn
   const spawnStar = () => {
     setStars((old) => [...old, getRandomStarData(bounds)])
   }
 
-  // Once a star is spawned, set next spawn at random time
+  // Recursively schedule next star if tab is visible
   const scheduleNextSpawn = () => {
+    if (!isTabVisible.current) return
     spawnStarTimeout.current = setTimeout(() => {
       spawnStar()
       scheduleNextSpawn()
-    }, randomRange(2000, 5000)) // 2s - 5s
+    }, randomRange(2000, 5000))
   }
 
-  useEffect(() => {
-    scheduleNextSpawn()
-    return () => {
+  // Tab visibility change handler
+  const handleVisibilityChange = () => {
+    isTabVisible.current = !document.hidden
+    if (isTabVisible.current) {
+      // Tab is visible -> resume
+      scheduleNextSpawn()
+    } else {
+      // Tab hidden -> clear any queued spawns
       if (spawnStarTimeout.current) {
         clearTimeout(spawnStarTimeout.current)
+        spawnStarTimeout.current = null
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bounds]) 
-  // Re-run if bounding changes drastically (like on resize).
-  // That way new stars take new bounds into account.
+  }
 
+  // On mount, listen to page visibility and schedule spawns if visible
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    if (!document.hidden) scheduleNextSpawn()
+
+    return () => {
+      if (spawnStarTimeout.current) clearTimeout(spawnStarTimeout.current)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bounds])
+
+  // Move/clean stars in the render loop
   useFrame(() => {
     setStars((prevStars) => {
       return prevStars
         .map((star) => {
-          // move star
+          // move
           star.position.add(star.direction.clone().multiplyScalar(star.speed))
-          // store tail position
+          // add tail
           star.tailPositions.push(star.position.clone())
           if (star.tailPositions.length > 8) {
-            // keep tail short
             star.tailPositions.shift()
           }
           return star
         })
         .filter((star) => {
           const { x, y, z } = star.position
-          // remove star only if it's fully out of the bounding area
+          // remove star if fully out of bounding area
           if (
-            x < bounds.xMin - 10 || x > bounds.xMax + 10 ||
-            y < bounds.yMin - 10 || y > bounds.yMax + 10 ||
-            z < bounds.zMin - 10 || z > bounds.zMax + 10
+            x < bounds.xMin - 10 ||
+            x > bounds.xMax + 10 ||
+            y < bounds.yMin - 10 ||
+            y > bounds.yMax + 10 ||
+            z < bounds.zMin - 10 ||
+            z > bounds.zMax + 10
           ) {
             return false
           }
@@ -411,7 +422,6 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
 
     for (let i = 0; i < count; i++) {
       const type = types[Math.floor(Math.random() * types.length)]
-      // Spread them further out
       const x = (Math.random() - 0.5) * (windowSize.width / 9)
       const y = (Math.random() - 0.5) * (windowSize.height / 9)
       const z = (Math.random() - 0.5) * 50
@@ -457,7 +467,7 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
     }
   }
 
-  // Explode
+  // Explode logic
   const explodeParticles = (position) => {
     const explosionForce = 0.6
     const explosionRadius = 55
@@ -482,7 +492,6 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
       particle.velocity[1] += (dy / distance) * rippleForce + Math.sin(randomAngle) * randomForce
       particle.velocity[2] += (dz / distance) * rippleForce * 0.5
 
-      // Increase rotation on explosion
       particle.rotationSpeed = [
         particle.rotationSpeed[0] + (Math.random() - 0.5) * 0.003,
         particle.rotationSpeed[1] + (Math.random() - 0.5) * 0.003,
@@ -491,23 +500,18 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
     })
   }
 
-  // Expose explodeParticles
+  // Expose explodeParticles to parent
   useEffect(() => {
     if (onParticleExplode) {
       onParticleExplode.current = explodeParticles
     }
   }, [onParticleExplode, particles])
 
-  // Handle pointer down => explode (for direct hits on particles)
+  // Handle pointer down => direct explosion
   const handlePointerDown = (event) => {
     event.stopPropagation()
     if (event.point) {
-      const clickPoint = new THREE.Vector3(
-        event.point.x,
-        event.point.y,
-        event.point.z
-      )
-      explodeParticles(clickPoint)
+      explodeParticles(new THREE.Vector3(event.point.x, event.point.y, event.point.z))
     }
   }
 
@@ -515,11 +519,11 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
   useFrame((state) => {
     const time = state.clock.elapsedTime
 
-    // More noticeable camera rotation for stronger parallax
+    // Slight camera rotation
     cameraRotation.current.x = Math.sin(time * 0.15) * 0.08
     cameraRotation.current.y = Math.cos(time * 0.2) * 0.08
 
-    // Incorporate mouse-based offset, bigger factor
+    // Incorporate mouse-based offset
     const targetRotationX = cameraRotation.current.x + mouse.current.y * 0.12
     const targetRotationY = cameraRotation.current.y + mouse.current.x * 0.12
 
@@ -537,13 +541,13 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
     // Update each particle
     particles.forEach((particle, i) => {
       const mesh = group.current.children[i]
-
-      // Slight bobbing
       const depthFactor = 1 - Math.abs(particle.position[2]) / 50
+
+      // Subtle bobbing
       mesh.position.y += Math.sin(time * 0.5 + particle.phase) * 0.0015 * depthFactor
       mesh.position.x += Math.cos(time * 0.3 + particle.phase) * 0.0015 * depthFactor
 
-      // Slow rotation
+      // Rotation
       mesh.rotation.x += particle.rotationSpeed[0]
       mesh.rotation.y += particle.rotationSpeed[1]
       mesh.rotation.z += particle.rotationSpeed[2]
@@ -558,7 +562,7 @@ const ParticleField = ({ mouse, onParticleExplode }) => {
       particle.velocity[1] *= 0.96
       particle.velocity[2] *= 0.96
 
-      // Pull back
+      // Pull back towards original position
       mesh.position.x += (particle.originalPosition[0] - mesh.position.x) * 0.01
       mesh.position.y += (particle.originalPosition[1] - mesh.position.y) * 0.01
       mesh.position.z += (particle.originalPosition[2] - mesh.position.z) * 0.01
@@ -583,21 +587,19 @@ const Scene = ({ mouse }) => {
   const particleExplodeRef = useRef()
   const { size, camera } = useThree()
 
-  // track bounding
   const [bounds, setBounds] = useState(() => getBounds(window.innerWidth, window.innerHeight))
 
   // Keep aspect ratio correct, update bounding on resize
   useEffect(() => {
     camera.aspect = size.width / size.height
     camera.updateProjectionMatrix()
-
     setBounds(getBounds(size.width, size.height))
   }, [size, camera])
 
-  // A function to blow all particles away if user clicks on empty space
+  // Blow all particles away if user clicks on empty space
   const handlePointerMissed = () => {
     if (particleExplodeRef.current) {
-      // Explode at center or random point
+      // Explode at center (or any chosen point)
       particleExplodeRef.current(new THREE.Vector3(0, 0, 0))
     }
   }
@@ -607,7 +609,7 @@ const Scene = ({ mouse }) => {
       {/* "night" environment suits the dark background well */}
       <Environment preset="night" background={false} />
 
-      {/* Lights for the scene */}
+      {/* Lights */}
       <hemisphereLight
         skyColor={'#ffffff'}
         groundColor={'#444444'}
@@ -628,7 +630,7 @@ const Scene = ({ mouse }) => {
       {/* Particle field */}
       <ParticleField mouse={mouse} onParticleExplode={particleExplodeRef} />
 
-      {/* Shooting stars, crossing the entire scene with dynamic bounding */}
+      {/* Shooting stars with updated spawn logic */}
       <ShootingStars bounds={bounds} />
 
       {/* Post-processing */}
@@ -660,7 +662,7 @@ const DarkBackground = () => {
   const mouse = useRef({ x: 0, y: 0 })
   const targetMouse = useRef({ x: 0, y: 0 })
 
-  // Smooth mouse move
+  // Smoothly track mouse
   useEffect(() => {
     const handleMouseMove = (event) => {
       targetMouse.current = {

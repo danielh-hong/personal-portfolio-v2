@@ -2,7 +2,7 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeContext } from './ThemeContext';
-import { Sun, Moon, User, Briefcase, FileText } from 'lucide-react'; // Added icons
+import { Sun, Moon, User, Briefcase, FileText, Mail } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const Navbar = () => {
@@ -13,7 +13,8 @@ const Navbar = () => {
   const navItems = [
     { path: '/about', label: 'About', icon: User },
     { path: '/projects', label: 'Projects', icon: Briefcase },
-    { path: '/resume', label: 'Resume', icon: FileText }
+    { path: '/resume', label: 'Resume', icon: FileText },
+    { path: '/contact', label: 'Contact', icon: Mail }
   ];
 
   return (

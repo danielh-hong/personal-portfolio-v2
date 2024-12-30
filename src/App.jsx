@@ -1,4 +1,3 @@
-// App.jsx
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './ThemeContext'
 import { useState, useEffect, useContext } from 'react'
@@ -11,6 +10,7 @@ import Sidebar from './sidebar'
 import SidebarMobile from './SidebarMobile'
 import Projects from './Projects/Projects'
 import Resume from './Resume'
+import Contact from './Contact'
 import LightBackground from './Backgrounds/LightBackground'
 import DarkBackground from './Backgrounds/DarkBackground'
 import './App.css'
@@ -26,7 +26,7 @@ const ThemeBackground = () => {
     return () => clearTimeout(timer);
   }, [theme]);
 
-  if (mounting) return null; // Prevent flickering during mount/unmount
+  if (mounting) return null;
   
   return theme === 'light' ? <LightBackground /> : <DarkBackground />;
 };
@@ -93,6 +93,14 @@ const AppContent = () => {
           element={
             <PageLayout>
               <Resume />
+            </PageLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <PageLayout>
+              <Contact />
             </PageLayout>
           }
         />
