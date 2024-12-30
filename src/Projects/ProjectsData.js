@@ -642,7 +642,7 @@ export const projects = [
     ],
     links: {
       github: 'https://github.com/danielh-hong/personal-portfolio',
-      live: 'https://yourpersonalwebsite.com'
+      live: 'https://daniel-hong.netlify.app/'
     }
   }
 ];
