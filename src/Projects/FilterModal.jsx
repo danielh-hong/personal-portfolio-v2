@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, SortAsc, SortDesc, Filter } from 'lucide-react';
+import { X, SortAsc, SortDesc, Filter, Star } from 'lucide-react';
 import styles from './FilterModal.module.css';
 
 const FilterModal = ({ 
@@ -15,15 +15,11 @@ const FilterModal = ({
 }) => {
   useEffect(() => {
     if (isOpen) {
-      // Get current scroll position
       const scrollY = window.scrollY;
-      
-      // Add styles to prevent background scroll
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
     } else {
-      // Restore scroll position when modal closes
       const scrollY = document.body.style.top;
       document.body.style.position = '';
       document.body.style.top = '';
@@ -32,7 +28,6 @@ const FilterModal = ({
     }
 
     return () => {
-      // Cleanup when component unmounts
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
@@ -59,17 +54,13 @@ const FilterModal = ({
     }
   };
 
-  const handleClose = () => {
-    onClose();
-  };
-
   return (
     <motion.div 
       className={styles.modalOverlay}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      onClick={handleClose}
+      onClick={onClose}
     >
       <motion.div 
         className={styles.modalContent}
@@ -82,7 +73,7 @@ const FilterModal = ({
           <h2>Filter & Sort</h2>
           <button 
             className={styles.closeButton}
-            onClick={handleClose}
+            onClick={onClose}
             aria-label="Close modal"
           >
             <X size={20} />
@@ -103,14 +94,14 @@ const FilterModal = ({
 
         <div className={styles.modalBody}>
           <div className={styles.section}>
-            <h3>Sort by Date</h3>
+            <h3>Sort by</h3>
             <div className={styles.sortButtons}>
               <button
-                className={`${styles.sortButton} ${sortOrder === 'asc' ? styles.active : ''}`}
-                onClick={() => setSortOrder('asc')}
+                className={`${styles.sortButton} ${sortOrder === 'featured' ? styles.active : ''}`}
+                onClick={() => setSortOrder('featured')}
               >
-                <SortAsc size={18} />
-                Oldest First
+                <Star size={18} />
+                Featured
               </button>
               <button
                 className={`${styles.sortButton} ${sortOrder === 'desc' ? styles.active : ''}`}
@@ -119,20 +110,20 @@ const FilterModal = ({
                 <SortDesc size={18} />
                 Newest First
               </button>
+              <button
+                className={`${styles.sortButton} ${sortOrder === 'asc' ? styles.active : ''}`}
+                onClick={() => setSortOrder('asc')}
+              >
+                <SortAsc size={18} />
+                Oldest First
+              </button>
             </div>
           </div>
 
           <div className={styles.section}>
             <h3>Filter by Category</h3>
             <div className={styles.tagGrid}>
-              <button
-                key="All"
-                className={`${styles.tagButton} ${selectedTags.includes('All') ? styles.active : ''}`}
-                onClick={() => handleTagClick('All')}
-              >
-                All
-              </button>
-              {tags.filter(tag => tag !== 'All').map(tag => (
+              {['All', ...tags.filter(tag => tag !== 'All')].map(tag => (
                 <button
                   key={tag}
                   className={`${styles.tagButton} ${selectedTags.includes(tag) ? styles.active : ''}`}
@@ -150,14 +141,14 @@ const FilterModal = ({
             className={styles.resetButton}
             onClick={() => {
               setSelectedTags(['All']);
-              setSortOrder('desc');
+              setSortOrder('featured');
             }}
           >
             Reset Filters
           </button>
           <button 
             className={styles.applyButton}
-            onClick={handleClose}
+            onClick={onClose}
           >
             Apply Filters
           </button>

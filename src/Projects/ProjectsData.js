@@ -1,3 +1,4 @@
+// ProjectsData.js
 // Define media types
 export const MEDIA_TYPES = {
   IMAGE: 'image',
@@ -24,11 +25,150 @@ export const TAGS = [
 
 // Sample projects array - fully updated with media descriptions
 export const projects = [
+  // Lurelore, HackTheNorth2024, Finalist
+  {
+    id: 19,
+    title: 'LureLore',
+    brief: 'Finalist ($5,000) at Hack the North (Canada\'s largest hackathon) for creating an immersive fishing memory platform where catches become interactive 3D experiences. I contributed 99.7% of the codebase, working on both frontend & backend.',
+    tags: ['Web Development', 'AI', '3D Graphics', 'Full Stack', 'Hackathon', 'MERN'],
+    skills: [
+      'React',
+      'Three.js',
+      'MongoDB',
+      'Express.js',
+      'Node.js',
+      'Gemini AI',
+      'Leaflet.js',
+      'RESTful APIs'
+    ],
+    thumbnail: '/lurelore/thumbnail.jpg',
+    startDate: '2024-09',
+    endDate: '2024-09',
+    media: [
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/lurelore/1.jpg',
+        caption: '3D Interactive Aquarium Dashboard',
+        description: 'Main dashboard featuring a custom-designed Three.js-powered aquarium where each catch comes to life as an interactive 3D model. Users can click any fish to view detailed catch information, upload photos for AI identification, or capture new catches. Built 99.7% of the codebase including the entire 3D visualization system.'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/lurelore/2.jpg',
+        caption: 'Winning Presentation at Hack the North',
+        description: 'Presenting to 1000+ attendees after winning first place ($5000) at Hack the North 2024, Canada\'s largest hackathon. Project was judged by distinguished panel including OpenAI\'s Head of Engineering and AWS\'s Senior Manager of Startup Solutions.'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/lurelore/3.jpg',
+        caption: 'Interactive Fishing Map',
+        description: 'Location-based feature built with Leaflet.js showing where users have caught fish across the world, complete with detailed catch information and statistics for each location. Implemented real-time catch tracking and custom achievement system.'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/lurelore/4.jpg',
+        caption: 'Catch Information Modal',
+        description: 'Detailed catch information interface showing AI-identified fish species, catch statistics, and custom achievement tracking. Developed during an intense 36-hour hackathon with just one teammate, showcasing rapid learning and development capabilities.'
+      },
+      {
+        type: MEDIA_TYPES.VIDEO,
+        youtubeId: 'IiKA0Ij20ZM',
+        caption: 'LureLore Demo Video',
+        description: 'Quick project demonstration video scrapped together during the last minutes of the hackathon showcasing the core features and functionality of LureLore. Because of this video we nearly missed the deadline!'
+      },
+      {
+        type: MEDIA_TYPES.VIDEO,
+        youtubeId: 'I5dP9mbnx4M',
+        caption: 'Winning Presentation at Hack the North',
+        description: 'Live recording of our first-place winning presentation in front of 1000+ attendees at Hack the North, demonstrating the complete platform and its impact.'
+      }
+    ],
+    links: {
+      github: 'https://github.com/danielh-hong/LureLore',
+      live: 'https://devpost.com/software/lurelore'
+    }
+  },
+
+
+  // 2t7 Engsci Survey, Engsci 2t7 Survey
+  {
+    id: 18,
+    title: 'EngSci 2T7 Major Survey',
+    brief: 'Full-stack MERN application enabling 250+ Engineering Science students to track and visualize major preferences, achieving 95% class participation with 1000+ unique visits',
+    tags: ['Web Development', 'Full Stack', 'Data Visualization'],
+    skills: [
+      'React',
+      'MongoDB',
+      'Express.js',
+      'Node.js',
+      'RESTful APIs',
+      'Recharts',
+      'Data Visualization',
+      'Frontend Development'
+    ],      thumbnail: '/2t7_survey/thumbnail.png',
+    startDate: '2024-10',
+    endDate: '2024-12',
+    media: [
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/2t7_survey/1.png',
+        caption: 'Voting Page',
+        description: 'Interactive voting interface featuring a custom-designed drag-and-drop ranking system with validation. Users can easily rank their major preferences with a smooth, intuitive interface. Submissions are stored in a Mongo DB backend. Implements cookie-based validation to prevent duplicate submissions. Features a dynamic background pattern made using custom CSS animations. https://2t7-major-survey.vercel.app/vote'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/2t7_survey/2.png',
+        caption: 'Results Page',
+        description: 'Data visualization dashboard built with Recharts, showing real-time major preference trends across 250+ Engineering Science students. Features interactive charts, multi-parameter search functionality, and detailed statistics. Backend powered by MongoDB with RESTful APIs for efficient data aggregation and real-time updates. Achieved 95% class participation with 1000+ unique visits.'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/2t7_survey/3.png',
+        caption: 'About Page',
+        description: 'About page explaining the platform\'s purpose and functionality. Features a responsive design using custom React components. Also features a contact page.'
+      }
+    ],
+    links: {
+      github: 'https://github.com/danielh-hong/2t7-major-survey',
+      live: 'https://2t7-major-survey.vercel.app/results'
+    },
+  },
+    
+  // Hackathon Project HawkHacks Basemint Cryptocurrency
+  {
+    id: 17,
+    title: 'Market Basemint',
+    brief: 'Decentralized NFT Marketplace for E-sports Tickets & Rewards made & deployed on the NEAR Protocol mainnet, winning 1st ($3,000) at the Hawkhacks Hackathon',
+    tags: ['Robotics', 'Engineering', 'Hackathon', 'Web Development'],
+    skills: ['Typescript', 'React', 'NEAR Blockchain', 'Cryptocurrency', 'Web3', 'Full Stack Development'],
+    thumbnail: '/market_basemint/thumbnail.png',
+    startDate: '2023-05',
+    endDate: '2024-05',
+    media: [
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/market_basemint/1.png',
+        caption: 'Screenshot of the website.',
+        description: 'Screenshot of the site, featuring the modal cryptocurrency wallet connection UI. The transaction mechanisms are fully functional, and all NFT\'s are connected to the mainnet of the 8-billion dollar NEAR cryptocurrency network. The live site can be viewed at https://marketbasemint.vercel.app/'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/market_basemint/2.jpg',
+        caption: 'Picture of my team at the hackathon.',
+        description: 'This project won my team first place at the Hawkhacks cryptocurrency hackathon, winning $3,000 dollars.'
+      },
+    ],
+    links: {
+      github: 'https://github.com/audgeviolin07/marketbasemint',
+      live: 'https://marketbasemint.vercel.app/'
+    }
+  },
+
+
   // Quadcopter Design
   {
-    id: 1,
+    id: 16,
     title: 'Quadcopter Fuselage Design',
-    brief: 'Autonomous drone system with advanced stabilization',
+    brief: 'Helped design the fuselage and bulkheads of a quadcopter drone system for the Univesity of Toronto Aerospace Team using Solidworks',
     tags: ['Robotics', 'Engineering'],
     skills: ['CAD', 'SolidWorks', 'PID Controllers', 'Python'],
     thumbnail: '/quadcopter/thumbnail.jpg',
@@ -55,10 +195,10 @@ export const projects = [
 
   // Pocket Fridge
   {
-    id: 2,
+    id: 15,
     title: 'Pocket Fridge (AI Project)',
-    brief: 'AI-powered app to manage fridge inventory and suggest recipes',
-    tags: ['Engineering', 'Web Development', 'AI'],
+    brief: 'AI-powered app to manage fridge inventory and suggest recipes, winning first place in the Sustainability category at the Google Genesis AI Hackathon.',
+    tags: ['Engineering', 'Web Dev', 'AI'],
     skills: ['MERN Stack', 'React Native', 'Python', 'Vertex AI', 'MongoDB', 'Express.js', 'Node.js', 'Flask'],
     thumbnail: '/pocket_fridge/thumbnail.png',
     startDate: '2024-03',
@@ -97,12 +237,14 @@ export const projects = [
 
   // EcoSort
   {
-    id: 3,
+    id: 14,
     title: 'EcoSort: SmartWaste Assistant',
     brief: 'Automatic, voice-controlled waste dispenser',
     tags: ['Engineering', 'Hackathon', 'IoT'],
     skills: ['Python', 'Raspberry Pi', 'Arduino', 'Machine Learning', 'Voice Recognition', 'Google Speech API'],
     thumbnail: '/ecosort/thumbnail.jpg',
+    startDate: '2024-02',
+    endDate: '2024-02',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
@@ -141,15 +283,16 @@ export const projects = [
     }
   },
 
-
   // Wind Turbine Nacelle
   {
-    id: 4,
+    id: 13,
     title: 'Wind Turbine Nacelle',
-    brief: 'Design of accessible nacelle for wind turbines',
+    brief: 'Design of accessible nacelle for wind turbines made with Solidworks.',
     tags: ['Engineering', 'Mechanical Design'],
     skills: ['SolidWorks', 'CAD', 'Aerodynamics', 'Team Collaboration'],
     thumbnail: '/utwind/thumbnail.jpg',
+    startDate: '2023-09',
+    endDate: '2024-05',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
@@ -190,12 +333,14 @@ export const projects = [
 
   // Praxis I
   {
-    id: 5,
+    id: 12,
     title: 'Praxis I',
     brief: 'Designing a helmet storage solution for bike commuters',
     tags: ['Engineering', 'Design', 'Teamwork'],
     skills: ['CAD', 'SolidWorks', 'Prototyping', 'Team Collaboration'],
     thumbnail: '/praxis_I/thumbnail.png',
+    startDate: '2023-09',
+    endDate: '2024-01',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
@@ -229,12 +374,14 @@ export const projects = [
 
   // Praxis II
   {
-    id: 6,
+    id: 11,
     title: 'Praxis II',
-    brief: 'Designing an efficient vermicompost worm separation system',
+    brief: 'Design of an efficient vermicompost worm separation system for Allan Gardens',
     tags: ['Engineering', 'Sustainability', 'Design'],
     skills: ['CAD', 'SolidWorks', 'Sustainable Design', 'Machine Learning'],
     thumbnail: '/praxis_II/1.png',
+    startDate: '2024-01',
+    endDate: '2024-05',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
@@ -269,130 +416,112 @@ export const projects = [
 
   // Civ Bridge
   {
-    id: 7,
+    id: 10,
     title: 'Civ Bridge',
     brief: 'Design and testing of a matboard bridge for structural integrity',
     tags: ['Engineering', 'Structures', 'Materials'],
     skills: ['SolidWorks', 'CAD', 'Structural Analysis', 'Team Collaboration'],
-    thumbnail: '/civ-bridge/thumbnail.png',
+    thumbnail: '/civ_bridge/thumbnail.png',
+    startDate: '2023-11',
+    endDate: '2024-01',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/civ-bridge/final-design.png',
+        url: '/civ_bridge/1.png',
         caption: 'Final bridge design and dimensions',
-        description: 'Final design schematics and dimensions of the matboard bridge, focusing on structural integrity.'
+        description: 'Final design schematics and dimensions of the matboard bridge, optimized for the in-class test.'
       },
       {
-        type: MEDIA_TYPES.VIDEO,
-        youtubeId: 'QG1LaxiMgBY',
-        caption: 'Civ Bridge Timelapse and Testing',
-        description: 'Timelapse video documenting the construction and testing phase of the Civ Bridge project.'
+        type: MEDIA_TYPES.IMAGE,
+        url: '/civ_bridge/2.png',
+        caption: 'Holding the Civ Bridge',
+        description: 'My team holding our civ bridge on the day of the final bridge test.'
+      },
+      {
+        type: MEDIA_TYPES.IMAGE,
+        url: '/civ_bridge/3.jpg',
+        caption: 'Creating the bridge',
+        description: 'A picture of my teammate carefully cutting on the different pieces of the matboard bridge using our limited materials.'
       },
       {
         type: MEDIA_TYPES.PDF,
-        url: '/civ-bridge/iterations.pdf',
-        caption: 'Bridge Design Iterations',
-        description: 'Document detailing the various design iterations and improvements made throughout the project.'
+        url: '/civ_bridge/4.pdf',
+        caption: 'All Bridge Cross Section Iterations',
+        description: 'PDF details the 9 iterations made of the cross section of the matboard, each made in order to optimize the design.'
       }
     ],
     links: {
-      github: 'https://github.com/yourusername/civ-bridge',
-      live: 'https://civbridge.designproject.com'
+
     }
   },
 
   // Aesthetic Stopwatch
   {
-    id: 8,
+    id: 9,
     title: 'Customizable, Aesthetic Stopwatch',
-    brief: 'A web-based customizable stopwatch with aesthetic design',
-    tags: ['Web Development', 'Design', 'Engineering'],
-    skills: ['HTML', 'CSS', 'JavaScript', 'particles.js', 'FancyBox'],
-    thumbnail: '/stopwatch/thumbnail.png',
+    brief: 'My first ever JS Project: a web-based customizable stopwatch.',
+    tags: ['Web Dev', 'Design', 'Engineering'],
+    skills: ['HTML', 'CSS', 'Vanilla JavaScript', 'particles.js', 'FancyBox'],
+    thumbnail: '/aesthetic_stopwatch/1.png',
+    startDate: '2024-04',
+    endDate: '2024-05',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/stopwatch/interface.png',
-        caption: 'Aesthetic Stopwatch Interface',
-        description: 'Screenshot of the stopwatch interface, showcasing its customizable and aesthetic design.'
+        url: '/aesthetic_stopwatch/1.png',
+        caption: 'Aesthetic Stopwatch Interface on Laptop',
+        description: 'This stop watch project was my first ever web development project, and uses Vanilla J.S, & CSS.'
       },
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/stopwatch/demo.png',
+        url: '/aesthetic_stopwatch/2.png',
         caption: 'Stopwatch on Laptop Screen',
-        description: 'Image of the Aesthetic Stopwatch running on a laptop, demonstrating its responsiveness and design.'
+        description: 'Image of the Aesthetic Stopwatch running on a an ipad..'
       }
     ],
     links: {
-      github: 'https://github.com/yourusername/aesthetic-stopwatch',
+      github: 'https://github.com/danielh-hong/browser_stopwatch',
       live: 'https://aesthetic-stopwatch.netlify.app/'
     }
   },
 
   // Pendulum Analysis
   {
-    id: 9,
+    id: 8,
     title: 'Pendulum Analysis',
-    brief: 'Research paper analyzing the swing dynamics of a pendulum',
+    brief: 'PHY180 Paper analyzing the swing dynamics of a pendulum',
     tags: ['Research', 'Physics', 'Engineering'],
     skills: ['Data Analysis', 'Research', 'Technical Writing'],
-    thumbnail: '/pendulum/thumbnail.png',
+    thumbnail: '/pendulum_analysis/thumbnail.png',
+    startDate: '2023-09',
+    endDate: '2023-12',
     media: [
-      {
-        type: MEDIA_TYPES.IMAGE,
-        url: '/pendulum/visualization.png',
-        caption: 'Pendulum swing data visualization',
-        description: 'Graphical representation of pendulum swing data, illustrating oscillation periods and amplitude changes.'
-      },
       {
         type: MEDIA_TYPES.PDF,
-        url: '/pendulum/research-paper.pdf',
-        caption: 'Pendulum Analysis Research Paper',
-        description: 'Comprehensive research paper detailing the methodology, data analysis, and conclusions of the pendulum swing dynamics study.'
-      }
-    ],
-    links: {
-      github: 'https://github.com/yourusername/pendulum-analysis',
-      live: 'https://pendulum-analysis.research.com'
-    }
-  },
+        url: '/pendulum_analysis/1.pdf',
+        caption: 'Pendulum swing data final paper',
+        description: 'Report on the swing of a pendulum, made for the PHY180 Engsci course.'
+      },
 
-  // Model Mania 2019
-  {
-    id: 10,
-    title: 'Model Mania 2019',
-    brief: 'SolidWorks model for the 2019 Model Mania design challenge',
-    tags: ['Engineering', 'CAD', '3D Modeling'],
-    skills: ['SolidWorks', 'CAD', '3D Printing'],
-    thumbnail: '/model-mania/thumbnail.png',
-    media: [
-      {
-        type: MEDIA_TYPES.IMAGE,
-        url: '/model-mania/cad-model.png',
-        caption: 'Model Mania 2019 CAD Screenshot',
-        description: 'Screenshot of the SolidWorks model created for the 2019 Model Mania design challenge.'
-      }
-    ],
-    links: {
-      github: 'https://github.com/yourusername/model-mania-2019',
-      live: 'https://modelmania2019.designproject.com'
-    }
+    ]
   },
 
   // The Legend of Pakicetus (Animated Short)
   {
-    id: 11,
+    id: 6,
     title: 'The Legend of Pakicetus (Animated Short)',
-    brief: 'Animated short film about the first whale on land',
+    brief: 'Animated short film about the first whale on land made with After Effects & Premiere Pro',
     tags: ['Animation', 'Video Production', 'Storytelling'],
     skills: ['After Effects', 'Illustrator', 'Photoshop', 'Premiere Pro', 'Media Encoder'],
     thumbnail: '/pakicetus/thumbnail.png',
+    startDate: '2022-04',
+    endDate: '2022-06',
     media: [
       {
         type: MEDIA_TYPES.VIDEO,
         youtubeId: '8I9feeSzREQ',
-        caption: 'Watch The Legend of Pakicetus on YouTube',
-        description: 'An animated short film that tells the story of Pakicetus, the first whale to venture onto land.'
+        caption: 'The Legend of Pakicetus on YouTube',
+        description: 'An animated short film I made for the culminating of my AP Design course that tells the story of Pakicetus, the first whale to venture onto land.'
       }
     ],
     links: {
@@ -402,39 +531,43 @@ export const projects = [
 
   // Nociception - The Perception of Pain
   {
-    id: 12,
+    id: 5,
     title: 'Nociception - The Perception of Pain',
-    brief: 'Animated video explaining how pain is perceived by the body',
+    brief: 'Animated video for the 2020 Breakthrough Junior Challenge explaining how pain is perceived by the body',
     tags: ['Education', 'Animation', 'Biology'],
     skills: ['Illustrator', 'Photoshop', 'After Effects', 'Premiere Pro'],
     thumbnail: '/nociception/thumbnail.png',
+    startDate: '2021-05',
+    endDate: '2021-07',
     media: [
       {
         type: MEDIA_TYPES.VIDEO,
-        youtubeId: '8I9feeSzREQ',
+        youtubeId: '/ZZlT_Oz8HyI?si=_KZf-hfCe1QvqD-U',
         caption: 'Watch Nociception on YouTube',
         description: 'Animated explanation of nociception and how the body perceives pain.'
       }
     ],
     links: {
-      live: 'https://youtu.be/8I9feeSzREQ'
+      live: 'https://www.youtube.com/watch?v=ZZlT_Oz8HyI&t=4s'
     }
   },
 
   // Biking - The Best Form of City Transportation
   {
-    id: 13,
+    id: 4,
     title: 'Biking - The Best Form of City Transportation',
     brief: 'Animated video promoting biking as the best form of transportation',
     tags: ['Advocacy', 'Animation', 'Transportation'],
     skills: ['Illustrator', 'Photoshop', 'After Effects', 'Premiere Pro'],
-    thumbnail: '/biking/thumbnail.png',
+    thumbnail: '/biking_video/thumbnail.png',
+    startDate: '2022-05',
+    endDate: '2022-07',
     media: [
       {
         type: MEDIA_TYPES.VIDEO,
         youtubeId: 'y_c79vshk14',
-        caption: 'Watch Biking - The Best Form of City Transportation on YouTube',
-        description: 'Animated advocacy video promoting biking as the most efficient and sustainable form of city transportation.'
+        caption: '"Biking - The Best Form of City Transportation" on YouTube',
+        description: 'Animated advocacy video promoting biking as the most efficient and sustainable form of city transportation made for my 11th grade english culminating.'
       }
     ],
     links: {
@@ -444,18 +577,20 @@ export const projects = [
 
   // Peto's Paradox
   {
-    id: 14,
+    id: 3,
     title: "Peto's Paradox",
-    brief: 'Animated video exploring the biological concept of Peto\'s Paradox',
+    brief: 'Animated video exploring the biological concept of Peto\'s Paradox, & my first animated video made for the 2020 Junior Breakthrough Challenge.',
     tags: ['Biology', 'Animation', 'Education'],
     skills: ['After Effects', 'Illustrator', 'Photoshop', 'Premiere Pro'],
     thumbnail: '/petos_paradox/thumbnail.png',
+    startDate: '2020-03',
+    endDate: '2021-06',
     media: [
       {
         type: MEDIA_TYPES.VIDEO,
         youtubeId: '2Xf_u02zm8k',
         caption: 'Watch Peto\'s Paradox on YouTube',
-        description: 'Animated exploration of Peto\'s Paradox and its implications in biology.'
+        description: 'Animated exploration of Peto\'s Paradox and its implications in biology. This video was made for the 2020 Breakthrough Junior Challenge and placed me in the top 5% of over 5,000 competitors. This video was made during the COVID-19 lockdown and is quite memorable to me.'
       }
     ],
     links: {
@@ -465,18 +600,20 @@ export const projects = [
 
   // Excavator
   {
-    id: 15,
-    title: 'Excavator (My First Ever Project)',
-    brief: 'Hydraulics-powered excavator made from recycled materials',
+    id: 2,
+    title: 'Excavator',
+    brief: 'Hydraulics-powered excavator made from recycled materials (my first ever engineering project)!',
     tags: ['Engineering', 'Robotics', 'Hydraulics'],
     skills: ['Basic Engineering', 'Hydraulics', 'Recycled Materials'],
     thumbnail: '/excavator/thumbnail.png',
+    startDate: '2017-02',
+    endDate: '2017-06',
     media: [
       {
         type: MEDIA_TYPES.VIDEO,
         youtubeId: 'JOrUQsLdYow',
         caption: 'Watch Excavator Project on YouTube',
-        description: 'Video showcasing the hydraulics-powered excavator made from recycled materials, demonstrating its movement and functionality.'
+        description: 'Video showcasing the hydraulics-powered excavator I made with my dad completely out of recycled materials in 5th grade. This project holds a dear place in my heart.'
       }
     ],
     links: {
@@ -484,28 +621,28 @@ export const projects = [
     }
   },
 
-  // Personal Website
+  // OLd Personal Website
   {
-    id: 16,
-    title: 'Personal Website',
-    brief: 'My personal portfolio website built with web technologies',
-    tags: ['Web Development', 'Design'],
-    skills: ['HTML', 'CSS', 'JavaScript', 'particles.js', 'FancyBox'],
-    thumbnail: '/personal_website/thumbnail.png',
+    id: 1,
+    title: 'Old Personal Website',
+    brief: 'My first personal portfolio website built with vanilla JS & CSS, made off of CodeWithSadee\'s template.',
+    tags: ['Web Dev', 'Design'],
+    skills: ['HTML', 'CSS', 'Vanilla JavaScript', 'particles.js', 'FancyBox'],
+    thumbnail: '/old_website/thumbnail.png',
+    startDate: '2024-02',
+    endDate: '2024-10',
     media: [
       {
         type: MEDIA_TYPES.IMAGE,
-        url: '/personal_website/1.png',
+        url: '/old_website/thumbnail.png',
         caption: 'Personal Website Homepage',
-        description: 'Screenshot of the homepage of my personal website, highlighting the interactive particles background and navigation.',
-        thumbnail: '/personal_website/thumbnail.png',
-        isThumbnail: true
+        description: 'Screenshot of the homepage of my old personal website, highlighting the interactive particles background and navigation.',
+        thumbnail: '/old_website/thumbnail.png',
       }
     ],
     links: {
-      github: 'https://github.com/yourusername/personal-website',
+      github: 'https://github.com/danielh-hong/personal-portfolio',
       live: 'https://yourpersonalwebsite.com'
     }
   }
 ];
-

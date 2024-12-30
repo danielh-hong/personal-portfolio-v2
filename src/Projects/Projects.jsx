@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { Filter, Search } from 'lucide-react';
@@ -6,6 +6,7 @@ import styles from './Projects.module.css';
 import ProjectsModal from './ProjectsModal';
 import FilterModal from './FilterModal';
 import { projects, TAGS } from './ProjectsData';
+import dayjs from 'dayjs';
 
 // Memoized project card component for better performance
 const ProjectCard = memo(({ project, onClick }) => {
@@ -14,29 +15,26 @@ const ProjectCard = memo(({ project, onClick }) => {
     '/images/project-placeholder.png';
 
   const formatDate = (startDate, endDate) => {
-    const formatToMonthYear = (dateStr) => {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { 
-        month: 'short',
-        year: 'numeric'
-      });
+    const formatToMonth = (date) => {
+      return date ? dayjs(date).format('MMM YYYY') : '';
     };
 
-    if (startDate && endDate) {
-      // If dates are the same, just show one date
-      if (startDate === endDate) {
-        return formatToMonthYear(startDate);
-      }
-      // Show range if different
-      return `${formatToMonthYear(startDate)} - ${formatToMonthYear(endDate)}`;
-    }
+    // Handle missing dates
+    if (!startDate && !endDate) return '';
     
-    // If only one date exists, show that one
-    return formatToMonthYear(endDate || startDate);
+    // Handle single date cases
+    if (startDate && !endDate) return formatToMonth(startDate);
+    if (!startDate && endDate) return formatToMonth(endDate);
+
+    // Both dates - same
+    if (startDate === endDate) return formatToMonth(startDate);
+
+    // Both dates - different
+    return `${formatToMonth(startDate)} - ${formatToMonth(endDate)}`;
   };
 
   const formattedDate = formatDate(project.startDate, project.endDate);
-
+  
   return (
     <motion.div
       className={styles.projectCard}
@@ -125,7 +123,7 @@ ProjectCard.displayName = 'ProjectCard';
 
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('desc');
+  const [sortOrder, setSortOrder] = useState('featured'); // default 'featured' projects which is by id # in projectsdata.js
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -150,9 +148,16 @@ const Projects = () => {
         return matchesSearch && matchesTags;
       })
       .sort((a, b) => {
-        const dateA = new Date(a.endDate || a.startDate);
-        const dateB = new Date(b.endDate || b.startDate);
-        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+        switch (sortOrder) {
+          case 'featured':
+            return b.id-a.id; // Sort by ID for featured
+          case 'desc':
+            return new Date(b.endDate || b.startDate) - new Date(a.endDate || a.startDate);
+          case 'asc':
+            return new Date(a.endDate || a.startDate) - new Date(b.endDate || b.startDate);
+          default:
+            return 0;
+        }
       });
   }, [searchTerm, selectedTags, sortOrder]);
   
