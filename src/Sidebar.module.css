@@ -142,7 +142,7 @@
 
 .link:hover {
   background: var(--hover);
-  transform: translateX(4px);
+  transform: translateY(4px);
 }
 
 .iconWrapper {
