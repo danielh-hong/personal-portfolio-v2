@@ -98,14 +98,12 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Memoize the resize handler
   const checkIfMobile = useCallback(() => {
     const isMobileView = window.innerWidth <= 992;
     setIsMobile(isMobileView);
     if (!isMobileView) setIsCollapsed(false);
   }, []);
 
-  // Memoize the toggle handler
   const handleToggle = useCallback(() => {
     setIsCollapsed(prev => !prev);
   }, []);
@@ -119,18 +117,18 @@ const Sidebar = () => {
   const currentStyles = isMobile ? mobileStyles : styles;
 
   return (
-    <aside className={`${currentStyles.sidebar} ${isCollapsed ? currentStyles.collapsed : ''}`}>
-      <div className={currentStyles.sidebarContent}>
-        <ProfileSection 
-          isMobile={isMobile} 
-          isCollapsed={isCollapsed} 
-          onToggle={handleToggle}
-        />
-        <div className={currentStyles.collapsibleContent}>
+    <div className={styles.sidebarContainer}>
+      <aside className={currentStyles.sidebar}>
+        <div className={currentStyles.sidebarContent}>
+          <ProfileSection 
+            isMobile={isMobile} 
+            isCollapsed={isCollapsed} 
+            onToggle={handleToggle}
+          />
           <NavigationLinks currentStyles={currentStyles} />
         </div>
-      </div>
-    </aside>
+      </aside>
+    </div>
   );
 };
 

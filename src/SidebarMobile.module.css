@@ -1,4 +1,4 @@
-/* SidebarMobile.module.css */
+/* SidebarMobile.module.css - for mobile sidebar */
 .mobileSidebar {
   width: 100%;
   background: var(--sidebar-bg);
@@ -55,7 +55,7 @@
 
 .profileInfo {
   flex: 1;
-  min-width: 0; /* Ensures text truncation works */
+  min-width: 0;
 }
 
 .username {

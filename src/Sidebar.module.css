@@ -1,14 +1,23 @@
 /* Sidebar.module.css */
+
+.sidebarContainer {
+  height: 100%;
+  position: relative;
+}
+
 .sidebar {
   width: 300px;
   height: 100%;
   background-color: var(--sidebar-bg);
   border-radius: 24px;
   position: relative;
-  overflow: hidden;
   backdrop-filter: blur(10px);
   border: 1px solid var(--divider-color);
   transition: all 0.3s ease;
+  overflow: hidden; /* Contains the scrollbar */
+  padding: 1.5rem;
+  padding-right: 0.75rem;
+
 }
 
 .sidebarContent {
@@ -16,8 +25,16 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2rem 1.5rem; /* first is top and bottom, second is left and right */
+  overflow-y: auto;
 }
+
+/* Add style for desktop collapsible content */
+.collapsibleContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 
 /* Profile Section */
 .profileSection {
@@ -157,4 +174,49 @@
 
 .downloadLink:hover {
   background: var(--primary-dark);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+  .sidebar {
+    width: 280px;
+  }
+
+  .avatarWrapper {
+    width: 120px;
+    height: 120px;
+  }
+
+  .username {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 260px;
+  }
+  .sidebarContent {
+    padding: 1.5rem 1.25rem;
+    padding-right: calc(1.25rem + 8px);
+    gap: 1.5rem;
+  }
+
+  .avatarWrapper {
+    width: 100px;
+    height: 100px;
+    border-width: 2px;
+  }
+
+  .avatarContainer {
+    padding: 2px;
+  }
+
+  .username {
+    font-size: 1.15rem;
+  }
+
+  .nav {
+    gap: 1.5rem;
+  }
 }
