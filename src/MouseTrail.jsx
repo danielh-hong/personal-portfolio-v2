@@ -2,78 +2,55 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const MouseTrail = () => {
   const [particles, setParticles] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
   const requestRef = useRef();
   const counterRef = useRef(0);
   const particleIdCounter = useRef(0);
 
-  // Check for mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768 || window.innerHeight <= 500);
-    };
+  // Create mouse trail particle - simplified for performance
+  const createTrailParticle = (x, y) => ({
+    id: particleIdCounter.current++,
+    x,
+    y,
+    size: 3, // Fixed size for better performance
+    life: 1,
+    color: 'hsla(220, 85%, 70%, 0.6)', // Fixed color for better performance
+    isClick: false
+  });
 
-    checkMobile(); // Initial check
-    window.addEventListener('resize', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
-  // Create mouse trail particle
-  const createTrailParticle = (x, y) => {
-    const size = Math.random() * 4 + 2; // Smaller, bubbly size
+  // Create click burst particle - simplified for performance
+  const createClickParticle = (x, y) => {
+    const angle = Math.random() * Math.PI * 2;
     return {
       id: particleIdCounter.current++,
-      x: x + Math.random() * 20 - 10, // Random offset like original
-      y: y + Math.random() * 20 - 10,
-      size,
-      life: 1,
-      color: `hsla(${Math.random() * 60 + 200}, 85%, 70%, 0.6)`, // Soft blue-purple range
-      isClick: false
-    };
-  };
-
-  // Create click burst particle
-  const createClickParticle = (x, y) => {
-    const id = particleIdCounter.current++;
-    const size = Math.random() * 15 + 10;
-    const angle = Math.random() * Math.PI * 2;
-    const velocity = {
-      x: Math.cos(angle) * 2,
-      y: Math.sin(angle) * 2
-    };
-    
-    return {
-      id,
       x,
       y,
-      size,
-      color: `hsla(${Math.random() * 60 + 200}, 80%, 60%, ${Math.random() * 0.5 + 0.5})`,
-      velocity,
+      size: 12, // Fixed size for better performance
+      velocity: {
+        x: Math.cos(angle) * 2,
+        y: Math.sin(angle) * 2
+      },
+      color: 'hsla(220, 80%, 60%, 0.8)', // Fixed color for better performance
       life: 1,
       isClick: true
     };
   };
 
   useEffect(() => {
-    if (isMobile) return; // Skip adding listeners on mobile
-
     const handleMouseMove = (e) => {
       counterRef.current++;
-
-      if (counterRef.current % 4 === 0) { // Same timing as original
+      
+      // Only create particle every 6 frames instead of 4
+      if (counterRef.current % 6 === 0) {
         const newParticle = createTrailParticle(e.clientX, e.clientY);
-        setParticles(prev => [...prev, newParticle].slice(-50)); // Keep reasonable number of particles
+        setParticles(prev => [...prev.slice(-20), newParticle]); // Keep only last 20 particles
       }
     };
 
     const handleClick = (e) => {
-      const newParticles = Array.from({ length: 12 }, () =>
+      const newParticles = Array.from({ length: 6 }, () => // Reduced from 12 to 6
         createClickParticle(e.clientX, e.clientY)
       );
-      setParticles(prev => [...prev, ...newParticles].slice(-100));
+      setParticles(prev => [...prev.slice(-30), ...newParticles]); // Keep only last 30 total
     };
 
     const animate = () => {
@@ -81,19 +58,17 @@ const MouseTrail = () => {
         return prevParticles
           .map(particle => {
             if (particle.isClick) {
-              // Click particle behavior
               return {
                 ...particle,
                 x: particle.x + particle.velocity.x,
                 y: particle.y + particle.velocity.y,
-                life: particle.life - 0.02,
-                size: particle.size * 0.95
+                life: particle.life - 0.04, // Faster fadeout
+                size: particle.size * 0.96 // Faster shrink
               };
             } else {
-              // Trail particle behavior - simple fade out
               return {
                 ...particle,
-                life: particle.life - 0.04
+                life: particle.life - 0.06 // Faster fadeout for trail
               };
             }
           })
@@ -112,9 +87,7 @@ const MouseTrail = () => {
       document.removeEventListener('click', handleClick);
       cancelAnimationFrame(requestRef.current);
     };
-  }, [isMobile]);
-
-  if (isMobile) return null; // Don't render component on mobile
+  }, []);
 
   return (
     <div 
@@ -142,9 +115,7 @@ const MouseTrail = () => {
             borderRadius: '50%',
             opacity: particle.life,
             transform: `translate(-50%, -50%) scale(${particle.isClick ? particle.life : 1})`,
-            boxShadow: `0 0 ${particle.size * (particle.isClick ? 2 : 1)}px ${particle.color}`,
-            transition: 'transform 0.1s ease-out',
-            willChange: 'transform, opacity',
+            boxShadow: `0 0 ${particle.size}px ${particle.color}`,
             pointerEvents: 'none'
           }}
         />

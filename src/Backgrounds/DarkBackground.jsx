@@ -126,10 +126,11 @@ const PrismParticle = ({ position, size, rotation, color }) => (
 )
 
 // -----------------------------------------------------------------------------
-// 6. Spiral Particle (We may skip using it on mobile if desired)
+// 6. Spiral Particle
 // -----------------------------------------------------------------------------
 const SpiralParticle = ({ position, size, rotation, color }) => {
   const geometry = useMemo(() => {
+    // Reduced tubular segments from 64 to 32 to lessen GPU load
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0, -size, 0),
       new THREE.Vector3(size * 0.5, -size * 0.5, size * 0.5),
@@ -137,7 +138,7 @@ const SpiralParticle = ({ position, size, rotation, color }) => {
       new THREE.Vector3(size * 0.5, size * 0.5, size * 0.5),
       new THREE.Vector3(0, size, 0),
     ])
-    return new THREE.TubeGeometry(curve, 64, size * 0.15, 8, false)
+    return new THREE.TubeGeometry(curve, 32, size * 0.15, 8, false)
   }, [size])
 
   return (
@@ -192,7 +193,7 @@ const OctahedronParticle = ({ position, size, rotation, color }) => (
 )
 
 // -----------------------------------------------------------------------------
-// 9. Custom Star Particle (2D Star shape extruded slightly)
+// 9. Custom Star Particle
 // -----------------------------------------------------------------------------
 const StarParticle = ({ position, size, rotation, color }) => {
   const geometry = useMemo(() => {
@@ -259,7 +260,7 @@ function randomRange(min, max) {
 }
 
 // -----------------------------------------------------------------------------
-// ShootingStars (skipped on mobile by default)
+// ShootingStars
 // -----------------------------------------------------------------------------
 function getRandomStarData(bounds) {
   const edge = Math.floor(Math.random() * 4)
@@ -437,7 +438,7 @@ function ShootingStars({ bounds }) {
 // -----------------------------------------------------------------------------
 // ParticleField
 // -----------------------------------------------------------------------------
-const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
+const ParticleField = ({ mouse, onParticleExplode }) => {
   const group = useRef()
   const cameraRotation = useRef({ x: 0, y: 0 })
   const { size } = useThree()
@@ -459,17 +460,18 @@ const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // One consistent particle count for desktop
   const particles = useMemo(() => {
-    // fewer particles on mobile
-    const count = isMobile ? 20 : 85
+    const count = 35
     const items = []
-    const desktopTypes = [
+
+    // We’ll keep all types in the mix
+    const types = [
       'crystal', 'torus', 'prism', 'spiral',
       'cube', 'sphere', 'blob', 'octahedron', 'star'
     ]
-    const mobileTypes = ['cube', 'sphere', 'octahedron', 'star']
-    const chosenTypes = isMobile ? mobileTypes : desktopTypes
 
+    // Pastel-like colors
     const colors = [
       '#ffa3a3', '#ff91c1', '#e68fff',
       '#9fa3ff', '#9ffff8', '#91ffd0',
@@ -478,7 +480,7 @@ const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
     ]
 
     for (let i = 0; i < count; i++) {
-      const type = chosenTypes[Math.floor(Math.random() * chosenTypes.length)]
+      const type = types[Math.floor(Math.random() * types.length)]
       const x = (Math.random() - 0.5) * (windowSize.width / 9)
       const y = (Math.random() - 0.5) * (windowSize.height / 9)
       const z = (Math.random() - 0.5) * 50
@@ -506,7 +508,7 @@ const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
       })
     }
     return items
-  }, [windowSize, isMobile])
+  }, [windowSize])
 
   const renderParticle = (particle, i) => {
     switch (particle.type) {
@@ -523,7 +525,7 @@ const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
     }
   }
 
-  // Explode logic
+  // Explosion logic
   const explodeParticles = (position) => {
     const explosionForce = 0.6
     const explosionRadius = 55
@@ -537,7 +539,7 @@ const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
 
       if (distance < 0.001) return
 
-      // rippleForce is stronger the closer you are to center
+      // rippleForce is stronger the closer you are
       const rippleForce = Math.sin(
         (1 - Math.min(1, distance / explosionRadius)) * Math.PI
       ) * explosionForce
@@ -640,7 +642,7 @@ const ParticleField = ({ mouse, onParticleExplode, isMobile }) => {
 // -----------------------------------------------------------------------------
 // Scene
 // -----------------------------------------------------------------------------
-const Scene = ({ mouse, isMobile }) => {
+const Scene = ({ mouse }) => {
   const particleExplodeRef = useRef()
   const { size, camera } = useThree()
   const [bounds, setBounds] = useState(() => getBounds(window.innerWidth, window.innerHeight))
@@ -661,10 +663,8 @@ const Scene = ({ mouse, isMobile }) => {
 
   return (
     <>
-      {/* We can skip environment on mobile for performance */}
-      {!isMobile && <Environment preset="night" background={false} />}
+      <Environment preset="night" background={false} />
 
-      {/* Lights */}
       <hemisphereLight
         skyColor="#ffffff"
         groundColor="#444444"
@@ -682,35 +682,28 @@ const Scene = ({ mouse, isMobile }) => {
       />
       <ambientLight intensity={0.15} />
 
-      {/* Main particles */}
       <ParticleField
         mouse={mouse}
         onParticleExplode={particleExplodeRef}
-        isMobile={isMobile}
       />
 
-      {/* Shooting stars (skipped on mobile) */}
-      {!isMobile && <ShootingStars bounds={bounds} />}
+      <ShootingStars bounds={bounds} />
 
-      {/* Post-processing (skipped or reduced on mobile) */}
-      {!isMobile && (
-        <EffectComposer>
-          <DepthOfField
-            focusDistance={0.02}
-            focalLength={0.02}
-            bokehScale={2}
-            height={480}
-          />
-          <Bloom
-            intensity={0.7}
-            luminanceThreshold={0.2}
-            luminanceSmoothing={0.9}
-          />
-          <ChromaticAberration offset={[0.0015, 0.0012]} />
-        </EffectComposer>
-      )}
+      <EffectComposer>
+        <DepthOfField
+          focusDistance={0.02}
+          focalLength={0.02}
+          bokehScale={1} // lowered from 2 to reduce cost
+          height={480}
+        />
+        <Bloom
+          intensity={0.7}
+          luminanceThreshold={0.2}
+          luminanceSmoothing={0.9}
+        />
+        <ChromaticAberration offset={[0.0015, 0.0012]} />
+      </EffectComposer>
 
-      {/* Missed click => explode everything */}
       <mesh onPointerMissed={handlePointerMissed} />
     </>
   )
@@ -722,18 +715,14 @@ const Scene = ({ mouse, isMobile }) => {
 const DarkBackground = () => {
   const mouse = useRef({ x: 0, y: 0 })
   const targetMouse = useRef({ x: 0, y: 0 })
-  const [isMobile, setIsMobile] = useState(isMobileDevice())
 
-  // Update isMobile in real time if user resizes or rotates device
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(isMobileDevice())
-    }
-    window.addEventListener('resize', handleResize, { passive: true })
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  // If on mobile, render nothing
+  const mobile = isMobileDevice()
+  if (mobile) {
+    return null
+  }
 
-  // Smoothly track mouse to create gentle camera movements
+  // Smoothly track mouse
   useEffect(() => {
     const handleMouseMove = (event) => {
       targetMouse.current.x = (event.clientX / window.innerWidth - 0.5) * 2
@@ -741,7 +730,6 @@ const DarkBackground = () => {
     }
 
     const updateMouse = () => {
-      // lerp to avoid abrupt movements
       mouse.current.x += (targetMouse.current.x - mouse.current.x) * 0.05
       mouse.current.y += (targetMouse.current.y - mouse.current.y) * 0.05
       requestAnimationFrame(updateMouse)
@@ -755,25 +743,22 @@ const DarkBackground = () => {
 
   return (
     <div className={`${styles.background} theme-transition`}>
-      {/* Render the 3D Canvas only if not mobile */}
-      {!isMobile && (
-        <Canvas
-          resize={{ debounce: 100 }}
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: 'high-performance',
-            preserveDrawingBuffer: false,
-          }}
-          camera={{ position: [0, 0, 35], fov: 70 }}
-          onCreated={({ gl }) => {
-            gl.setSize(window.innerWidth, window.innerHeight)
-            gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-          }}
-        >
-          <Scene mouse={mouse} isMobile={isMobile} />
-        </Canvas>
-      )}
+      <Canvas
+        resize={{ debounce: 100 }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance',
+          preserveDrawingBuffer: false,
+        }}
+        camera={{ position: [0, 0, 35], fov: 70 }}
+        onCreated={({ gl }) => {
+          gl.setSize(window.innerWidth, window.innerHeight)
+          gl.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        }}
+      >
+        <Scene mouse={mouse} />
+      </Canvas>
     </div>
   )
 }
