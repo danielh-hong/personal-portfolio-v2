@@ -1,5 +1,3 @@
-// LightParticles.jsx
-
 import * as THREE from 'three'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
@@ -196,7 +194,7 @@ export const StarParticle = ({ position, size, rotation, color }) => {
 // -----------------------------------------------------------------------------
 // ParticleField
 // -----------------------------------------------------------------------------
-export function ParticleField({ mouse, onParticleExplode, isMobile }) {
+export function ParticleField({ mouse, onParticleExplode }) {
   const group = useRef()
   const cameraRotation = useRef({ x: 0, y: 0 })
   const { size } = useThree()
@@ -218,25 +216,23 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Generate fewer shapes if mobile
+  // Reduced desktop count => 35 for better performance
   const particles = useMemo(() => {
-    const count = isMobile ? 20 : 85
+    const count = 35
     const colors = [
       '#ffa3a3', '#ff91c1', '#e68fff',
       '#9fa3ff', '#9ffff8', '#91ffd0',
       '#fdff91', '#ffd59f', '#ff9f9f',
       '#ffe0f7', '#b4ffe0', '#9feaff'
     ]
-    const desktopTypes = [
+    const types = [
       'crystal', 'torus', 'prism', 'spiral',
       'cube', 'sphere', 'blob', 'octahedron', 'star'
     ]
-    const mobileTypes = ['cube', 'sphere', 'octahedron', 'star']
-    const chosenTypes = isMobile ? mobileTypes : desktopTypes
 
     const items = []
     for (let i = 0; i < count; i++) {
-      const type = chosenTypes[Math.floor(Math.random() * chosenTypes.length)]
+      const type = types[Math.floor(Math.random() * types.length)]
       const x = (Math.random() - 0.5) * (windowSize.width / 9)
       const y = (Math.random() - 0.5) * (windowSize.height / 9)
       const z = (Math.random() - 0.5) * 50
@@ -264,9 +260,9 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
       })
     }
     return items
-  }, [windowSize, isMobile])
+  }, [windowSize])
 
-  // Renders the correct shape
+  // Renders correct shape
   const renderParticle = (particle, i) => {
     switch (particle.type) {
       case 'crystal':    return <CrystalParticle   key={i} {...particle} />
@@ -293,7 +289,6 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
       const dy = mesh.position.y - position.y
       const dz = mesh.position.z - position.z
       const distance = Math.sqrt(dx * dx + dy * dy + dz * dz)
-
       if (distance < 0.001) return
 
       const rippleForce = Math.sin(
@@ -307,7 +302,7 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
       particle.velocity[1] += (dy / distance) * rippleForce + Math.sin(randomAngle) * randomForce
       particle.velocity[2] += (dz / distance) * rippleForce * 0.5
 
-      // Tweak rotation on explosion
+      // Tweak rotation
       particle.rotationSpeed = [
         particle.rotationSpeed[0] + (Math.random() - 0.5) * 0.003,
         particle.rotationSpeed[1] + (Math.random() - 0.5) * 0.003,
@@ -378,7 +373,7 @@ export function ParticleField({ mouse, onParticleExplode, isMobile }) {
       particle.velocity[1] *= 0.96
       particle.velocity[2] *= 0.96
 
-      // Pull back toward original
+      // Pull back toward original position
       mesh.position.x += (particle.originalPosition[0] - mesh.position.x) * 0.01
       mesh.position.y += (particle.originalPosition[1] - mesh.position.y) * 0.01
       mesh.position.z += (particle.originalPosition[2] - mesh.position.z) * 0.01
