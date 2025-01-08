@@ -1,12 +1,7 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useRef, useMemo, useState, useEffect } from 'react'
-import {
-  EffectComposer,
-  Bloom,
-  DepthOfField,
-  ChromaticAberration
-} from '@react-three/postprocessing'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import styles from './DarkBackground.module.css'
 
 // -----------------------------------------------------------------------------
@@ -27,9 +22,8 @@ function randomRange(min, max) {
   return Math.random() * (max - min) + min
 }
 
-// Used for bounding box logic (shooting stars removal, etc.)
+// For bounding box logic (shooting stars removal, etc.)
 function getBounds(width, height) {
-  // A bit bigger than screen to ensure they don’t pop in/out too abruptly
   const xExtent = Math.max(30, width / 20)
   const yExtent = Math.max(20, height / 20)
   const zExtent = 20
@@ -78,7 +72,7 @@ function createStarGeometry(size = 1, extrudeFraction = 0.1) {
 // 4) A Simple "Static" Star Component with random color
 // -----------------------------------------------------------------------------
 function StaticStar({ position, size, color }) {
-  // Create geometry once, memoized:
+  // Create geometry once, memoized
   const geometry = useMemo(() => createStarGeometry(size), [size])
   return (
     <mesh position={position} geometry={geometry}>
@@ -89,11 +83,10 @@ function StaticStar({ position, size, color }) {
 
 // -----------------------------------------------------------------------------
 // 5) A Big Cloud of "Distant" Stars as a single Points geometry
-//    Now placed inside the same groupRef to parallax with everything else
 // -----------------------------------------------------------------------------
 function DistantStars() {
-  // Adjust these for performance vs. richness
-  const numStars = 700
+  // Fewer stars to reduce load
+  const numStars = 400
 
   const positions = useMemo(() => {
     const arr = new Float32Array(numStars * 3)
@@ -133,7 +126,7 @@ function DistantStars() {
     <points>
       <bufferGeometry ref={geometryRef} />
       <pointsMaterial
-        size={2.0}   // Increase size so they're more visible
+        size={2.0}   // increased so they're visible
         sizeAttenuation
         vertexColors
         transparent
@@ -151,14 +144,14 @@ function ShootingStars({ bounds }) {
   const spawnRef = useRef(null)
   const tabVisible = useRef(!document.hidden)
 
-  // Let’s pick from a small color palette for variety
+  // Simple color palette for variety
   const colorPalette = ['#ffffff', '#ffcfdf', '#fde2ff', '#c7ceea', '#bffcc6']
 
-  // Pre-create star geometry for the head + tail so we don’t rebuild every frame
+  // Pre-create star geometry for the head + tail
   const headGeometry = useMemo(() => createStarGeometry(0.2, 0.05), [])
   const tailGeometry = useMemo(() => createStarGeometry(0.2, 0.05), [])
 
-  // Helper: build random star path + color
+  // Build random star path + color
   function createShootingStarData() {
     const start = new THREE.Vector3()
     const end = new THREE.Vector3()
@@ -238,12 +231,11 @@ function ShootingStars({ bounds }) {
     setStars((prevStars) =>
       prevStars
         .map((star) => {
-          // move forward
           star.position.add(star.direction.clone().multiplyScalar(star.speed))
-
           // store tail positions
           star.tailPositions.push(star.position.clone())
-          if (star.tailPositions.length > 12) {
+          // short tail => 8 positions
+          if (star.tailPositions.length > 8) {
             star.tailPositions.shift()
           }
           return star
@@ -272,15 +264,14 @@ function ShootingStars({ bounds }) {
         const headPos = star.position
         return (
           <group key={i}>
-            {/* Star Head (larger star shape) */}
+            {/* Star Head */}
             <mesh position={headPos} geometry={headGeometry}>
               <meshBasicMaterial color={star.color} />
             </mesh>
 
-            {/* Tail (smaller star shapes) */}
+            {/* Tail */}
             {star.tailPositions.map((pos, j) => {
               const fade = j / star.tailPositions.length
-              // Make the tail star smaller and fade out
               const scale = (1 - fade) * 0.6
               const opacity = 1 - fade
               return (
@@ -290,7 +281,11 @@ function ShootingStars({ bounds }) {
                   geometry={tailGeometry}
                   scale={[scale, scale, scale]}
                 >
-                  <meshBasicMaterial color={star.color} transparent opacity={opacity} />
+                  <meshBasicMaterial
+                    color={star.color}
+                    transparent
+                    opacity={opacity}
+                  />
                 </mesh>
               )
             })}
@@ -302,15 +297,14 @@ function ShootingStars({ bounds }) {
 }
 
 // -----------------------------------------------------------------------------
-// 7) The Main Scene: includes a group for parallax, distant stars, static stars,
-//    and the shooting stars
+// 7) The Main Scene: group everything for parallax
 // -----------------------------------------------------------------------------
 function Scene({ mouse }) {
   const groupRef = useRef()
   const { size, camera } = useThree()
   const [bounds, setBounds] = useState(() => getBounds(window.innerWidth, window.innerHeight))
 
-  // Recompute bounding area for shooting stars on resize
+  // Update bounding box on resize
   useEffect(() => {
     camera.aspect = size.width / size.height
     camera.updateProjectionMatrix()
@@ -320,12 +314,11 @@ function Scene({ mouse }) {
   // A small color palette for static star variety
   const starPalette = ['#ffffff', '#ffcfdf', '#fde2ff', '#c7ceea', '#bffcc6']
 
-  // Create a bunch of random static stars
+  // Fewer static stars => 50
   const [staticStars] = useState(() => {
     const stars = []
-    const starCount = 70 // adjust for more/less
+    const starCount = 50
     for (let i = 0; i < starCount; i++) {
-      // positions
       const x = (Math.random() - 0.5) * (size.width / 7)
       const y = (Math.random() - 0.5) * (size.height / 7)
       const z = (Math.random() - 0.5) * 30
@@ -336,23 +329,30 @@ function Scene({ mouse }) {
     return stars
   })
 
-  // Subtle camera motion + parallax for everything
+  // Subtle camera motion + parallax
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime()
-
     const targetRotX = Math.sin(elapsed * 0.15) * 0.07 + mouse.current.y * 0.15
     const targetRotY = Math.cos(elapsed * 0.2) * 0.07 + mouse.current.x * 0.15
 
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.02)
-    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.02)
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(
+      groupRef.current.rotation.x,
+      targetRotX,
+      0.02
+    )
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(
+      groupRef.current.rotation.y,
+      targetRotY,
+      0.02
+    )
   })
 
   return (
     <group ref={groupRef}>
-      {/* Big cloud of somewhat distant stars */}
+      {/* Distant star field */}
       <DistantStars />
 
-      {/* Render all the static, extruded stars */}
+      {/* Static extruded stars */}
       {staticStars.map((star, i) => (
         <StaticStar key={i} position={star.position} size={star.size} color={star.color} />
       ))}
@@ -403,11 +403,13 @@ export default function DarkBackground() {
           powerPreference: 'high-performance'
         }}
       >
-        {/* Optional post-processing for a subtle glow */}
+        {/* Reduced post-processing: only Bloom, with lower intensity */}
         <EffectComposer>
-          <DepthOfField focusDistance={0.01} focalLength={0.02} bokehScale={0.8} />
-          <Bloom intensity={0.5} luminanceThreshold={0.2} luminanceSmoothing={0.85} />
-          <ChromaticAberration offset={[0.0008, 0.0008]} />
+          <Bloom
+            intensity={0.35}
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.85}
+          />
         </EffectComposer>
 
         <Scene mouse={mouse} />

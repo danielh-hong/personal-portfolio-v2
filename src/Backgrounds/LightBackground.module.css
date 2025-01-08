@@ -2,46 +2,122 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #dbdce2 0%,
-    #e4e4e9 50%,
-    #cdd8d5 100%
-  );
+  z-index: 0;
   overflow: hidden;
-  z-index: 0; /* ensure background stays behind other content */
-  pointer-events: none; /* do not intercept pointer events */
-  transition: background 1s ease-in-out;
 }
 
-.background::before,
-.background::after {
-  content: '';
+.gradient {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    145deg,
+    #cce6f8 0%,
+    #f0f7ff 45%,
+    #eee0da 100%
+  );
+}
+
+.sun {
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  width: min(120px, 20vw);
+  height: min(120px, 20vw);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 236, 210, 0.8) 0%,
+    rgba(255, 225, 185, 0.4) 50%,
+    transparent 100%
+  );
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.elementContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
-.background::before {
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(120, 120, 200, 0.2) 0%,
-    rgba(70, 100, 180, 0.1) 40%,
-    rgba(255, 255, 255, 0) 100%
+.cloud {
+  position: absolute;
+  left: -200px;
+  color: rgba(255, 255, 255, 0.8);
+  width: min(200px, 40vw);
+  animation: moveCloud var(--duration) linear var(--delay);
+  transform: translateY(var(--y-pos)) scale(var(--scale));
+}
+
+.bird {
+  position: absolute;
+  left: -50px;
+  width: 24px;
+  color: rgba(0, 0, 0, 0.2);
+  animation: moveBird var(--duration) ease-in-out var(--delay),
+             flapWings 0.6s ease-in-out infinite;
+  transform: translateY(var(--y-pos)) scale(var(--scale));
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes moveCloud {
+  from { transform: translateX(-200px) translateY(var(--y-pos)) scale(var(--scale)); }
+  to { transform: translateX(calc(100vw + 200px)) translateY(var(--y-pos)) scale(var(--scale)); }
+}
+
+@keyframes moveBird {
+  0% { transform: translateX(-50px) translateY(var(--y-pos)) scale(var(--scale)); }
+  50% { transform: translateX(calc(50vw)) translateY(calc(var(--y-pos) - 5%)) scale(var(--scale)); }
+  100% { transform: translateX(calc(100vw + 50px)) translateY(var(--y-pos)) scale(var(--scale)); }
+}
+
+@keyframes flapWings {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.7); }
+}
+
+@media (max-width: 768px) {
+  .cloud {
+    --duration: 45s;
+  }
+  .bird {
+    --duration: 12s;
+  }
+}
+
+:global(.dark) .gradient {
+  background: linear-gradient(
+    145deg,
+    #1a2634 0%,
+    #1e2c3a 45%,
+    #242d39 100%
   );
 }
 
-.background::after {
+:global(.dark) .sun {
   background: radial-gradient(
-    circle at 70% 70%,
-    rgba(100, 150, 220, 0.15) 0%,
-    rgba(130, 80, 180, 0.08) 45%,
-    rgba(255, 255, 255, 0) 100%
+    circle at center,
+    rgba(255, 214, 160, 0.15) 0%,
+    rgba(255, 198, 120, 0.08) 50%,
+    transparent 100%
   );
+}
+
+:global(.dark) .cloud {
+  color: rgba(255, 255, 255, 0.03);
+}
+
+:global(.dark) .bird {
+  color: rgba(255, 255, 255, 0.05);
 }
